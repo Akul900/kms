@@ -84,7 +84,7 @@ class FaultTreeXMLImport
 
             // Создание StateProperty
             foreach($state->children() as $state_property) {
-                if ($state_property->getName() == 'StateProperty') {
+                if ($state_property->getName() == 'FaultParameter') {
                     $state_property_model = new StateProperty();
                     $state_property_model->name = (string)$state_property['name'];
                     $state_property_model->description = (string)$state_property['description'];
@@ -110,7 +110,7 @@ class FaultTreeXMLImport
                         $state_property_model->operator = StateProperty::APPROXIMATELY_EQUAL_OPERATOR;
                     }
                     $state_property_model->value = (string)$state_property['value'];
-                    $state_property_model->state = $state_model->id;
+                    $state_property_model->fault = $state_model->id;
                     $state_property_model->save();
                 }
             }

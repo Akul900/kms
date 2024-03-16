@@ -29,6 +29,7 @@ class Diagram extends \yii\db\ActiveRecord
 
     const EVENT_TREE_TYPE = 0;               // Тип диаграммы дерево событий
     const STATE_TRANSITION_DIAGRAM_TYPE = 1; // Тип диаграммы переходов состояний
+    const FAULT_TREE_TYPE = 2;               // Тип диаграммы дерево отказов
 
     const PUBLIC_STATUS = 0;  // Публичный статус
     const PRIVATE_STATUS = 1; // Приватный статус
@@ -98,6 +99,7 @@ class Diagram extends \yii\db\ActiveRecord
             self::EVENT_TREE_TYPE => Yii::t('app', 'DIAGRAM_MODEL_EVENT_TREE_TYPE'),
             self::STATE_TRANSITION_DIAGRAM_TYPE =>
                 Yii::t('app', 'DIAGRAM_MODEL_STATE_TRANSITION_DIAGRAM_TYPE'),
+            self::FAULT_TREE_TYPE => Yii::t('app', 'DIAGRAM_MODEL_FAULT_TREE_TYPE')
         ];
     }
 
@@ -121,6 +123,7 @@ class Diagram extends \yii\db\ActiveRecord
         return [
             self::EVENT_TREE_TYPE => 'Event tree',
             self::STATE_TRANSITION_DIAGRAM_TYPE => 'State transition diagram',
+            self::FAULT_TREE_TYPE => 'Fault tree',
         ];
     }
 

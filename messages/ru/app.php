@@ -52,6 +52,10 @@ return [
     'NAV_ADD_STATE' => 'Состояние',
     'NAV_ADD_START' => 'Начало',
     'NAV_ADD_END' => 'Завершение',
+    'NAV_ADD_FAULT' => 'Отказ',
+    'NAV_ADD_AND' => 'И',
+    'NAV_ADD_OR' => 'Или',
+    'NAV_BASIC_EVENT' => 'Базовое событие',
 
     'NAV_IMPORT' => 'Импортировать',
     'NAV_EXPORT' => 'Экспортировать',
@@ -261,6 +265,7 @@ return [
     /* Значения полей типов диаграмм */
     'DIAGRAM_MODEL_EVENT_TREE_TYPE' => 'Дерево событий',
     'DIAGRAM_MODEL_STATE_TRANSITION_DIAGRAM_TYPE' => 'Диаграмма переходов состояний',
+    'DIAGRAM_MODEL_FAULT_TREE_TYPE' => 'Дерево отказов',
     /* Значения полей статусов */
     'DIAGRAM_MODEL_PUBLIC_STATUS' => 'Публичный',
     'DIAGRAM_MODEL_PRIVATE_STATUS' => 'Частный',
@@ -506,6 +511,9 @@ return [
     'START_TO_END_DELETE_END' => 'Удаление завершения',
     'CONNECTION_DELETE_CONNECTION' => 'Удаление связи',
 
+    /* Заголовки модальных форм FTDE */
+    'FAULT_ADD_NEW_FAULT' => 'Добавить новый отказ',
+    'FAULT_ADD_NEW_BASIC_EVENT' => 'Добавить новое базовое событие',
     /* Cообщения EETE */
     'MAXIMUM_CONNECTIONS' => 'Максимальное количество соединений ',
     'MECHANISMS_SHOULD_NOT_BE_INTERCONNECTED' => 'Механизмы не должны быть связаны между собой',

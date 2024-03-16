@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'pgsql:host=localhost;port=5432;dbname=kmsdb;',
+    'dsn' => 'pgsql:host=localhost;port=5432;dbname=fault_tree_db;',
     'username' => 'postgres',
-    'password' => 'root',
+    'password' => '12345',
     'charset' => 'utf8',
     'tablePrefix' => 'kms_',
     'schemaMap' => [
@@ -14,3 +14,4 @@ return [
         ]
     ],
 ];
+

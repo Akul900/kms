@@ -11,6 +11,8 @@ use app\components\StateTransitionXMLGenerator;
 use app\components\EventTreeXMLGenerator;
 use app\components\StateTransitionXMLImport;
 use app\components\EventTreeXMLImport;
+use app\components\FaultTreeXMLGenerator;
+use app\components\FaultTreeXMLImport;
 
 class ApiController extends Controller
 {
@@ -178,6 +180,56 @@ class ApiController extends Controller
             if ($diagram->type == $type) {
                 //Создание экземпляра класса StateTransitionXMLImport
                 $generator = new StateTransitionXMLImport();
+                //Создание диаграммы
+                $import_progress = $generator->importXMLCode($id, $file);
+            }
+        }
+        return $import_progress;
+    }
+
+
+    /**
+     * Экспорт конкретной публичной (public) диаграммы перехода состояний по id
+     * @param $id - идентификатор диаграммы перехода состояний
+     * @return string - код сгенерированной диаграммы перехода состояний
+     */
+    public function actionExportFaultTreeDiagram($id)
+    {
+        //Текущая (выбранная) диаграмма переходов состояний
+        $model = Diagram::find()->where(['id' => $id, 'status' => Diagram::PUBLIC_STATUS])->one();
+        //Создание экземпляра класса StateTransitionXMLGenerator (генератора кода диаграмм переходов состояний)
+        $code_generator = new FaultTreeXMLGenerator();
+        //Генерация кода диаграммы переходов состояний
+        $code_generator->generateSTDXMLCode($id);
+    }
+
+
+    /**
+     * Импорт диаграммы перехода состояний по id.
+     * @param $id - идентификатор диаграммы перехода состояний
+     * @return bool|string - возвращает текст хода выполнения импорта диаграммы перехода состояний, иначе false
+     */
+    public function actionImportFaultTreeDiagram($id)
+    {
+        // Переменная для хранения хода выполнения импорта
+        $import_progress = false;
+        // Если метод запроса POST
+        if (Yii::$app->request->isPost) {
+            //Текущая (выбранная) диаграмма
+            $diagram = Diagram::find()->where(['id' => $id])->one();
+            //Получение XML-строк из XML-файла
+            $file = simplexml_load_file($_POST['file']);
+
+            // Определение корректности файла по наличию в нем State (состояний)
+            if (((string)$file["type"] == "Дерево отказов") or ((string)$file["type"] == "Fault tree")) {
+                $type = Diagram::FAULT_TREE_TYPE;  
+                $mode = -2;  
+            }
+
+            // Если тип диаграммы совпадает с типом диаграммы в файле
+            if (($diagram->type == $type) and ($mode == -2)) {
+                //Создание экземпляра класса EventTreeXMLImport
+                $generator = new EventTreeXMLImport();
                 //Создание диаграммы
                 $import_progress = $generator->importXMLCode($id, $file);
             }

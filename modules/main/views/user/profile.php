@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> ' .
             Yii::t('app', 'USER_PAGE_UPDATE_ACCOUNT_INFORMATION'),
             ['update-profile', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('<span class="glyphicon glyphicon-refresh"></span> ' .
+         <?= Html::a('<span class="glyphicon glyphicon-refresh"></span> ' .
             Yii::t('app', 'USER_PAGE_UPDATE_PASSWORD'), ['change-password', 'id' => $model->id],
             ['class' => 'btn btn-primary']) ?>
     </p>

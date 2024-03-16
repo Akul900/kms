@@ -25,6 +25,9 @@ $config = [
         'stde'=> [
             'class' => 'app\modules\stde\Module',
         ],
+        'ftde'=> [
+            'class' => 'app\modules\ftde\Module',
+        ],
         'api' => [
             'class' => 'app\modules\api\Module',
         ]
@@ -59,6 +62,10 @@ $config = [
                     'stde/state-transition-diagrams/<_std>',
                 '/state-transition-diagrams/<_std:(edit-state|delete-state|copy-state|add-state-property|edit-state-property|delete-state-property|add-transition|edit-transition|delete-transition|add-transition-property|edit-transition-property|delete-transition-property|save-indent|delete-start|delete-end|end-connection|start-connection|del-state-connection|save-indent-start-or-end)>' =>
                     'stde/state-transition-diagrams/<_std>',
+                '/fault-tree-diagrams/<_ftd:(visual-diagram|add-state|add-start|add-end|add-basic-event)>/<id:\d+>' =>
+                    'ftde/fault-tree-diagrams/<_ftd>',
+                '/fault-tree-diagrams/<_ftd:(edit-state|delete-state|copy-state|add-state-property|edit-state-property|delete-state-property|add-transition|edit-transition|delete-transition|add-transition-property|edit-transition-property|delete-transition-property|save-indent|delete-start|delete-end|end-connection|or-out-connection|fault-connection|del-connection|start-connection|del-state-connection|save-indent-start-or-end|fault-and-connection|delete-basic-event)>' =>
+                    'ftde/fault-tree-diagrams/<_ftd>',
                 /* Роуты для пользователей */
                 '/user/<_usr:(list|create)>' => 'main/user/<_usr>',
                 '/user/<_usr:(view|update|delete|profile|update-profile|change-password)>/<id:\d+>' =>
@@ -69,10 +76,13 @@ $config = [
                 /* Роуты для REST API */
                 '/api/get-all-state-transition-diagrams-list' => 'api/api/get-all-state-transition-diagrams-list',
                 '/api/get-all-event-tree-diagrams-list' => 'api/api/get-all-event-tree-diagrams-list',
+                '/api/get-all-fault-tree-diagrams-list' => 'api/api/get-all-fault-tree-diagrams-list',
                 '/api/export-state-transition-diagram/<id:\d+>' => 'api/api/export-state-transition-diagram',
                 '/api/export-event-tree-diagram/<id:\d+>' => 'api/api/export-event-tree-diagram',
+                '/api/export-fault-tree-diagram/<id:\d+>' => 'api/api/export-fault-tree-diagram',
                 '/api/import-state-transition-diagram/<id:\d+>' => 'api/api/import-state-transition-diagram',
                 '/api/import-event-tree-diagram/<id:\d+>' => 'api/api/import-event-tree-diagram',
+                '/api/import-fault-tree-diagram/<id:\d+>' => 'api/api/import-fault-tree-diagram',
             ],
         ],
         'cache' => [

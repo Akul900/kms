@@ -52,6 +52,7 @@ return [
     'NAV_ADD_STATE' => 'State',
     'NAV_ADD_START' => 'Start',
     'NAV_ADD_END' => 'End',
+    'NAV_ADD_FAULT' => 'Fault',
 
     'NAV_IMPORT' => 'Import',
     'NAV_EXPORT' => 'Export',
@@ -261,6 +262,7 @@ return [
     /* Значения полей типов диаграмм */
     'DIAGRAM_MODEL_EVENT_TREE_TYPE' => 'Event tree',
     'DIAGRAM_MODEL_STATE_TRANSITION_DIAGRAM_TYPE' => 'State transition diagram',
+    'DIAGRAM_MODEL_FAULT_TREE_TYPE' => 'Fault tree',
     /* Значения полей статусов */
     'DIAGRAM_MODEL_PUBLIC_STATUS' => 'Public',
     'DIAGRAM_MODEL_PRIVATE_STATUS' => 'Private',

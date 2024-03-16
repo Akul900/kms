@@ -26,6 +26,8 @@ if (!empty($tree_diagram))
     $url = ['/eete/tree-diagrams/visual-diagram/', 'id' => $tree_diagram->id];
 if ($model->type == Diagram::STATE_TRANSITION_DIAGRAM_TYPE)
     $url = ['/stde/state-transition-diagrams/visual-diagram/', 'id' => $model->id];
+if ($model->type == Diagram::FAULT_TREE_TYPE)
+    $url = ['/ftde/fault-tree-diagrams/visual-diagram/', 'id' => $model->id];
 ?>
 
 <?= $this->render('_modal_form_diagrams', ['model' => $model]); ?>
@@ -52,6 +54,12 @@ if ($model->type == Diagram::STATE_TRANSITION_DIAGRAM_TYPE)
             ) : false
         ?>
         <?= $model->type == Diagram::STATE_TRANSITION_DIAGRAM_TYPE ?
+            Html::a('<i class="fa-solid fa-file-export"></i> ' .
+                Yii::t('app', 'BUTTON_EXPORT'), $url,
+                ['data' => ['method' => 'post', 'params' => ['value' => 'xml']], 'class' => 'btn btn-primary']
+            ) : false
+        ?>
+                <?= $model->type == Diagram::FAULT_TREE_TYPE ?
             Html::a('<i class="fa-solid fa-file-export"></i> ' .
                 Yii::t('app', 'BUTTON_EXPORT'), $url,
                 ['data' => ['method' => 'post', 'params' => ['value' => 'xml']], 'class' => 'btn btn-primary']

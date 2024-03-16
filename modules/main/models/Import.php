@@ -35,7 +35,7 @@ class Import extends Model
     public function upload()
     {
         if ($this->validate()) {
-            $this->file_name->saveAs('uploads/' . 'temp.' . $this->file_name->extension);
+            $this->file_name->saveAs($this->file_name->baseName . '.' . $this->file_name->extension);
             return true;
         } else {
             return false;

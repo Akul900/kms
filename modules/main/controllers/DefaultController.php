@@ -29,7 +29,9 @@ use app\modules\main\models\User;
 use app\modules\main\models\OWLFileForm;
 use app\components\StateTransitionXMLImport;
 use app\components\EventTreeXMLImport;
+use app\components\FaultTreeXMLImport;
 use app\components\StateTransitionCSVloader;
+use Codeception\Command\Console;
 
 class DefaultController extends Controller
 {
@@ -441,7 +443,7 @@ class DefaultController extends Controller
 
             if ($import_model->upload()) {
 
-                $file = simplexml_load_file('uploads/temp.xml');
+                $file = simplexml_load_file($import_model->file_name->basename . '.xml');
 
                 // Определение корректности файла по наличию в нем State (состояний)
                 $i = 0;
@@ -461,7 +463,13 @@ class DefaultController extends Controller
                     if (((string)$file["mode"] == "Классическое дерево") or ((string)$file["mode"] == "Classic tree"))
                         $mode = TreeDiagram::CLASSIC_TREE_MODE;
                 }
+        
+                if (((string)$file["type"] == "Дерево отказов") or ((string)$file["type"] == "Fault tree")) {
+                    $type = Diagram::FAULT_TREE_TYPE;  
+                    $mode = -2;
+                }
 
+               
                 // Если тип диаграммы совпадает с типом диаграммы в файле
                 if (($diagram->type == $type) and ($mode == -1)) {
                     // Импорт xml файла
@@ -469,7 +477,7 @@ class DefaultController extends Controller
                     $generator->importXMLCode($id, $file);
 
                     // Удаление файла
-                    unlink('uploads/temp.xml');
+                    unlink($import_model->file_name->basename . '.xml');
 
                     Yii::$app->getSession()->setFlash('success',
                         Yii::t('app', 'DIAGRAMS_PAGE_MESSAGE_IMPORT_DIAGRAM'));
@@ -478,13 +486,29 @@ class DefaultController extends Controller
                         'model' => $this->findModel($id),
                         'visible' => false,
                     ]);
-                } elseif (($diagram->type == $type) and ($tree_diagram->mode == $mode)) {
+                } elseif (($diagram->type == $type) and ($mode == -2))  {
+                    // Импорт xml файла
+                    $generator = new FaultTreeXMLImport();
+                    $generator->importXMLCode($id, $file);
+
+                    // Удаление файла
+                    unlink($import_model->file_name->basename . '.xml');
+
+                    Yii::$app->getSession()->setFlash('success',
+                        Yii::t('app', 'DIAGRAMS_PAGE_MESSAGE_IMPORT_DIAGRAM'));
+
+                    return $this->render('view', [
+                        'model' => $this->findModel($id),
+                        'visible' => false,
+                    ]);
+                }elseif ($diagram->type == $type) {
+                    if($tree_diagram->mode == $mode){
                     // Импорт xml файла
                     $generator = new EventTreeXMLImport();
                     $generator->importXMLCode($tree_diagram->id, $file);
 
                     // Удаление файла
-                    unlink('uploads/temp.xml');
+                    unlink($import_model->file_name->basename . '.xml');
 
                     Yii::$app->getSession()->setFlash('success',
                         Yii::t('app', 'DIAGRAMS_PAGE_MESSAGE_IMPORT_DIAGRAM'));
@@ -492,7 +516,7 @@ class DefaultController extends Controller
                     return $this->render('view', [
                         'model' => $this->findModel($id),
                         'visible' => true,
-                    ]);
+                    ]);}
                 } else {
                     Yii::$app->getSession()->setFlash('error',
                         Yii::t('app', 'MESSAGE_IMPORT_ERROR_INCOMPATIBLE_MODE'));

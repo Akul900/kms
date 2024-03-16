@@ -1,0 +1,221 @@
+.div-and{
+    background-image:url(../images/and.png);
+    background-size:  contain;
+    width: 60px;
+    height: 120px;
+    position: absolute;
+}
+
+.div-and:hover {
+    border:2px solid #337ab7;
+    background-color: #b9def0;
+    opacity:0.9;
+    cursor: pointer;
+}
+
+.div-and:active {
+    cursor: move;
+}
+
+.content-and{
+    position: relative;
+    height: 60px;
+    font-size: 80%;
+}
+
+.del-and {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.connect-and {
+    position: absolute;
+    bottom: 20px;
+    right: 0px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+/*показать скрытые кнопки*/
+.content-and:hover .del-and {
+    display:block;
+}
+.content-and:hover .connect-and {
+    display:block;
+}
+
+
+
+
+
+.div-or{
+    background-image:url(../images/or.png);
+    background-size:  contain;
+    width: 60px;
+    height: 120px;
+    position: absolute;
+}
+
+.div-or:hover {
+    border:2px solid #337ab7;
+    background-color: #b9def0;
+    opacity:0.9;
+    cursor: pointer;
+}
+
+.div-or:active {
+    cursor: move;
+}
+
+.connect-or {
+    position: absolute;
+    bottom: 5px;
+    right: 0px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.content-or{
+    position: relative;
+    height: 48px;
+    font-size: 80%;
+}
+
+.del-or {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+/*показать скрытые кнопки*/
+.content-or:hover .del-or {
+    display:block;
+}
+.content-or:hover .connect-or {
+    display:block;
+}
+
+
+/* -Стили для состояний- */
+.div-basic-event {
+    /* форма*/
+    min-width: 100px;
+    min-height: 100px;
+    border:2px solid #337ab7;
+    background-color:#f5f5f5;
+    border-radius: 50%;
+    box-shadow: 5px 5px 5px #b9def0;
+    /* текст по центру для дочернего блока div-basic-event-name*/
+    position: absolute;
+    
+
+}
+
+.div-basic-event:hover {
+    border:2px solid #337ab7;
+    background-color: #b9def0;
+    opacity:0.9;
+    cursor: pointer;
+}
+
+.div-basic-event:active {
+    cursor: move;
+}
+
+.content-basic-event{
+    position: relative;
+    padding-top: 35px;
+    min-height: 60px;
+    padding-bottom: 20px;
+    font-size: 80%;
+}
+
+.div-basic-event-name {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-weight: bold;
+    /* текст по центру*/
+    position: relative;
+    text-align: center;
+    word-wrap: break-word; /* перенос строк */
+}
+
+/*кнопки состояний*/
+.edit-basic-event {
+    position: absolute;
+    right: 30px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.del-basic-event {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.connect-basic-event {
+    position: absolute;
+    top: 5px;
+    right: 50px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.copy-basic-event {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.add-basic-event-property {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+/*показать скрытые кнопки*/
+.content-basic-event:hover .edit-basic-event {
+    display:block;
+}
+.content-basic-event:hover .del-basic-event {
+    display:block;
+}
+.content-basic-event:hover .connect-basic-event {
+    display:block;
+}
+.content-basic-event:hover .copy-basic-event {
+    display:block;
+}
+.content-basic-event:hover .add-basic-event-property {
+    display:block;
+}

@@ -10,7 +10,7 @@ use app\modules\main\models\Lang;
 <!-- Модальное окно удаления начала -->
 <?php Modal::begin([
     'id' => 'deleteStartModalForm',
-    'title' => '<h3>' . Yii::t('app', 'START_TO_END_DELETE_START') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'AND_DELETE_AND') . '</h3>',
 ]); ?>
 
     <!-- Скрипт модального окна -->
@@ -57,7 +57,7 @@ use app\modules\main\models\Lang;
 
     <div class="modal-body">
         <p style="font-size: 14px">
-            <?php echo Yii::t('app', 'DELETE_START_TEXT'); ?>
+            <?php echo Yii::t('app', 'DELETE_AND_TEXT'); ?>
         </p>
     </div>
 
@@ -81,7 +81,7 @@ use app\modules\main\models\Lang;
 <!-- Модальное окно удаления завершения -->
 <?php Modal::begin([
     'id' => 'deleteEndModalForm',
-    'title' => '<h3>' . Yii::t('app', 'START_TO_END_DELETE_END') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'OR_DELETE_OR') . '</h3>',
 ]); ?>
 
 <!-- Скрипт модального окна -->
@@ -128,7 +128,7 @@ use app\modules\main\models\Lang;
 
 <div class="modal-body">
     <p style="font-size: 14px">
-        <?php echo Yii::t('app', 'DELETE_END_TEXT'); ?>
+        <?php echo Yii::t('app', 'DELETE_OR_TEXT'); ?>
     </p>
 </div>
 

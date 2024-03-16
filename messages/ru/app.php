@@ -513,7 +513,18 @@ return [
 
     /* Заголовки модальных форм FTDE */
     'FAULT_ADD_NEW_FAULT' => 'Добавить новый отказ',
-    'FAULT_ADD_NEW_BASIC_EVENT' => 'Добавить новое базовое событие',
+    'FAULT_COPY_FAULT' => 'Копирование отказа',
+    'FAULT_DELETE_FAULT' => 'Удаление отказа',
+    'FAULT_EDIT_FAULT' => 'Изменение отказа',
+    'FAULT_PROPERTY_ADD_NEW_FAULT_PROPERTY' => 'Добавить новое свойство отказа',
+    'FAULT_PROPERTY_EDIT_FAULT_PROPERTY' => 'Изменение свойства отказа',
+    'FAULT_PROPERTY_DELETE_FAULT_PROPERTY' => 'Удаление свойства отказа',
+    'FAULT_ADD_NEW_BASIC_EVENT' => 'Добавить новое базисное событие',
+    'BASIC_EVENT_EDIT_BASIC_EVENT' => 'Изменение базисного события',
+    'BASIC_EVENT_DELETE_BASIC_EVENT' => 'Удаление базисного события',
+    'AND_DELETE_AND' => 'Удаление И',
+    'OR_DELETE_OR' => 'Удаление ИЛИ',
+
     /* Cообщения EETE */
     'MAXIMUM_CONNECTIONS' => 'Максимальное количество соединений ',
     'MECHANISMS_SHOULD_NOT_BE_INTERCONNECTED' => 'Механизмы не должны быть связаны между собой',
@@ -548,6 +559,13 @@ return [
     'DELETE_END_TEXT' => 'Вы действительно хотите удалить завершение?',
 
     'CONNECTION_DELETE' => 'Удалить',
+
+    /* Техсты модальных форм FTDE */
+    'DELETE_FAULT_TEXT' => 'Вы действительно хотите удалить отказ?',
+    'DELETE_BASIC_EVENT_TEXT' => 'Вы действительно хотите удалить базисное событие?',
+    'DELETE_AND_TEXT' => 'Вы действительно хотите удалить И?',
+    'DELETE_OR_TEXT' => 'Вы действительно хотите удалить ИЛИ?',
+    'DELETE_FAULT_PARAMETER_TEXT' => 'Вы действительно хотите удалить свойство отказа?',
 
     /* Техсты сообщений модальных форм EETE */
     'MESSAGE_PROBABILITY_ALLOWED_ONLY_UP_TO_HUNDREDTHS' => 'Допускается ввод числа от 0 до 1, и только до сотых',

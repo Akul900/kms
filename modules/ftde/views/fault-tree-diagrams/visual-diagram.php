@@ -56,7 +56,7 @@ foreach ($states_model_all as $s){
 // создаем массив из state_property для передачи в js
 $states_property_mas = array();
 foreach ($states_property_model_all as $sp){
-    array_push($states_property_mas, [$sp->id, $sp->name, $sp->description, $sp->operator, $sp->value, $sp->state]);
+    array_push($states_property_mas, [$sp->id, $sp->name, $sp->description, $sp->operator, $sp->value, $sp->fault]);
 }
 
 // создаем массив из transition для передачи в jsplumb
@@ -284,7 +284,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     var description = "";
     var operator = "";
     var value = "";
-    var state = "";
+    var fault = "";
     $.each(states_property_mas, function (i, mas) {
         $.each(mas, function (j, elem) {
             if (j == 0) {id = elem;}//записываем id
@@ -292,14 +292,14 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             if (j == 2) {description = elem;}
             if (j == 3) {operator = elem;}
             if (j == 4) {value = elem;}
-            if (j == 5) {state = elem;}
+            if (j == 5) {fault = elem;}
             mas_data_state_property[q] = {
                 "id":id,
                 "name":name,
                 "description":description,
                 "operator":operator,
                 "value":value,
-                "state":state,
+                "fault":fault,
             }
         });
         q = q+1;
@@ -1437,21 +1437,21 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     });
 
 
-     // редактирование состояния
+     // редактирование базового события
      $(document).on('click', '.edit-basic-event', function() {
         if (!guest) {
-            var state = $(this).attr('id');
-            basic_event_id_on_click = parseInt(state.match(/\d+/));
+            var basic_event = $(this).attr('id');
+            basic_event_id_on_click = parseInt(basic_event.match(/\d+/));
 
-            var div_state = document.getElementById("basic_event_" + basic_event_id_on_click);
+            var div_basic_event = document.getElementById("basic_event_" + basic_event_id_on_click);
 
-            $.each(mas_data_state, function (i, elem) {
+            $.each(mas_data_basic_event, function (i, elem) {
                 if (elem.id == basic_event_id_on_click) {
-                    document.forms["edit-state-form"].reset();
-                    document.forms["edit-state-form"].elements["Element[name]"].value = elem.name;
-                    document.forms["edit-state-form"].elements["Element[description]"].value = elem.description;
+                    document.forms["edit-basic-event-form"].reset();
+                    document.forms["edit-basic-event-form"].elements["Element[name]"].value = elem.name;
+                    document.forms["edit-basic-event-form"].elements["Element[description]"].value = elem.description;
 
-                    $("#editStateModalForm").modal("show");
+                    $("#editBasicEventModalForm").modal("show");
                 }
             });
         }
@@ -1911,7 +1911,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 <?php
                     $line = false;
                     foreach ($states_property_model_all as $state_property){
-                        if ($state_property->state == $state->id){
+                        if ($state_property->fault == $state->id){
                             $line = true;
                         }
                     }
@@ -1922,7 +1922,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
                 <!-- отображение свойств состояний -->
                 <?php foreach ($states_property_model_all as $state_property): ?>
-                    <?php if ($state_property->state == $state->id){ ?>
+                    <?php if ($state_property->fault == $state->id){ ?>
                         <div id="state_property_<?= $state_property->id ?>" class="div-state-property">
                             <div class="button-state-property">
                                 <div id="state_property_edit_<?= $state_property->id ?>" class="edit-state-property glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
@@ -1952,7 +1952,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 <?php
                     $line = false;
                     foreach ($states_property_model_all as $state_property){
-                        if ($state_property->basic_event == $basic_event->id){
+                        if ($state_property->fault == $state->id){
                             $line = true;
                         }
                     }

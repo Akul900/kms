@@ -66,6 +66,9 @@ class FaultTreeXMLImport
             if ((string)$state['type'] == 'End'){
                 $state_model->type = Element::END_TYPE;
             }
+            if ((string)$state['type'] == 'Basic event'){
+                $state_model->type = Element::BASIC_EVENT;
+            }
             $state_model->description = (string)$state['description'];
             $state_model->indent_x = (string)$state['indent_x'];
             $state_model->indent_y = (string)$state['indent_y'];

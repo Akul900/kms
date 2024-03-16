@@ -12,7 +12,7 @@ use app\modules\stde\models\StateProperty;
 <!-- Модальное окно добавления нового свойства состояния -->
 <?php Modal::begin([
     'id' => 'addStatePropertyModalForm',
-    'title' => '<h3>' . Yii::t('app', 'STATE_PROPERTY_ADD_NEW_STATE_PROPERTY') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'FAULT_PROPERTY_ADD_NEW_FAULT_PROPERTY') . '</h3>',
 ]); ?>
 
 <!-- Скрипт модального окна -->
@@ -27,7 +27,7 @@ use app\modules\stde\models\StateProperty;
             $.ajax({
                 //переход на экшен левел
                 url: "<?= Yii::$app->request->baseUrl . '/' . Lang::getCurrent()->url .
-                '/state-transition-diagrams/add-state-property'?>",
+                '/fault-tree-diagrams/add-fault-property'?>",
                 type: "post",
                 data: form.serialize() + "&state_id_on_click=" + state_id_on_click,
                 dataType: "json",
@@ -80,13 +80,13 @@ use app\modules\stde\models\StateProperty;
                         var description = data['description'];
                         var operator = parseInt(data['operator'], 10);
                         var value = data['value'];
-                        var state = data['state'];
+                        var value = data['fault'];
 
                         var j = 0;
                         $.each(mas_data_state_property, function (i, elem) {
                             j = j + 1;
                         });
-                        mas_data_state_property[j] = {id:id, name:name, description:description, operator:operator, value:value, state:state};
+                        mas_data_state_property[j] = {id:id, name:name, description:description, operator:operator, value:value, fault:fault};
 
                         //обновление поля visual_diagram_field для размещения элементов
                         mousemoveState();
@@ -157,7 +157,7 @@ use app\modules\stde\models\StateProperty;
 <!-- Модальное окно изменения свойства состояния -->
 <?php Modal::begin([
     'id' => 'editStatePropertyModalForm',
-    'title' => '<h3>' . Yii::t('app', 'STATE_PROPERTY_EDIT_STATE_PROPERTY') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'FAULT_PROPERTY_EDIT_FAULT_PROPERTY') . '</h3>',
 ]); ?>
 
 <!-- Скрипт модального окна -->
@@ -172,7 +172,7 @@ use app\modules\stde\models\StateProperty;
             $.ajax({
                 //переход на экшен левел
                 url: "<?= Yii::$app->request->baseUrl . '/' . Lang::getCurrent()->url .
-                '/state-transition-diagrams/edit-state-property'?>",
+                '/fault-tree-diagrams/edit-fault-property'?>",
                 type: "post",
                 data: form.serialize() + "&state_property_id_on_click=" + state_property_id_on_click,
                 dataType: "json",
@@ -268,7 +268,7 @@ use app\modules\stde\models\StateProperty;
 <!-- Модальное окно удаления свойство состояния -->
 <?php Modal::begin([
     'id' => 'deleteStatePropertyModalForm',
-    'title' => '<h3>' . Yii::t('app', 'STATE_PROPERTY_DELETE_STATE_PROPERTY') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'FAULT_PROPERTY_DELETE_FAULT_PROPERTY') . '</h3>',
 ]); ?>
 
 <!-- Скрипт модального окна -->
@@ -282,7 +282,7 @@ use app\modules\stde\models\StateProperty;
             $.ajax({
                 //переход на экшен левел
                 url: "<?= Yii::$app->request->baseUrl . '/' . Lang::getCurrent()->url .
-                '/state-transition-diagrams/delete-state-property'?>",
+                '/fault-tree-diagrams/delete-fault-property'?>",
                 type: "post",
                 data: "YII_CSRF_TOKEN=<?= Yii::$app->request->csrfToken ?>" + "&state_property_id_on_click=" + state_property_id_on_click,
                 dataType: "json",
@@ -343,7 +343,7 @@ use app\modules\stde\models\StateProperty;
 
 <div class="modal-body">
     <p style="font-size: 14px">
-        <?php echo Yii::t('app', 'DELETE_STATE_PROPERTY_TEXT'); ?>
+        <?php echo Yii::t('app', 'DELETE_FAULT_PARAMETER_TEXT'); ?>
     </p>
 </div>
 

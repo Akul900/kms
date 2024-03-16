@@ -174,8 +174,8 @@ use app\modules\main\models\Lang;
 
 <!-- Модальное окно изменения состояния -->
 <?php Modal::begin([
-    'id' => 'editbasic-eventModalForm',
-    'title' => '<h3>' . Yii::t('app', 'basic_event_EDIT_basic-event') . '</h3>',
+    'id' => 'editBasicEventModalForm',
+    'title' => '<h3>' . Yii::t('app', 'BASIC_EVENT_EDIT_BASIC_EVENT') . '</h3>',
 ]); ?>
 
     <!-- Скрипт модального окна -->
@@ -198,7 +198,7 @@ use app\modules\main\models\Lang;
                         // Если валидация прошла успешно (нет ошибок ввода)
                         if (data['success']) {
                             // Скрывание модального окна
-                            $("#editbasic-eventModalForm").modal("hide");
+                            $("#editBasicEventModalForm").modal("hide");
 
                             //изменение div состояния
                             var div_basic_event_name = document.getElementById('basic_event_name_' + data['id']);
@@ -272,7 +272,7 @@ use app\modules\main\models\Lang;
 <!-- Модальное окно удаления состояния -->
 <?php Modal::begin([
     'id' => 'deleteBasicEventModalForm',
-    'title' => '<h3>' . Yii::t('app', 'basic_event_DELETE_basic-event') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'BASIC_EVENT_DELETE_BASIC_EVENT') . '</h3>',
 ]); ?>
 
     <!-- Скрипт модального окна -->
@@ -339,7 +339,7 @@ use app\modules\main\models\Lang;
 
     <div class="modal-body">
         <p style="font-size: 14px">
-            <?php echo Yii::t('app', 'DELETE_basic_event_TEXT'); ?>
+            <?php echo Yii::t('app', 'DELETE_BASIC_EVENT_TEXT'); ?>
         </p>
     </div>
 

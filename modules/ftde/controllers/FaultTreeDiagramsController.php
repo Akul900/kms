@@ -49,7 +49,7 @@ class FaultTreeDiagramsController extends Controller
         $states_property_model_all = array();//массив связей
         foreach ($states_property_all as $sp){
             foreach ($states_model_all as $s){
-                if ($sp->state == $s->id){
+                if ($sp->fault == $s->id){
                     array_push($states_property_model_all, $sp);
                 }
             }
@@ -328,6 +328,38 @@ class FaultTreeDiagramsController extends Controller
         return false;
     }
 
+     /**
+     * Изменение состояния.
+     */
+    public function actionEditBasicEvent()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $model = Element::find()->where(['id' => Yii::$app->request->post('basic_event_id_on_click')])->one();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Формирование данных об измененном событии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+            } else
+                $data = ActiveForm::validate($model);
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
 
     /**
      * Удаление состояния.
@@ -463,7 +495,7 @@ class FaultTreeDiagramsController extends Controller
      * @param $id - id дерева событий
      * @return bool|\yii\console\Response|Response
      */
-    public function actionAddStateProperty()
+    public function actionAddFaultProperty()
     {
         //Ajax-запрос
         if (Yii::$app->request->isAjax) {
@@ -475,10 +507,10 @@ class FaultTreeDiagramsController extends Controller
             // Формирование модели свойства состояния
             $model = new StateProperty();
 
-            $model->state = Yii::$app->request->post('state_id_on_click');
+            $model->fault = Yii::$app->request->post('state_id_on_click');
 
             //поиск количества свойст у выбранного состояния
-            $state_property_count = StateProperty::find()->where(['state' => Yii::$app->request->post('state_id_on_click')])->count();
+            $state_property_count = StateProperty::find()->where(['fault' => Yii::$app->request->post('state_id_on_click')])->count();
             $data["state_property_count"] = $state_property_count;
 
             // Определение полей модели уровня и валидация формы
@@ -494,7 +526,7 @@ class FaultTreeDiagramsController extends Controller
                 $data["operator"] = $model->operator;
                 $data["operator_name"] = $model->getOperatorName();
                 $data["value"] = $model->value;
-                $data["state"] = $model->state;
+                $data["fault"] = $model->fault;
 
             } else
                 $data = ActiveForm::validate($model);
@@ -509,7 +541,7 @@ class FaultTreeDiagramsController extends Controller
     /**
      * Изменение свойства состояния.
      */
-    public function actionEditStateProperty()
+    public function actionEditFaultProperty()
     {
         //Ajax-запрос
         if (Yii::$app->request->isAjax) {
@@ -546,7 +578,7 @@ class FaultTreeDiagramsController extends Controller
     /**
      * Удаление свойства состояния.
      */
-    public function actionDeleteStateProperty()
+    public function actionDeleteFaultProperty()
     {
         //Ajax-запрос
         if (Yii::$app->request->isAjax) {
@@ -557,11 +589,11 @@ class FaultTreeDiagramsController extends Controller
             $response->format = Response::FORMAT_JSON;
 
             $model = StateProperty::find()->where(['id' => Yii::$app->request->post('state_property_id_on_click')])->one();
-            $state_id = $model->state;
+            $state_id = $model->fault;
             $model -> delete();
 
             //поиск количества свойст у выбранного состояния
-            $state_property_count = StateProperty::find()->where(['state' => $state_id])->count();
+            $state_property_count = StateProperty::find()->where(['fault' => $state_id])->count();
             $data["state_property_count"] = $state_property_count;
             $data["state_id"] = $state_id;
 

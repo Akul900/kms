@@ -175,7 +175,7 @@ use app\modules\main\models\Lang;
 <!-- Модальное окно изменения состояния -->
 <?php Modal::begin([
     'id' => 'editStateModalForm',
-    'title' => '<h3>' . Yii::t('app', 'STATE_EDIT_STATE') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'FAULT_EDIT_FAULT') . '</h3>',
 ]); ?>
 
     <!-- Скрипт модального окна -->
@@ -272,7 +272,7 @@ use app\modules\main\models\Lang;
 <!-- Модальное окно удаления состояния -->
 <?php Modal::begin([
     'id' => 'deleteStateModalForm',
-    'title' => '<h3>' . Yii::t('app', 'STATE_DELETE_STATE') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'FAULT_DELETE_FAULT') . '</h3>',
 ]); ?>
 
     <!-- Скрипт модального окна -->
@@ -339,7 +339,7 @@ use app\modules\main\models\Lang;
 
     <div class="modal-body">
         <p style="font-size: 14px">
-            <?php echo Yii::t('app', 'DELETE_STATE_TEXT'); ?>
+            <?php echo Yii::t('app', 'DELETE_FAULT_TEXT'); ?>
         </p>
     </div>
 
@@ -363,7 +363,7 @@ use app\modules\main\models\Lang;
 <!-- Модальное окно копирования состояния -->
 <?php Modal::begin([
     'id' => 'copyStateModalForm',
-    'title' => '<h3>' . Yii::t('app', 'STATE_COPY_STATE') . '</h3>',
+    'title' => '<h3>' . Yii::t('app', 'FAULT_COPY_FAULT') . '</h3>',
 ]); ?>
 
 <!-- Скрипт модального окна -->

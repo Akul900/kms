@@ -33,13 +33,13 @@ $this->params['menu_diagram'] = [
         'value' => 'xml',
     ]]],
 
-    ['label' => '<i class="fa-solid fa-align-center"></i> ' . Yii::t('app', 'NAV_ALIGNMENT'),
-        'url' => '#', 'linkOptions' => ['id'=>'nav_alignment']],
+    // ['label' => '<i class="fa-solid fa-align-center"></i> ' . Yii::t('app', 'NAV_ALIGNMENT'),
+    //     'url' => '#', 'linkOptions' => ['id'=>'nav_alignment']],
 
-    ['label' => '<i class="fa-solid fa-file-export"></i> ' . Yii::t('app', 'NAV_UNLOAD_DECISION_TABLE'),
-        'url' => '#', 'linkOptions' => ['data-method' => 'post', 'data-params' => [
-        'value' => 'csv',
-    ]]],
+    // ['label' => '<i class="fa-solid fa-file-export"></i> ' . Yii::t('app', 'NAV_UNLOAD_DECISION_TABLE'),
+    //     'url' => '#', 'linkOptions' => ['data-method' => 'post', 'data-params' => [
+    //     'value' => 'csv',
+    // ]]],
 ];
 ?>
 
@@ -730,7 +730,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
             // Запрет на соединение начала и завершения
             if ((name_source == 'and') && (name_target == 'or')){
-                var message = "<?php echo Yii::t('app', 'START_AND_END_CANNOT_BE_LINKED'); ?>";
+                var message = "<?php echo Yii::t('app', 'AND_OR_CANNOT_BE_LINKED'); ?>";
                 document.getElementById("message-text").lastChild.nodeValue = message;
                 $("#viewMessageErrorLinkingItemsModalForm").modal("show");
                 return false;
@@ -822,6 +822,36 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     ],
                 });
             });
+
+            $.each(mas_data_state_connection_fault, function (j, elem) {
+                var c = instance.connect({
+                    source: "and_" + elem.element_from,
+                    target: "basic_event_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+            });
+
+            $.each(mas_data_state_connection_fault, function (j, elem) {
+                var c = instance.connect({
+                    source: "or_" + elem.element_from,
+                    target: "basic_event_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+            });
+
+            
 
 
             // //построение связей из mas_data_transition
@@ -1718,6 +1748,18 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                             //     $("#viewMessageErrorLinkingItemsModalForm").modal("show");
                             // }
                     });
+                    instance.makeTarget(div_and, {
+                        filter: ".fa-share",
+                        anchor: "Top", //непрерывный анкер
+                        maxConnections: 1, //ог
+                        allowLoopback: false,
+                        onMaxConnections: function (info, e) {
+                            //отображение сообщения об ограничении
+                            var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                            document.getElementById("message-text").lastChild.nodeValue = message;
+                            $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                        }
+                    });
 
                     var nav_add_start = document.getElementById('nav_add_start');
                     // Выключение кнопки добавления начала
@@ -1785,12 +1827,28 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     //добавляем элемент div_and в группу с именем group_field
                     instance.addToGroup('group_field', div_end);
 
-                    instance.makeTarget(div_end, {
-                            filter: ".fa-share",
-                            anchor: "Top", //непрерывный анкер
-                            maxConnections: -1,
+                    // instance.makeTarget(div_end, {
+                    //         filter: ".fa-share",
+                    //         anchor: "Top", //непрерывный анкер
+                    //         maxConnections: -1,
+                    // });
+                    instance.makeSource(div_end, {
+                        filter: ".fa-share",
+                        anchor: "Bottom", //непрерывный анкер
+                        maxConnections: -1, //ограничение на одно соединение из элемента "начала"
                     });
-
+                    instance.makeTarget(div_end, {
+                        filter: ".fa-share",
+                        anchor: "Top", //непрерывный анкер
+                        maxConnections: 1, //ог
+                        allowLoopback: false,
+                        onMaxConnections: function (info, e) {
+                            //отображение сообщения об ограничении
+                            var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                            document.getElementById("message-text").lastChild.nodeValue = message;
+                            $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                        }
+                    });
                     var nav_add_end = document.getElementById('nav_add_end');
                     // Выключение кнопки добавления завершения
                     nav_add_end.className = 'dropdown-item';

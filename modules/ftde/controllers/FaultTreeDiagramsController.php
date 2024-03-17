@@ -42,7 +42,7 @@ class FaultTreeDiagramsController extends Controller
         $state_property_model = new StateProperty();
         $transition_model = new Transition();
         $transition_property_model = new TransitionProperty();
-
+        $element_model_all = Element::find()->all();
         $states_model_all = Element::find()->where(['diagram' => $id, 'type' => Element::COMMON_FAULT] )->orWhere(['diagram' => $id, 'type' => Element::INITIAL_FAULT])->all();
 
         $states_property_all = StateProperty::find()->all();
@@ -145,13 +145,15 @@ class FaultTreeDiagramsController extends Controller
         $connection_basic_event_model_all = array();//массив связей
         if ($states_model_all != null){
             foreach ($state_connections_all as $sc){
-                foreach ($basic_event_model as $be){
+                foreach ($element_model_all as $be){
                     if ($sc->element_from == $be->id){
                         array_push($states_connection_fault_model_all, $sc);
                     }
                 }
             }
         }
+
+        
 
         $start_count = Element::find()->where(['diagram' => $id, 'type' => Element::START_TYPE])->count();//количество начал
         $end_count = Element::find()->where(['diagram' => $id, 'type' => Element::END_TYPE])->count();//количество завершений
@@ -438,24 +440,27 @@ class FaultTreeDiagramsController extends Controller
             // Присваивает новому состоянию местопоожение правее копируемого
             $model->indent_x = $state->indent_x + 160;
             $model->indent_y = $state->indent_y;
-
+            $model->type = Element::COMMON_FAULT;
+      
             // Определение полей модели уровня и валидация формы
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                
+    
                 // Тип присваивается константа "COMMON_STATE_TYPE" как обычное состояние
-                $model->type = Element::COMMON_FAULT;
+            
                 // Добавление нового состояния в БД
                 $model->save();
 
                 $i = 0;
                 //копирование свойств состояний
-                $state_property = StateProperty::find()->where(['state' => $state->id])->all();
+                $state_property = StateProperty::find()->where(['fault' => $state->id])->all();
                 foreach ($state_property as $sp){
                     $new_state_property = new StateProperty();
                     $new_state_property->name = $sp->name;
                     $new_state_property->description = $sp->description;
                     $new_state_property->operator = $sp->operator;
                     $new_state_property->value = $sp->value;
-                    $new_state_property->state = $model->id;
+                    $new_state_property->fault = $model->id;
                     $new_state_property->save();
 
                     $data["state_property_id_$i"] = $new_state_property->id;
@@ -478,6 +483,7 @@ class FaultTreeDiagramsController extends Controller
                 $data["description"] = $model->description;
                 $data["indent_x"] = $model->indent_x;
                 $data["indent_y"] = $model->indent_y;
+                $data["type"] = $model->type;
                 $data["i"] = $i;
             } else
                 $data = ActiveForm::validate($model);

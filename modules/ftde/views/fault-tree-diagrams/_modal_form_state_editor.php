@@ -36,7 +36,7 @@ use app\modules\main\models\Lang;
                     // Если валидация прошла успешно (нет ошибок ввода)
                     if (data['success']) {
                         // Скрывание модального окна
-                        $("#addStateModalForm").modal("hide");
+                        $("#addFaultModalForm").modal("hide");
 
                         //создание div состояния
                         var div_visual_diagram_field = document.getElementById('visual_diagram_field');

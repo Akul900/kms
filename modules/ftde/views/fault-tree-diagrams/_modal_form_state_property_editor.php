@@ -80,7 +80,7 @@ use app\modules\stde\models\StateProperty;
                         var description = data['description'];
                         var operator = parseInt(data['operator'], 10);
                         var value = data['value'];
-                        var value = data['fault'];
+                        var fault = data['fault'];
 
                         var j = 0;
                         $.each(mas_data_state_property, function (i, elem) {

@@ -823,33 +823,10 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 });
             });
 
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "and_" + elem.element_from,
-                    target: "basic_event_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
 
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "or_" + elem.element_from,
-                    target: "basic_event_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
+
+
+   
 
             
 
@@ -877,7 +854,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             for (var i = 0; i < windows_start.length; i++) {
                 instance.makeSource(windows_start[i], {
                     filter: ".fa-share",
-                    anchor: "Bottom", //непрерывный анкер
+                    anchor: [ 0.5, 1, 0, 1, 0, -20 ], //непрерывный анкер
                     maxConnections: -1, //ограничение на одно соединение из элемента "начала"
                     // onMaxConnections: function (info, e) {
                     //     //отображение сообщения об ограничении
@@ -890,7 +867,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 instance.makeTarget(windows_start[i], {
                     filter: ".fa-share",
                     dropOptions: { hoverClass: "dragHover" },
-                    anchor: "Top", //непрерывный анкер
+                    anchor: [ 0.5, 0, 0, -1, 0, 20 ], //непрерывный анкер
                     maxConnections: 1,
                     allowLoopback: false,
                     onMaxConnections: function (info, e) {
@@ -903,7 +880,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             }
 
             //построение связей из mas_data_state_connection_start
-            $.each(mas_data_state_connection_start, function (j, elem) {
+            $.each(mas_data_state_connection_fault, function (j, elem) {
                 var c = instance.connect({
                     source: "and_" + elem.element_from,
                     target: "state_" + elem.element_to,
@@ -934,8 +911,64 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             //     });
             // }
 
+
+
+
+
+
+            //стиль точки входа линии завершения
+            for (var i = 0; i < windows_end.length; i++) {
+                instance.makeSource(windows_end[i], {
+                    filter: ".fa-share",
+                    anchor: [ 0.5, 1, 0, 1, 0, -20 ], //непрерывный анкер
+                    maxConnections: -1, //ограничение на одно соединение из элемента "начала"
+                });
+                instance.makeTarget(windows_end[i], {
+                    filter: ".fa-share",
+                    anchor: [ 0.5, 0, 0, -1, 0, 20 ], //непрерывный анкер
+                    maxConnections: 1, //ог
+                    allowLoopback: false,
+                    onMaxConnections: function (info, e) {
+                        //отображение сообщения об ограничении
+                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                        document.getElementById("message-text").lastChild.nodeValue = message;
+                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                    }
+                });
+                
+            }
+
+            $.each(mas_data_state_connection_fault, function (j, elem) {
+                var c = instance.connect({
+                    source: "or_" + elem.element_from,
+                    target: "basic_event_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+            });
+
+            $.each(mas_data_state_connection_fault, function (j, elem) {
+                var c = instance.connect({
+                    source: "and_" + elem.element_from,
+                    target: "basic_event_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+            });
+
+            
             //построение связей из mas_data_state_connection_or
-            $.each(mas_data_state_connection_end, function (j, elem) {
+            $.each(mas_data_state_connection_fault, function (j, elem) {
                 var c = instance.connect({
                     source: "or_" + elem.element_from,
                     target: "state_" + elem.element_to,
@@ -948,32 +981,6 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     ],
                 });
             });     
-
-
-
-
-
-            //стиль точки входа линии завершения
-            for (var i = 0; i < windows_end.length; i++) {
-                instance.makeSource(windows_end[i], {
-                    filter: ".fa-share",
-                    anchor: "Bottom", //непрерывный анкер
-                    maxConnections: -1, //ограничение на одно соединение из элемента "начала"
-                });
-                instance.makeTarget(windows_end[i], {
-                    filter: ".fa-share",
-                    anchor: "Top", //непрерывный анкер
-                    maxConnections: 1, //ог
-                    allowLoopback: false,
-                    onMaxConnections: function (info, e) {
-                        //отображение сообщения об ограничении
-                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                        document.getElementById("message-text").lastChild.nodeValue = message;
-                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    }
-                });
-                
-            }
 
             //построение связей из mas_data_state_connection_fault
             $.each(mas_data_state_connection_fault, function (j, elem) {
@@ -1714,6 +1721,11 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     div_and.className = 'div-and';
                     div_visual_diagram_field.append(div_and);
 
+                    var div_and_and = document.createElement('div');
+                    div_and_and.className = 'div-and-and' ;
+                    div_and_and.innerHTML = 'И';
+                    div_and.append(div_and_and);
+
                     var div_content_start = document.createElement('div');
                     div_content_start.className = 'content-and';
                     div_and.append(div_content_start);
@@ -1739,7 +1751,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
                     instance.makeSource(div_and, {
                             filter: ".fa-share",
-                            anchor: "Bottom", //непрерывный анкер
+                            anchor: [ 0.5, 1, 0, 1, 0, -20 ], //непрерывный анкер
                             maxConnections: -1, //ограничение на одно соединение из элемента "начала"
                             // onMaxConnections: function (info, e) {
                             //     //отображение сообщения об ограничении
@@ -1750,7 +1762,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     });
                     instance.makeTarget(div_and, {
                         filter: ".fa-share",
-                        anchor: "Top", //непрерывный анкер
+                        anchor: [ 0.5, 0, 0, -1, 0, 20 ], //непрерывный анкер
                         maxConnections: 1, //ог
                         allowLoopback: false,
                         onMaxConnections: function (info, e) {
@@ -1803,6 +1815,11 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     div_end.className = 'div-or';
                     div_visual_diagram_field.append(div_end);
 
+                    var div_or_or = document.createElement('div');
+                    div_or_or.className = 'div-or-or' ;
+                    div_or_or.innerHTML = 'ИЛИ';
+                    div_end.append(div_or_or);
+
                     var div_content_end = document.createElement('div');
                     div_content_end.className = 'content-or';
                     div_end.append(div_content_end);
@@ -1834,12 +1851,12 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     // });
                     instance.makeSource(div_end, {
                         filter: ".fa-share",
-                        anchor: "Bottom", //непрерывный анкер
+                        anchor: [ 0.5, 1, 0, 1, 0, -20 ], //непрерывный анкер
                         maxConnections: -1, //ограничение на одно соединение из элемента "начала"
                     });
                     instance.makeTarget(div_end, {
                         filter: ".fa-share",
-                        anchor: "Top", //непрерывный анкер
+                        anchor: [ 0.5, 0, 0, -1, 0, 20 ], //непрерывный анкер
                         maxConnections: 1, //ог
                         allowLoopback: false,
                         onMaxConnections: function (info, e) {
@@ -1946,6 +1963,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
     <?php foreach ($start_model as $and): ?>
         <div id="and_<?= $and->id ?>" class="div-and">
+            <div class="div-and-and">И</div>
             <div class="content-and">
                 <div id="and_del_<?= $and->id ?>" class="del-and" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                 <div class="connect-and" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
@@ -2005,9 +2023,9 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     <div id="basic_event_property_<?= $basic_event->id ?>" class="add-basic-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div>
                     <div id="basic_event_copy_<?= $basic_event->id ?>" class="copy-basic-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
                 </div>
-
+                
                 <!-- отображение разделительной пунктирной линии -->
-                <?php
+                <?php /*
                     $line = false;
                     foreach ($states_property_model_all as $state_property){
                         if ($state_property->fault == $state->id){
@@ -2017,7 +2035,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 ?>
                 <?php if ($line == true){ ?>
                     <div id="basic_event_line_<?= $basic_event->id ?>" class="div-line"></div>
-                <?php } ?>
+                <?php }*/ ?>
 
 
             </div>
@@ -2066,6 +2084,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
         <?php foreach ($end_model as $end): ?>
             <div id="or_<?= $end->id ?>" class="div-or">
+            <div class="div-or-or">ИЛИ</div>
                 <div class="content-or">
                     <div id="or_del_<?= $end->id ?>" class="del-or" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div class="connect-or" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>

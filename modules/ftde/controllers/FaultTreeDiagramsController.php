@@ -90,19 +90,6 @@ class FaultTreeDiagramsController extends Controller
         //все связи между StartToEnd и State
         $state_connections_all = StateConnection::find()->all();
 
-        //начало диаграммы
-        $start_model = Element::find()->where(['diagram' => $id, 'type' => Element::START_TYPE])->all();
-        //связи между началом StartToEnd и State диаграммы
-        $states_connection_start_model_all = array();//массив связей
-        if ($start_model != null){
-            foreach ($state_connections_all as $sc){
-                foreach ($start_model as $sm){
-                    if ($sc->element_from == $sm->id) {
-                        array_push($states_connection_start_model_all, $sc);
-                    }
-                }
-            }
-        }
 
         $states_connection_fault_model_all = array();//массив связей
         if ($states_model_all != null){
@@ -114,6 +101,21 @@ class FaultTreeDiagramsController extends Controller
                 }
             }
         }
+
+        //начало диаграммы
+        $start_model = Element::find()->where(['diagram' => $id, 'type' => Element::START_TYPE])->all();
+        //связи между началом StartToEnd и State диаграммы
+        $states_connection_start_model_all = array();//массив связей
+        if ($start_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($start_model as $sm){
+                    if ($sc->element_from == $sm->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
 
 
 
@@ -134,7 +136,7 @@ class FaultTreeDiagramsController extends Controller
             foreach ($state_connections_all as $sc){
                 foreach ($end_model as $em){
                     if ($sc->element_from == $em->id) {
-                        array_push($states_connection_end_model_all, $sc);
+                        array_push($states_connection_fault_model_all, $sc);
                     }
                 }
             }
@@ -143,9 +145,9 @@ class FaultTreeDiagramsController extends Controller
         //базовое событие
         $basic_event_model = Element::find()->where(['diagram' => $id, 'type' => Element::BASIC_EVENT])->all();
         $connection_basic_event_model_all = array();//массив связей
-        if ($states_model_all != null){
+        if ($basic_event_model != null){
             foreach ($state_connections_all as $sc){
-                foreach ($element_model_all as $be){
+                foreach ($basic_event_model as $be){
                     if ($sc->element_from == $be->id){
                         array_push($states_connection_fault_model_all, $sc);
                     }

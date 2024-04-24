@@ -1,15 +1,27 @@
 .div-and{
-    background-image:url(../images/and.png);
+    background-image:url(../images/triangle.png);
     background-size:  contain;
-    width: 60px;
-    height: 120px;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
     position: absolute;
 }
 
+.div-and-and {
+    /* текст по центру*/
+    font-weight:bold;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 37%;
+    margin-right: -60%;
+    transform: translate(-50%, -50%);
+}
+
 .div-and:hover {
-    border:2px solid #337ab7;
-    background-color: #b9def0;
-    opacity:0.9;
+    width:69px;
+    height:80px;
+    background-image:url(../images/triangle_activ.png);
     cursor: pointer;
 }
 
@@ -25,8 +37,8 @@
 
 .del-and {
     position: absolute;
-    right: 0px;
-    top: 2px;
+    right: -10px;
+    top: -4px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -35,8 +47,8 @@
 
 .connect-and {
     position: absolute;
-    bottom: 20px;
-    right: 0px;
+    top: 20px;
+    right: -10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -56,17 +68,30 @@
 
 
 .div-or{
-    background-image:url(../images/or.png);
+    background-image:url(../images/triangle.png);
     background-size:  contain;
-    width: 60px;
-    height: 120px;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
     position: absolute;
 }
 
+.div-or-or {
+    /* текст по центру*/
+    font-weight:bold;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 37%;
+    margin-right: -60%;
+    transform: translate(-50%, -50%);
+}
+
+
 .div-or:hover {
-    border:2px solid #337ab7;
-    background-color: #b9def0;
-    opacity:0.9;
+    width:69px;
+    height:80px;
+    background-image:url(../images/triangle_activ.png);
     cursor: pointer;
 }
 
@@ -76,8 +101,8 @@
 
 .connect-or {
     position: absolute;
-    bottom: 5px;
-    right: 0px;
+    top: 20px;
+    right: -10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -92,8 +117,8 @@
 
 .del-or {
     position: absolute;
-    right: 0px;
-    top: 2px;
+    right: -10px;
+    top: -4px;
     display:none;
     color: #337ab7;
     font-size: 13px;

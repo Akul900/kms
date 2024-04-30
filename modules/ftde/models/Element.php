@@ -27,8 +27,8 @@ use app\modules\main\models\Diagram;
 
 class Element extends \yii\db\ActiveRecord
 {
-    const START_TYPE = 0;         // И
-    const END_TYPE = 1;           // Или
+    const AND_TYPE = 0;         // И
+    const OR_TYPE = 1;           // Или
     const COMMON_FAULT = 2;           // Отказ
     const INITIAL_FAULT = 3;
     const BASIC_EVENT = 4;      //Базисное событие
@@ -104,8 +104,8 @@ class Element extends \yii\db\ActiveRecord
     public static function getTypesArray()
     {
         return [
-            self::START_TYPE => Yii::t('app', 'START_TO_END_MODEL_START_TYPE'),
-            self::END_TYPE => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::AND_TYPE => Yii::t('app', 'START_TO_END_MODEL_START_TYPE'),
+            self::OR_TYPE => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
             self::COMMON_FAULT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
             self::INITIAL_FAULT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
             self::BASIC_EVENT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
@@ -129,8 +129,8 @@ class Element extends \yii\db\ActiveRecord
     public static function getTypesArrayEn()
     {
         return [
-            self::START_TYPE => 'Start',
-            self::END_TYPE => 'End',
+            self::AND_TYPE => 'And',
+            self::OR_TYPE => 'Or',
             self::COMMON_FAULT => 'Fault',
             self::INITIAL_FAULT => 'Initial fault',
             self::BASIC_EVENT => 'Basic event',

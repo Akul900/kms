@@ -61,10 +61,10 @@ class FaultTreeXMLImport
                 $state_model->type = Element::COMMON_FAULT;
             }
             if ((string)$state['type'] == 'Start'){
-                $state_model->type = Element::START_TYPE;
+                $state_model->type = Element::AND_TYPE;
             }
             if ((string)$state['type'] == 'End'){
-                $state_model->type = Element::END_TYPE;
+                $state_model->type = Element::OR_TYPE;
             }
             if ((string)$state['type'] == 'Basic event'){
                 $state_model->type = Element::BASIC_EVENT;

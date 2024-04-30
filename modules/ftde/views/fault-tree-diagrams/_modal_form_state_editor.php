@@ -42,8 +42,13 @@ use app\modules\main\models\Lang;
                         var div_visual_diagram_field = document.getElementById('visual_diagram_field');
 
                         var div_state = document.createElement('div');
-                        div_state.id = 'state_' + data['id'];
-                        div_state.className = 'div-state';
+                        if (data['type'] == 3){
+                            div_state.id = 'state-start_' + data['id'];
+                            div_state.className = 'div-state-start';
+                        }else{
+                            div_state.id = 'state_' + data['id'];
+                            div_state.className = 'div-state';
+                        }
                         div_state.title = data['description'];
                         div_visual_diagram_field.append(div_state);
 
@@ -92,21 +97,40 @@ use app\modules\main\models\Lang;
                         div_content_state.append(div_copy);
 
                         //сделать div двигаемым
-                        var div_state = document.getElementById('state_' + data['id']);
+                        if (data['type'] == 3){
+                            var div_state = document.getElementById('state-start_' + data['id']);
+                        }else{
+                            var div_state = document.getElementById('state_' + data['id']);
+                        }
                         instance.draggable(div_state);
                         //добавляем элемент div_state в группу с именем group_field
                         instance.addToGroup('group_field', div_state);
 
-                        instance.makeSource(div_state, {
-                            filter: ".fa-share",
-                            anchor: "Continuous", //непрерывный анкер
-                        });
+                        if (data['type'] == 3){
+                            instance.makeSource(div_state, {
+                                filter: ".fa-share",
+                                anchor: "Bottom", //непрерывный анкер
+                                maxConnections: 1,
+                                onMaxConnections: function (info, e) {
+                                    //отображение сообщения об ограничении
+                                    var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                                    document.getElementById("message-text").lastChild.nodeValue = message;
+                                    $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                                }
+                            });
+                        }else{
+                            instance.makeSource(div_state, {
+                                filter: ".fa-share",
+                                anchor: "Continuous", //непрерывный анкер
+                            });
 
-                        instance.makeTarget(div_state, {
-                            dropOptions: { hoverClass: "dragHover" },
-                            anchor: "Continuous", //непрерывный анкер
-                            allowLoopback: true, // Разрешение создавать кольцевую связь
-                        });
+                            instance.makeTarget(div_state, {
+                                dropOptions: { hoverClass: "dragHover" },
+                                anchor: "Continuous", //непрерывный анкер
+                                allowLoopback: false, // Разрешение создавать кольцевую связь
+                            });
+                        }
+
 
 
                         //добавлены новые записи в массив состояний для изменений
@@ -204,7 +228,11 @@ use app\modules\main\models\Lang;
                             var div_state_name = document.getElementById('state_name_' + data['id']);
                             div_state_name.innerHTML = data['name'];
 
-                            var div_state = document.getElementById('state_' + data['id']);
+                            if (data['type'] == 3){
+                                var div_state = document.getElementById('state-start_' + data['id']);
+                            }else{
+                                var div_state = document.getElementById('state_' + data['id']);
+                            }
                             div_state.title = data['description'];
 
 
@@ -297,7 +325,11 @@ use app\modules\main\models\Lang;
                             $("#deleteStateModalForm").modal("hide");
 
                             //удаление div состояния
-                            var div_state = document.getElementById('state_' + state_id_on_click);
+                            if (data['type'] == 3){
+                                var div_state = document.getElementById('state-start_' + state_id_on_click);
+                            }else{
+                                var div_state = document.getElementById('state_' + state_id_on_click);
+                            }
                             instance.removeFromGroup(div_state);//удаляем из группы
                             instance.remove(div_state);// удаляем состояние
 
@@ -392,8 +424,14 @@ use app\modules\main\models\Lang;
                         var div_visual_diagram_field = document.getElementById('visual_diagram_field');
 
                         var div_state = document.createElement('div');
-                        div_state.id = 'state_' + data['id'];
-                        div_state.className = 'div-state';
+                        if (data['type'] == 3){
+                            div_state.id = 'state-start_' + data['id'];
+                            div_state.className = 'div-state-start';
+                        }else{
+                            div_state.id = 'state_' + data['id'];
+                            div_state.className = 'div-state';
+                        }
+
                         div_state.title = data['description'];
                         div_visual_diagram_field.append(div_state);
 
@@ -442,21 +480,40 @@ use app\modules\main\models\Lang;
                         div_content_state.append(div_copy);
 
                         //сделать div двигаемым
-                        var div_state = document.getElementById('state_' + data['id']);
+                        if (data['type'] == 3){
+                            var div_state = document.getElementById('state-start_' + data['id']);
+                        }else{
+                            var div_state = document.getElementById('state_' + data['id']);
+                        }
                         instance.draggable(div_state);
                         //добавляем элемент div_state в группу с именем group_field
                         instance.addToGroup('group_field', div_state);
 
-                        instance.makeSource(div_state, {
-                            filter: ".fa-share",
-                            anchor: "Continuous", //непрерывный анкер
-                        });
+                        if (data['type'] == 3){
+                            instance.makeSource(div_state, {
+                                filter: ".fa-share",
+                                anchor: "Bottom", //непрерывный анкер
+                                maxConnections: 1,
+                                onMaxConnections: function (info, e) {
+                                    //отображение сообщения об ограничении
+                                    var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                                    document.getElementById("message-text").lastChild.nodeValue = message;
+                                    $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                                }
+                            });
+                        }else{
+                            instance.makeSource(div_state, {
+                                filter: ".fa-share",
+                                anchor: "Continuous", //непрерывный анкер
+                            });
 
-                        instance.makeTarget(div_state, {
-                            dropOptions: { hoverClass: "dragHover" },
-                            anchor: "Continuous", //непрерывный анкер
-                            allowLoopback: true, // Разрешение создавать кольцевую связь
-                        });
+                            instance.makeTarget(div_state, {
+                                dropOptions: { hoverClass: "dragHover" },
+                                anchor: "Continuous", //непрерывный анкер
+                                allowLoopback: false, // Разрешение создавать кольцевую связь
+                            });
+                        }
+
 
 
                         //добавлены новые записи в массив состояний для изменений

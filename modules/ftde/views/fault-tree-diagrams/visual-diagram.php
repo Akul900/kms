@@ -50,7 +50,7 @@ $this->params['menu_diagram'] = [
 // создаем массив из state для передачи в js
 $states_mas = array();
 foreach ($states_model_all as $s){
-    array_push($states_mas, [$s->id, $s->indent_x, $s->indent_y, $s->name, $s->description]);
+    array_push($states_mas, [$s->id, $s->indent_x, $s->indent_y, $s->name, $s->description, $s->type]);
 }
 
 // создаем массив из state_property для передачи в js
@@ -201,6 +201,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     var indent_y = "";
     var name = "";
     var description = "";
+    var type = ""
     $.each(states_mas, function (i, mas) {
         $.each(mas, function (j, elem) {
             if (j == 0) {id = elem;}//записываем id
@@ -208,12 +209,14 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             if (j == 2) {indent_y = elem;}
             if (j == 3) {name = elem;}
             if (j == 4) {description = elem;}
+            if (j == 5) {type = elem;}
             mas_data_state[q] = {
                 "id":id,
                 "indent_x":indent_x,
                 "indent_y":indent_y,
                 "name":name,
                 "description":description,
+                "type":type
             }
         });
         q = q+1;
@@ -581,17 +584,34 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
         //Распределение state (состояний) на диаграмме
         $.each(mas_data_state, function (j, elem) {
-            $(".div-state").each(function(i) {
-                var state = $(this).attr('id');
-                var state_id = parseInt(state.match(/\d+/));
 
-                if (elem.id == state_id) {
-                    $(this).css({
-                        left: parseInt(elem.indent_x),
-                        top: parseInt(elem.indent_y)
-                    });
-                }
-            });
+            console.log(elem)
+            if(elem["type"] == 3){
+                $(".div-state-start").each(function(i) {
+                    var state = $(this).attr('id');
+                    var state_id = parseInt(state.match(/\d+/));
+
+                    if (elem.id == state_id) {
+                        $(this).css({
+                            left: parseInt(elem.indent_x),
+                            top: parseInt(elem.indent_y)
+                        });
+                    }
+                });
+            }else{
+                $(".div-state").each(function(i) {
+                    var state = $(this).attr('id');
+                    var state_id = parseInt(state.match(/\d+/));
+
+                    if (elem.id == state_id) {
+                        $(this).css({
+                            left: parseInt(elem.indent_x),
+                            top: parseInt(elem.indent_y)
+                        });
+                    }
+                });
+            }
+           
         });
 
         //Распределение basic_event (базовых состояний) на диаграмме
@@ -663,6 +683,16 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         });
 
                 //находим все элементы с классом div-state и делаем их двигаемыми
+        $(".div-state-start").each(function(i) {
+            var id_state = $(this).attr('id');
+            var state = document.getElementById(id_state);
+            //делаем state перетаскиваемыми
+            instance.draggable(state);
+            //добавляем элемент state в группу с именем group_field
+            instance.addToGroup('group_field', state);
+        });
+
+                //находим все элементы с классом div-state и делаем их двигаемыми
         $(".div-basic-event").each(function(i) {
             var id_state = $(this).attr('id');
             var state = document.getElementById(id_state);
@@ -707,6 +737,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
 
         var windows = jsPlumb.getSelector(".div-state");
+        var windows_fault_start = jsPlumb.getSelector(".div-state-start");
         var windows_start = jsPlumb.getSelector(".div-and");
         var windows_end = jsPlumb.getSelector(".div-or");
         var windows_basic_event = jsPlumb.getSelector(".div-basic-event");
@@ -727,9 +758,12 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     connection_is = true;
                 }
             });
+            console.log(name_target)
 
-            // Запрет на соединение начала и завершения
-            if ((name_source == 'and') && (name_target == 'or')){
+            // Запреты на соединения
+            if (((name_source == 'and') && (name_target == 'or')) || ((name_source == 'or') && (name_target == 'and')) 
+            || ((name_source == 'or') && (name_target == 'basic'))||((name_source == 'and') && (name_target == 'basic'))
+            || ((name_source == 'state-start') != (name_target == 'state'))){
                 var message = "<?php echo Yii::t('app', 'AND_OR_CANNOT_BE_LINKED'); ?>";
                 document.getElementById("message-text").lastChild.nodeValue = message;
                 $("#viewMessageErrorLinkingItemsModalForm").modal("show");
@@ -760,8 +794,25 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 instance.makeTarget(windows[i], {
                     dropOptions: { hoverClass: "dragHover" },
                     anchor: "Top", //непрерывный анкер
-                    allowLoopback: true, // Разрешение создавать кольцевую связь
+                    allowLoopback: false, // Разрешение создавать кольцевую связь
                 });
+            }
+
+            for (var i = 0; i < windows_fault_start.length; i++) {
+
+                instance.makeSource(windows_fault_start[i], {
+                    filter: ".fa-share",
+                    anchor: "Bottom", //непрерывный анкер
+                    maxConnections: 1,
+                    onMaxConnections: function (info, e) {
+                        //отображение сообщения об ограничении
+                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                        document.getElementById("message-text").lastChild.nodeValue = message;
+                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                    }
+                });
+
+
             }
 
              //построение связей из mas_data_state_connection_fault
@@ -779,18 +830,40 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 });
             });
 
+            //построение связей из mas_data_state_connection_fault
+            $.each(mas_data_state_connection_fault, function (j, elem) {
+                var c = instance.connect({
+                    source: "state-start_" + elem.element_from,
+                    target: "state_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+            });
+
 
             for (var i = 0; i < windows_basic_event.length; i++) {
 
-                instance.makeSource(windows_basic_event[i], {
-                    filter: ".fa-share",
-                    anchor: "Bottom", //непрерывный анкер
-                });
+                // instance.makeSource(windows_basic_event[i], {
+                //     filter: ".fa-share",
+                //     anchor: "Bottom", //непрерывный анкер
+                // });
 
                 instance.makeTarget(windows_basic_event[i], {
                     dropOptions: { hoverClass: "dragHover" },
                     anchor: "Top", //непрерывный анкер
-                    allowLoopback: true, // Разрешение создавать кольцевую связь
+                    allowLoopback: false, // Разрешение создавать кольцевую связь
+                    maxConnections: 1,
+                    onMaxConnections: function (info, e) {
+                        //отображение сообщения об ограничении
+                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                        document.getElementById("message-text").lastChild.nodeValue = message;
+                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                    }
                 });
             }
 
@@ -799,6 +872,34 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 var c = instance.connect({
                     source: "basic_event_" + elem.element_from,
                     target: "state_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+            });
+
+            $.each(mas_data_state_connection_fault, function (j, elem) {
+                var c = instance.connect({
+                    source: "basic_event_" + elem.element_from,
+                    target: "or_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+            });
+
+            $.each(mas_data_state_connection_fault, function (j, elem) {
+                var c = instance.connect({
+                    source: "basic_event_" + elem.element_from,
+                    target: "and_" + elem.element_to,
                     overlays: [
                         ['Label', {
                             label: message_label,
@@ -1203,12 +1304,11 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         });
 
         $(".div-basic-event").each(function(i) {
-            var id_state = $(this).attr('id');
-            var state = document.getElementById(id_state);
+            var id_basic = $(this).attr('id');
+            var basic = document.getElementById(id_basic);
 
-            var w = state.offsetLeft + state.clientWidth;
-            var h = state.offsetTop + state.clientHeight;
-
+            var w = basic.offsetLeft + basic.clientWidth;
+            var h = basic.offsetTop + basic.clientHeight;
             if (w > max_w){max_w = w;}
             if (h > max_h){max_h = h;}
 
@@ -1272,6 +1372,13 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         instance.repaintEverything();
     });
 
+        //при движении блока состояния расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-state-start', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    });
+
     $(document).on('mousemove', '.div-basic-event', function() {
         mousemoveState();
         // Обновление формы редактора
@@ -1294,6 +1401,24 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
     //сохранение расположения элемента
     $(document).on('mouseup', '.div-state', function() {
+        if (!guest) {
+            var state = $(this).attr('id');
+            var state_id = parseInt(state.match(/\d+/));
+            var indent_x = $(this).position().left;
+            var indent_y = $(this).position().top;
+            //если отступ элемента отрицательный делаем его нулевым
+            if (indent_x < 0){
+                indent_x = 0;
+            }
+            if (indent_y < 0){
+                indent_y = 0;
+            }
+            saveIndent(state_id, indent_x, indent_y);
+        }
+    });
+
+        //сохранение расположения элемента
+        $(document).on('mouseup', '.div-state-start', function() {
         if (!guest) {
             var state = $(this).attr('id');
             var state_id = parseInt(state.match(/\d+/));
@@ -1457,6 +1582,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
     //сохранение расположения элемента
     $(document).on('mouseup', '.div-basic-event', function() {
+        var field = document.getElementById('visual_diagram_field');
         if (!guest) {
             var state = $(this).attr('id');
             var state_id = parseInt(state.match(/\d+/));
@@ -1469,7 +1595,8 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             if (indent_y < 0){
                 indent_y = 0;
             }
-            saveIndent(state_id, indent_x, indent_y);
+            saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
+         
         }
     });
 
@@ -1948,6 +2075,39 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
         }
     });
+    // document.addEventListener('wheel', function(e) {
+    // e.ctrlKey && e.preventDefault();
+    // }, {
+    // passive: false,
+    // });
+    document.addEventListener("DOMContentLoaded", function(){ 
+   
+
+        const zoomElement = document.getElementById("visual_diagram_field");
+        console.log(zoomElement)
+        let zoom = 1;
+        const ZOOM_SPEED = 0.1;
+        document.addEventListener("wheel", function(e) {  
+            if(event.ctrlKey == true)
+        {
+            e.ctrlKey && e.preventDefault();
+            
+            if(e.deltaY > 0){    
+                zoomElement.style.transform = `scale(${zoom += ZOOM_SPEED})`;  
+            }else{    
+                zoomElement.style.transform = `scale(${zoom -= ZOOM_SPEED})`;  }
+            }
+
+        }, {
+    passive: false,
+    });
+        
+    })
+    
+ 
+
+
+        
 </script>
 
 
@@ -1959,7 +2119,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
 <div id="visual_diagram" class="visual-diagram col-md-12">
 
-    <div id="visual_diagram_field" class="visual-diagram-top-layer">
+    <div id="visual_diagram_field" class="visual-diagram-top-layer" style="transform: scale(1.0);">
 
     <?php foreach ($start_model as $and): ?>
         <div id="and_<?= $and->id ?>" class="div-and">
@@ -1973,7 +2133,11 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
         <!-- отображение состояний -->
         <?php foreach ($states_model_all as $state): ?>
-            <div id="state_<?= $state->id ?>" class="div-state" title="<?= $state->description ?>">
+            <?php if ($state->type == 3): ?>
+                <div id="state-start_<?= $state->id ?>" class="div-state-start" title="<?= $state->description ?>">
+            <?php else: ?>
+                <div id="state_<?= $state->id ?>" class="div-state" title="<?= $state->description ?>">
+            <?php endif; ?>
                 <div class="content-state">
                     <div id="state_name_<?= $state->id ?>" class="div-state-name"><?= $state->name ?></div>
                     <div class="connect-state" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>

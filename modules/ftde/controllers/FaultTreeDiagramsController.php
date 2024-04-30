@@ -103,7 +103,7 @@ class FaultTreeDiagramsController extends Controller
         }
 
         //начало диаграммы
-        $start_model = Element::find()->where(['diagram' => $id, 'type' => Element::START_TYPE])->all();
+        $start_model = Element::find()->where(['diagram' => $id, 'type' => Element::AND_TYPE])->all();
         //связи между началом StartToEnd и State диаграммы
         $states_connection_start_model_all = array();//массив связей
         if ($start_model != null){
@@ -129,7 +129,7 @@ class FaultTreeDiagramsController extends Controller
         // }
 
         //завершение диаграммы
-        $end_model = Element::find()->where(['diagram' => $id, 'type' => Element::END_TYPE])->all();
+        $end_model = Element::find()->where(['diagram' => $id, 'type' => Element::OR_TYPE])->all();
         //связи между завершением StartToEnd и State диаграммы
         $states_connection_end_model_all = array();//массив связей
         if ($end_model != null){
@@ -157,8 +157,8 @@ class FaultTreeDiagramsController extends Controller
 
         
 
-        $start_count = Element::find()->where(['diagram' => $id, 'type' => Element::START_TYPE])->count();//количество начал
-        $end_count = Element::find()->where(['diagram' => $id, 'type' => Element::END_TYPE])->count();//количество завершений
+        $start_count = Element::find()->where(['diagram' => $id, 'type' => Element::AND_TYPE])->count();//количество начал
+        $end_count = Element::find()->where(['diagram' => $id, 'type' => Element::OR_TYPE])->count();//количество завершений
 
         return $this->render('visual-diagram', [
             'model' => $this->findModel($id),
@@ -240,6 +240,7 @@ class FaultTreeDiagramsController extends Controller
                 // Формирование данных о новом состоянии
                 $data["id"] = $model->id;
                 $data["name"] = $model->name;
+                $data["type"] = $model->type;
                 $data["description"] = $model->description;
                 $data["indent_x"] = $model->indent_x;
                 $data["indent_y"] = $model->indent_y;
@@ -320,6 +321,7 @@ class FaultTreeDiagramsController extends Controller
                 $data["success"] = true;
                 // Формирование данных об измененном событии
                 $data["id"] = $model->id;
+                $data["type"] = $model->type;
                 $data["name"] = $model->name;
                 $data["description"] = $model->description;
             } else
@@ -384,6 +386,7 @@ class FaultTreeDiagramsController extends Controller
             $state -> delete();
 
             $data["success"] = true;
+            $data["type"] = $state->type;
 
             // Возвращение данных
             $response->data = $data;
@@ -904,7 +907,7 @@ class FaultTreeDiagramsController extends Controller
             $model = new Element();
             // Задание id диаграммы
             $model->diagram = $id;
-            $model->type = Element::START_TYPE;
+            $model->type = Element::AND_TYPE;
             // Успешный ввод данных
             $data["success"] = true;
             // Добавление нового состояния в БД
@@ -970,7 +973,7 @@ class FaultTreeDiagramsController extends Controller
             $model = new Element();
             // Задание id диаграммы
             $model->diagram = $id;
-            $model->type = Element::END_TYPE;
+            $model->type = Element::OR_TYPE;
             // Успешный ввод данных
             $data["success"] = true;
             // Добавление нового состояния в БД

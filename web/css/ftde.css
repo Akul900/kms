@@ -252,7 +252,7 @@
 .div-prohibition{
     background-image:url(../images/prohibition.png);
     background-size: contain;
-    width:70px;
+    width:69px;
     height:80px;
     filter: drop-shadow(5px 5px 5px #b9def0);
     position: absolute;
@@ -260,7 +260,7 @@
 
 
 .div-prohibition:hover {
-    width:70px;
+    width:69px;
     height:80px;
     background-image:url(../images/prohibition_activ.png);
     cursor: pointer;

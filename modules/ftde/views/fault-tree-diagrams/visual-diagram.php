@@ -20,8 +20,14 @@ $this->params['menu_add'] = [
     ['label' => Yii::t('app', 'NAV_ADD_OR'), 'url' => '#',
         'linkOptions' => ['id'=>'nav_add_end']],
 
-        ['label' => Yii::t('app', 'NAV_BASIC_EVENT'), 'url' => '#',
+    ['label' => Yii::t('app', 'NAV_ADD_PROHIBITION'), 'url' => '#',
+        'linkOptions' => ['id'=>'nav_add_prohibition']],
+
+    ['label' => Yii::t('app', 'NAV_BASIC_EVENT'), 'url' => '#',
         'linkOptions' => ['data-bs-toggle'=>'modal', 'data-bs-target'=>'#addBasicEventModalForm']],
+
+    ['label' => Yii::t('app', 'NAV_UNDEVELOPED_EVENT'), 'url' => '#',
+        'linkOptions' => ['data-bs-toggle'=>'modal', 'data-bs-target'=>'#addUndevelopedEventModalForm']],
 ];
 
 $this->params['menu_diagram'] = [
@@ -111,6 +117,11 @@ foreach ($connection_basic_event_model_all as $s){
     array_push($basic_event_mas, [$s->id, $s->element_from, $s->element_to]);
 }
 
+$prohibition_mas = array();
+foreach ($prohibition_model as $e){
+    array_push($prohibition_mas, [$e->id, $e->indent_x, $e->indent_y]);
+}
+
 ?>
 
 
@@ -187,6 +198,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     var states_connection_fault_mas = <?php echo json_encode($states_connection_fault_mas); ?>;//прием массива соединений завершений из php
     var basic_event_connection_mas = <?php echo json_encode($basic_event_connection_mas); ?>;//прием массива соединений завершений из php
     var basic_event_mas = <?php echo json_encode($basic_event_mas); ?>;//прием массивабазовых событий из php
+    var prohibition_mas =  <?php echo json_encode($prohibition_mas); ?>;//прием запретов из php
     var message_label = "<?php echo Yii::t('app', 'CONNECTION_DELETE'); ?>";
 
     var element_from_source = "";
@@ -383,6 +395,25 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     });
     //console.log(mas_data_end);
 
+
+    var mas_data_prohibition = {};
+    var q = 0;
+    var id = "";
+    var indent_x = "";
+    var indent_y = "";
+    $.each(prohibition_mas, function (i, mas) {
+        $.each(mas, function (j, elem) {
+            if (j == 0) {id = elem;}//записываем id
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            mas_data_prohibition[q] = {
+                "id":id,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
+            }
+        });
+        q = q+1;
+    });
 
     var mas_data_state_connection_start = {};
     var q = 0;
@@ -659,6 +690,20 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 }
             });
         });
+
+        $.each(mas_data_prohibition, function (j, elem) {
+            $(".div-prohibition").each(function(i) {
+                var prohibition = $(this).attr('id');
+                var prohibition_id = parseInt(prohibition.match(/\d+/));
+
+                if (elem.id == prohibition_id) {
+                    $(this).css({
+                        left: parseInt(elem.indent_x),
+                        top: parseInt(elem.indent_y)
+                    });
+                }
+            });
+        });
         mousemoveState();
 
 
@@ -724,6 +769,16 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             instance.addToGroup('group_field', end);
         });
 
+        //находим все элементы с классом div-prohibition и делаем их двигаемыми
+        $(".div-prohibition").each(function(i) {
+            var id_prohibition = $(this).attr('id');
+            var eprohibition = document.getElementById(id_prohibition);
+            //делаем end перетаскиваемыми
+            instance.draggable(eprohibition);
+            //добавляем элемент end в группу с именем group_field
+            instance.addToGroup('group_field', eprohibition);
+        });
+
 
         //находим все элементы с классом div-transition и делаем их двигаемыми
         //$(".div-transition").each(function(i) {
@@ -741,6 +796,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         var windows_start = jsPlumb.getSelector(".div-and");
         var windows_end = jsPlumb.getSelector(".div-or");
         var windows_basic_event = jsPlumb.getSelector(".div-basic-event");
+        var windows_prohibition = jsPlumb.getSelector(".div-prohibition");
 
         instance.bind("beforeDrop", function (info) {
             var source_id = info.sourceId;
@@ -758,12 +814,14 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     connection_is = true;
                 }
             });
+            console.log(name_source)
             console.log(name_target)
 
             // Запреты на соединения
-            if (((name_source == 'and') && (name_target == 'or')) || ((name_source == 'or') && (name_target == 'and')) 
-            || ((name_source == 'or') && (name_target == 'basic'))||((name_source == 'and') && (name_target == 'basic'))
-            || ((name_source == 'state-start') != (name_target == 'state'))){
+            if (((name_source == 'and') && (name_target == 'or' || name_target == 'prohibition' || name_target == 'and' || name_target == 'basic')) 
+            || ((name_source == 'or') && (name_target == 'and' || name_target == 'prohibition' || name_target == 'or' || name_target == 'basic')) 
+            || ((name_source == 'state-start') && (name_target == 'and' || name_target == 'or'|| name_target == 'basic'|| name_target == 'prohibition'))
+            || ((name_source == 'prohibition') && (name_target == 'and' || name_target == 'or'|| name_target == 'basic'|| name_target == 'prohibition'))){
                 var message = "<?php echo Yii::t('app', 'AND_OR_CANNOT_BE_LINKED'); ?>";
                 document.getElementById("message-text").lastChild.nodeValue = message;
                 $("#viewMessageErrorLinkingItemsModalForm").modal("show");
@@ -980,6 +1038,35 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 });
             }
 
+            //стиль точки выхода линии "Запрета"
+            for (var i = 0; i < windows_prohibition.length; i++) {
+                instance.makeSource(windows_prohibition[i], {
+                    filter: ".fa-share",
+                    anchor: [ 0.53, 1, 0, 1, 0, 0 ], //непрерывный анкер
+                    maxConnections: -1, //ограничение на одно соединение из элемента "начала"
+                    // onMaxConnections: function (info, e) {
+                    //     //отображение сообщения об ограничении
+                    //     var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                    //     document.getElementById("message-text").lastChild.nodeValue = message;
+                    //     $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                    // }
+                });
+
+                instance.makeTarget(windows_prohibition[i], {
+                    filter: ".fa-share",
+                    dropOptions: { hoverClass: "dragHover" },
+                    anchor: [ 0.51, 0, 0, -1, 0, 0 ], //непрерывный анкер
+                    maxConnections: 1,
+                    allowLoopback: false,
+                    onMaxConnections: function (info, e) {
+                        //отображение сообщения об ограничении
+                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                        document.getElementById("message-text").lastChild.nodeValue = message;
+                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                    }
+                });
+            }
+
             //построение связей из mas_data_state_connection_start
             $.each(mas_data_state_connection_fault, function (j, elem) {
                 var c = instance.connect({
@@ -1099,6 +1186,42 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 var c = instance.connect({
                     source: "state_" + elem.element_from,
                     target: "and_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+
+                var c = instance.connect({
+                    source: "prohibition_" + elem.element_from,
+                    target: "state_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+
+                var c = instance.connect({
+                    source: "state_" + elem.element_from,
+                    target: "prohibition_" + elem.element_to,
+                    overlays: [
+                        ['Label', {
+                            label: message_label,
+                            location: 0.5, //расположение посередине
+                            cssClass: "connections-style",
+                        }]
+                    ],
+                });
+
+                var c = instance.connect({
+                    source: "prohibition_" + elem.element_from,
+                    target: "basic_event_" + elem.element_to,
                     overlays: [
                         ['Label', {
                             label: message_label,
@@ -2075,6 +2198,119 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
         }
     });
+
+
+
+        //добавление элемента "начало" на диаграмму
+        $('#nav_add_prohibition').on('click', function() {
+        $.ajax({
+            //переход на экшен левел
+            url: "<?= Yii::$app->request->baseUrl . '/' . Lang::getCurrent()->url .
+            '/fault-tree-diagrams/add-prohibition/' . $model->id ?>",
+            type: "post",
+            data: "YII_CSRF_TOKEN=<?= Yii::$app->request->csrfToken ?>",
+            dataType: "json",
+            success: function (data) {
+                if (data['success']) {
+                    //создание div состояния
+                    var div_visual_diagram_field = document.getElementById('visual_diagram_field');
+
+                    var div_prohibition = document.createElement('div');
+                    div_prohibition.id = 'prohibition_' + data['id'];
+                    div_prohibition.className = 'div-prohibition';
+                    div_visual_diagram_field.append(div_prohibition);
+
+                    // var div_prohibition_and = document.createElement('div');
+                    // div_and_and.className = 'div-and-and' ;
+                    // div_and_and.innerHTML = 'И';
+                    // div_and.append(div_and_and);
+
+                    var div_content_start = document.createElement('div');
+                    div_content_start.className = 'content-prohibition';
+                    div_prohibition.append(div_content_start);
+
+                    var div_del = document.createElement('div');
+                    div_del.id = 'prohibition_del_' + data['id'];
+                    div_del.className = 'del-prohibition' ;
+                    div_del.title = '<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>';
+                    div_del.innerHTML = '<i class="fa-solid fa-trash"></i>'
+                    div_content_start.append(div_del);
+
+                    var div_connect = document.createElement('div');
+                    div_connect.className = 'connect-prohibition' ;
+                    div_connect.title = '<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>' ;
+                    div_connect.innerHTML = '<i class="fa-solid fa-share"></i>';
+                    div_content_start.append(div_connect);
+
+                    //сделать div двигаемым
+                    var div_prohibition = document.getElementById('prohibition_' + data['id']);
+                    instance.draggable(div_prohibition);
+                    //добавляем элемент div_prohibition в группу с именем group_field
+                    instance.addToGroup('group_field', div_prohibition);
+
+                    instance.makeSource(div_prohibition, {
+                            filter: ".fa-share",
+                            anchor: [0.53, 1, 0, 1, 0, 0], //непрерывный анкер
+                            maxConnections: -1, //ограничение на одно соединение из элемента "начала"
+                            // onMaxConnections: function (info, e) {
+                            //     //отображение сообщения об ограничении
+                            //     var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                            //     document.getElementById("message-text").lastChild.nodeValue = message;
+                            //     $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                            // }
+                    });
+                    instance.makeTarget(div_prohibition, {
+                        filter: ".fa-share",
+                        anchor: [ 0.51, 0, 0, -1, 0, 0 ], //непрерывный анкер
+                        maxConnections: 1, //ог
+                        allowLoopback: false,
+                        onMaxConnections: function (info, e) {
+                            //отображение сообщения об ограничении
+                            var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                            document.getElementById("message-text").lastChild.nodeValue = message;
+                            $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                        }
+                    });
+
+                    var nav_add_prohibition = document.getElementById('nav_add_prohibition');
+                    // Выключение кнопки добавления начала
+                    nav_add_prohibition.className = 'dropdown-item';
+                }
+            },
+            error: function () {
+                alert('Error!');
+            }
+        });
+    });
+
+    //удаление запрета
+    $(document).on('click', '.del-prohibition', function() {
+        if (!guest) {
+            var prohibition = $(this).attr('id');
+            id_prohibition = parseInt(prohibition.match(/\d+/));
+
+            $("#deleteProhibitionModalForm").modal("show");
+        }
+    });
+
+      //сохранение расположения элемента запрета
+      $(document).on('mouseup', '.div-prohibition', function() {
+        if (!guest) {
+            var start_or_end = $(this).attr('id');
+            var start_or_end_id = parseInt(start_or_end.match(/\d+/));
+            var indent_x = $(this).position().left;
+            var indent_y = $(this).position().top;
+            //если отступ элемента отрицательный делаем его нулевым
+            if (indent_x < 0){
+                indent_x = 0;
+            }
+            if (indent_y < 0){
+                indent_y = 0;
+            }
+            saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
+        }
+    });
+
     // document.addEventListener('wheel', function(e) {
     // e.ctrlKey && e.preventDefault();
     // }, {
@@ -2255,6 +2491,15 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 </div>
             </div>
             <?php endforeach; ?>
+
+        <?php foreach ($prohibition_model as $prohibition): ?>
+            <div id="prohibition_<?= $prohibition->id ?>" class="div-prohibition">
+                <div class="content-prohibition">
+                    <div id="prohibition_del_<?= $prohibition->id ?>" class="del-prohibition" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div class="connect-prohibition" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                </div>
+            </div>
+        <?php endforeach; ?>
 
     </div>
 

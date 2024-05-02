@@ -32,6 +32,9 @@ class Element extends \yii\db\ActiveRecord
     const COMMON_FAULT = 2;           // Отказ
     const INITIAL_FAULT = 3;
     const BASIC_EVENT = 4;      //Базисное событие
+    const UNDEVELOPED_EVENT = 5;
+    const PROHIBITION_TYPE = 6;
+   
 
 
     /**

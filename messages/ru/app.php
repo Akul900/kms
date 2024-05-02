@@ -56,6 +56,8 @@ return [
     'NAV_ADD_AND' => 'И',
     'NAV_ADD_OR' => 'Или',
     'NAV_BASIC_EVENT' => 'Базовое событие',
+    'NAV_UNDEVELOPED_EVENT' => 'Неразвитое событие',
+    'NAV_ADD_PROHIBITION' => 'Запрет',
 
     'NAV_IMPORT' => 'Импортировать',
     'NAV_EXPORT' => 'Экспортировать',
@@ -524,6 +526,7 @@ return [
     'BASIC_EVENT_DELETE_BASIC_EVENT' => 'Удаление базисного события',
     'AND_DELETE_AND' => 'Удаление И',
     'OR_DELETE_OR' => 'Удаление ИЛИ',
+    'PROHIBITION_DELETE_PROHIBITION' => 'Удаление Запрета',
 
     /* Cообщения EETE */
     'MAXIMUM_CONNECTIONS' => 'Максимальное количество соединений ',
@@ -565,6 +568,7 @@ return [
     'DELETE_BASIC_EVENT_TEXT' => 'Вы действительно хотите удалить базисное событие?',
     'DELETE_AND_TEXT' => 'Вы действительно хотите удалить И?',
     'DELETE_OR_TEXT' => 'Вы действительно хотите удалить ИЛИ?',
+    'DELETE_PROHIBITION_TEXT' => 'Вы действительно хотите удалить Запрет?',
     'DELETE_FAULT_PARAMETER_TEXT' => 'Вы действительно хотите удалить свойство отказа?',
     'AND_OR_CANNOT_BE_LINKED' => 'Элементы не могут быть связаны между собой',
 

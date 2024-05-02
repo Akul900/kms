@@ -155,6 +155,20 @@ class FaultTreeDiagramsController extends Controller
             }
         }
 
+        //Запреты
+        $prohibition_model = Element::find()->where(['diagram' => $id, 'type' => Element::PROHIBITION_TYPE])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($prohibition_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($prohibition_model as $pm){
+                    if ($sc->element_from == $pm->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
         
 
         $start_count = Element::find()->where(['diagram' => $id, 'type' => Element::AND_TYPE])->count();//количество начал
@@ -178,7 +192,9 @@ class FaultTreeDiagramsController extends Controller
             'start_count' => $start_count,
             'end_count' => $end_count,
             'basic_event_model' => $basic_event_model,
-            'connection_basic_event_model_all' => $connection_basic_event_model_all
+            'connection_basic_event_model_all' => $connection_basic_event_model_all,
+            'prohibition_model' => $prohibition_model,
+
         ]);
     }
 
@@ -1316,8 +1332,63 @@ class FaultTreeDiagramsController extends Controller
         return false;
     }
 
+/**
+     * Добавление завешения.
+     *
+     * @param $id - id дерева перехода состояний
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddProhibition($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+            // Формирование модели уровня
+            $model = new Element();
+            // Задание id диаграммы
+            $model->diagram = $id;
+            $model->type = Element::PROHIBITION_TYPE;
+            // Успешный ввод данных
+            $data["success"] = true;
+            // Добавление нового состояния в БД
+            $model->save();
+            $data["id"] = $model->id;
 
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
 
+    public function actionDeleteProhibition()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $prohibition = Element::find()->where(['id' => Yii::$app->request->post('id_prohibition')])->one();
+            $prohibition_id = $prohibition->id;
+            $prohibition -> delete();
+
+            // Успешный ввод данных
+            $data["success"] = true;
+            $data["id"] = $prohibition_id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
 
     
 }

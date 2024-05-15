@@ -69,6 +69,31 @@ class FaultTreeXMLImport
             if ((string)$state['type'] == 'Basic event'){
                 $state_model->type = Element::BASIC_EVENT;
             }
+            if ((string)$state['type'] == 'Undeveloped event'){
+                $state_model->type = Element::UNDEVELOPED_EVENT;
+            }
+            if ((string)$state['type'] == 'Prohibition'){
+                $state_model->type = Element::PROHIBITION_TYPE;
+            }
+            if ((string)$state['type'] == 'And with priority'){
+                $state_model->type = Element::AND_WITH_PRIORITY;
+            }
+            if ((string)$state['type'] == 'Majotity valvet'){
+                $state_model->type = Element::MAJORITY_VALVE;
+            }
+            if ((string)$state['type'] == 'Transfer valve'){
+                $state_model->type = Element::TRANSFER_VALVE;
+            }
+            if ((string)$state['type'] == 'Not'){
+                $state_model->type = Element::NOT_TYPE;
+            }
+            if ((string)$state['type'] == 'Conditional event'){
+                $state_model->type = Element::CONDITIONAL_EVENT;
+            }
+            if ((string)$state['type'] == 'Hidden event'){
+                $state_model->type = Element::HIDDEN_EVENT;
+            }
+
             $state_model->description = (string)$state['description'];
             $state_model->indent_x = (string)$state['indent_x'];
             $state_model->indent_y = (string)$state['indent_y'];

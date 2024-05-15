@@ -105,7 +105,7 @@ class FaultTreeDiagramsController extends Controller
         //начало диаграммы
         $start_model = Element::find()->where(['diagram' => $id, 'type' => Element::AND_TYPE])->all();
         //связи между началом StartToEnd и State диаграммы
-        $states_connection_start_model_all = array();//массив связей
+        $states_connection_end_model_all = array();//массив связей
         if ($start_model != null){
             foreach ($state_connections_all as $sc){
                 foreach ($start_model as $sm){
@@ -144,7 +144,7 @@ class FaultTreeDiagramsController extends Controller
 
         //базовое событие
         $basic_event_model = Element::find()->where(['diagram' => $id, 'type' => Element::BASIC_EVENT])->all();
-        $connection_basic_event_model_all = array();//массив связей
+        $states_connection_end_model_all = array();//массив связей
         if ($basic_event_model != null){
             foreach ($state_connections_all as $sc){
                 foreach ($basic_event_model as $be){
@@ -169,6 +169,107 @@ class FaultTreeDiagramsController extends Controller
             }
         }
 
+        //Мажоритарный вентиль 
+        $majority_valve_model = Element::find()->where(['diagram' => $id, 'type' => Element::MAJORITY_VALVE])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($majority_valve_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($majority_valve_model as $mm){
+                    if ($sc->element_from == $mm->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
+        //И с приоритетом
+        $and_with_priority_model = Element::find()->where(['diagram' => $id, 'type' => Element::AND_WITH_PRIORITY])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($and_with_priority_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($and_with_priority_model as $am){
+                    if ($sc->element_from == $am->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
+
+        //Неразвитые события
+        $undeveloped_event_model = Element::find()->where(['diagram' => $id, 'type' => Element::UNDEVELOPED_EVENT])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($undeveloped_event_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($undeveloped_event_model as $um){
+                    if ($sc->element_from == $um->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
+
+        //Не
+        $not_model = Element::find()->where(['diagram' => $id, 'type' => Element::NOT_TYPE])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($not_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($not_model as $nm){
+                    if ($sc->element_from == $nm->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
+        //Вентиль переноса
+        $transfer_valve_model = Element::find()->where(['diagram' => $id, 'type' => Element::TRANSFER_VALVE])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($transfer_valve_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($transfer_valve_model as $tm){
+                    if ($sc->element_from == $tm->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
+        //Скрытое событие
+        $hidden_event_model = Element::find()->where(['diagram' => $id, 'type' => Element::HIDDEN_EVENT])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($hidden_event_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($hidden_event_model as $hm){
+                    if ($sc->element_from == $hm->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
+
+        //Условное событие
+        $conditional_event_model = Element::find()->where(['diagram' => $id, 'type' => Element::CONDITIONAL_EVENT])->all();
+        //связи между завершением StartToEnd и State диаграммы
+        $states_connection_end_model_all = array();//массив связей
+        if ($conditional_event_model != null){
+            foreach ($state_connections_all as $sc){
+                foreach ($conditional_event_model as $cm){
+                    if ($sc->element_from == $cm->id) {
+                        array_push($states_connection_fault_model_all, $sc);
+                    }
+                }
+            }
+        }
+
         
 
         $start_count = Element::find()->where(['diagram' => $id, 'type' => Element::AND_TYPE])->count();//количество начал
@@ -186,14 +287,21 @@ class FaultTreeDiagramsController extends Controller
             'transitions_property_model_all' => $transitions_property_model_all,
             'start_model' => $start_model,
             'end_model' => $end_model,
-            'states_connection_start_model_all' => $states_connection_start_model_all,
+          //  'states_connection_start_model_all' => $states_connection_start_model_all,
             'states_connection_end_model_all' => $states_connection_end_model_all,
             'states_connection_fault_model_all' => $states_connection_fault_model_all,
             'start_count' => $start_count,
             'end_count' => $end_count,
             'basic_event_model' => $basic_event_model,
-            'connection_basic_event_model_all' => $connection_basic_event_model_all,
+         //   'connection_basic_event_model_all' => $connection_basic_event_model_all,
             'prohibition_model' => $prohibition_model,
+            'majority_valve_model' => $majority_valve_model,
+            'and_with_priority_model' => $and_with_priority_model,
+            'undeveloped_event_model' => $undeveloped_event_model,
+            'not_model' => $not_model,
+            'transfer_valve_model' => $transfer_valve_model,
+            'hidden_event_model' => $hidden_event_model,
+            'conditional_event_model' => $conditional_event_model,
 
         ]);
     }
@@ -411,7 +519,7 @@ class FaultTreeDiagramsController extends Controller
         return false;
     }
 
-       /**
+    /**
      * Удаление базового соббытия.
      */
     public function actionDeleteBasicEvent()
@@ -1378,7 +1486,7 @@ class FaultTreeDiagramsController extends Controller
             $prohibition = Element::find()->where(['id' => Yii::$app->request->post('id_prohibition')])->one();
             $prohibition_id = $prohibition->id;
             $prohibition -> delete();
-
+         //   var_dump($prohibition);
             // Успешный ввод данных
             $data["success"] = true;
             $data["id"] = $prohibition_id;
@@ -1390,5 +1498,608 @@ class FaultTreeDiagramsController extends Controller
         return false;
     }
 
-    
+
+
+       /**
+     * Добавление завешения.
+     *
+     * @param $id - id дерева перехода состояний
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddMajorityValve($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+            // Формирование модели уровня
+            $model = new Element();
+            // Задание id диаграммы
+            $model->diagram = $id;
+            $model->type = Element::MAJORITY_VALVE;
+            // Успешный ввод данных
+            $data["success"] = true;
+            // Добавление нового состояния в БД
+            $model->save();
+            $data["id"] = $model->id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+    public function actionDeleteMajorityValve()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $majorit_valve = Element::find()->where(['id' => Yii::$app->request->post('id_majority_valve')])->one();
+            $majorit_valve_id = $majorit_valve->id;
+            $majorit_valve -> delete();
+
+            // Успешный ввод данных
+            $data["success"] = true;
+            $data["id"] = $majorit_valve_id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+
+    /**
+     * Добавление завешения.
+     *
+     * @param $id - id дерева перехода состояний
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddAndWithPriority($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+            // Формирование модели уровня
+            $model = new Element();
+            // Задание id диаграммы
+            $model->diagram = $id;
+            $model->type = Element::AND_WITH_PRIORITY;
+            // Успешный ввод данных
+            $data["success"] = true;
+            // Добавление нового состояния в БД
+            $model->save();
+            $data["id"] = $model->id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+    public function actionDeleteAndWithPriority()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $and_with_priority = Element::find()->where(['id' => Yii::$app->request->post('id_and_with_priority')])->one();
+            $and_with_priority_id = $and_with_priority->id;
+            $and_with_priority -> delete();
+
+            // Успешный ввод данных
+            $data["success"] = true;
+            $data["id"] = $and_with_priority_id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+    /**
+     * Добавление нового базвовго события.
+     *
+     * @param $id - id дерева 
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddUndevelopedEvent($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+            // Формирование модели уровня
+            $model = new Element();
+            // Задание id диаграммы
+            $model->diagram = $id;
+            $model->type = Element::UNDEVELOPED_EVENT;
+            // Определение полей модели уровня и валидация формы
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                // Условие проверки является ли состояние инициирующим
+
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Добавление нового состояния в БД
+                $model->save();
+                // Формирование данных о новом состоянии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+                $data["indent_x"] = $model->indent_x;
+                $data["indent_y"] = $model->indent_y;
+            } else
+                $data = ActiveForm::validate($model);
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+ 
+
+    /**
+     * Изменение состояния.
+     */
+    public function actionEditUndevelopedEvent()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $model = Element::find()->where(['id' => Yii::$app->request->post('undeveloped_event_id_on_click')])->one();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Формирование данных об измененном событии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+            } else
+                $data = ActiveForm::validate($model);
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+    /**
+     * Удаление базового соббытия.
+     */
+    public function actionDeleteUndevelopedEvent()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $undeveloped_event_id_on_click = Yii::$app->request->post('undeveloped_event_id_on_click');
+
+            $state = Element::find()->where(['id' => $undeveloped_event_id_on_click])->one();
+            $state -> delete();
+
+            $data["success"] = true;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+
+           /**
+     * Добавление завешения.
+     *
+     * @param $id - id дерева перехода состояний
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddNot($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+            // Формирование модели уровня
+            $model = new Element();
+            // Задание id диаграммы
+            $model->diagram = $id;
+            $model->type = Element::NOT_TYPE;
+            // Успешный ввод данных
+            $data["success"] = true;
+            // Добавление нового состояния в БД
+            $model->save();
+            $data["id"] = $model->id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+    public function actionDeleteNot()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $not = Element::find()->where(['id' => Yii::$app->request->post('id_not')])->one();
+            $not_id = $not->id;
+            $not -> delete();
+
+            // Успешный ввод данных
+            $data["success"] = true;
+            $data["id"] = $not_id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+               /**
+     * Добавление завешения.
+     *
+     * @param $id - id дерева перехода состояний
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddTransferValve($id)
+    {
+     //Ajax-запрос
+     if (Yii::$app->request->isAjax) {
+        // Определение массива возвращаемых данных
+        $data = array();
+        
+        // Установка формата JSON для возвращаемых данных
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        // Формирование модели уровня
+        $model = new Element();
+        // Задание id диаграммы
+        $model->diagram = $id;
+        $model->type = Element::TRANSFER_VALVE;
+        // Определение полей модели уровня и валидация формы
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // Условие проверки является ли состояние инициирующим
+
+            // Успешный ввод данных
+            $data["success"] = true;
+            // Добавление нового состояния в БД
+            $model->save();
+            // Формирование данных о новом состоянии
+            $data["id"] = $model->id;
+            $data["name"] = $model->name;
+            $data["description"] = $model->description;
+            $data["indent_x"] = $model->indent_x;
+            $data["indent_y"] = $model->indent_y;
+        } else
+            $data = ActiveForm::validate($model);
+        // Возвращение данных
+        $response->data = $data;
+        return $response;
+    }
+    return false;
+    }
+
+    public function actionDeleteTransferValve()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $not = Element::find()->where(['id' => Yii::$app->request->post('id_transfer_valve')])->one();
+            $not_id = $not->id;
+            $not -> delete();
+
+            // Успешный ввод данных
+            $data["success"] = true;
+            $data["id"] = $not_id;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+       /**
+     * Изменение состояния.
+     */
+    public function actionEditTransferValve()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $model = Element::find()->where(['id' => Yii::$app->request->post('transfer_valve_id_on_click')])->one();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Формирование данных об измененном событии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+            } else
+                $data = ActiveForm::validate($model);
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+     /**
+     * Добавление нового базвовго события.
+     *
+     * @param $id - id дерева 
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddHiddenEvent($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+            // Формирование модели уровня
+            $model = new Element();
+            // Задание id диаграммы
+            $model->diagram = $id;
+            $model->type = Element::HIDDEN_EVENT;
+            // Определение полей модели уровня и валидация формы
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                // Условие проверки является ли состояние инициирующим
+
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Добавление нового состояния в БД
+                $model->save();
+                // Формирование данных о новом состоянии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+                $data["indent_x"] = $model->indent_x;
+                $data["indent_y"] = $model->indent_y;
+            } else
+                $data = ActiveForm::validate($model);
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+ 
+
+    /**
+     * Изменение состояния.
+     */
+    public function actionEditHiddenEvent()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $model = Element::find()->where(['id' => Yii::$app->request->post('hidden_event_id_on_click')])->one();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Формирование данных об измененном событии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+            } else
+                $data = ActiveForm::validate($model);
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+    /**
+     * Удаление базового соббытия.
+     */
+    public function actionDeleteHiddenEvent()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $hidden_event_id_on_click = Yii::$app->request->post('hidden_event_id_on_click');
+
+            $state = Element::find()->where(['id' => $hidden_event_id_on_click])->one();
+            $state -> delete();
+
+            $data["success"] = true;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+         /**
+     * Добавление нового базвовго события.
+     *
+     * @param $id - id дерева 
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionAddConditionalEvent($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+            // Формирование модели уровня
+            $model = new Element();
+            // Задание id диаграммы
+            $model->diagram = $id;
+            $model->type = Element::CONDITIONAL_EVENT;
+            // Определение полей модели уровня и валидация формы
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                // Условие проверки является ли состояние инициирующим
+
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Добавление нового состояния в БД
+                $model->save();
+                // Формирование данных о новом состоянии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+                $data["indent_x"] = $model->indent_x;
+                $data["indent_y"] = $model->indent_y;
+            } else
+                $data = ActiveForm::validate($model);
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+ 
+
+    /**
+     * Изменение состояния.
+     */
+    public function actionEditConditionalEvent()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $model = Element::find()->where(['id' => Yii::$app->request->post('conditional_event_id_on_click')])->one();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                // Успешный ввод данных
+                $data["success"] = true;
+                // Формирование данных об измененном событии
+                $data["id"] = $model->id;
+                $data["name"] = $model->name;
+                $data["description"] = $model->description;
+            } else
+                $data = ActiveForm::validate($model);
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
+
+    /**
+     * Удаление базового соббытия.
+     */
+    public function actionDeleteConditionalEvent()
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $conditional_event_id_on_click = Yii::$app->request->post('conditional_event_id_on_click');
+
+            $state = Element::find()->where(['id' => $conditional_event_id_on_click])->one();
+            $state -> delete();
+
+            $data["success"] = true;
+
+            // Возвращение данных
+            $response->data = $data;
+            return $response;
+        }
+        return false;
+    }
+
 }
+
+
+
+

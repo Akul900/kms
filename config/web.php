@@ -62,11 +62,13 @@ $config = [
                     'stde/state-transition-diagrams/<_std>',
                 '/state-transition-diagrams/<_std:(edit-state|delete-state|copy-state|add-state-property|edit-state-property|delete-state-property|add-transition|edit-transition|delete-transition|add-transition-property|edit-transition-property|delete-transition-property|save-indent|delete-start|delete-end|end-connection|start-connection|del-state-connection|save-indent-start-or-end)>' =>
                     'stde/state-transition-diagrams/<_std>',
-                '/fault-tree-diagrams/<_ftd:(visual-diagram|add-state|add-start|add-end|add-basic-event|add-prohibition)>/<id:\d+>' =>
+                '/fault-tree-diagrams/<_ftd:(visual-diagram|add-state|add-start|add-end|add-basic-event|add-prohibition|add-majority-valve|add-and-with-priority|add-undeveloped-event|add-not|add-transfer-valve|add-hidden-event|add-conditional-event)>/<id:\d+>' =>
                     'ftde/fault-tree-diagrams/<_ftd>',
                 '/fault-tree-diagrams/<_ftd:(edit-state|delete-state|copy-state|add-fault-property|edit-fault-property|delete-fault-property|add-transition|edit-transition|delete-transition|add-transition-property|edit-transition-property|delete-transition-property|save-indent|delete-start|delete-end|end-connection|or-out-connection|fault-connection|del-connection|start-connection|del-state-connection|save-indent-start-or-end|fault-and-connection|delete-basic-event|edit-basic-event)>' =>
                     'ftde/fault-tree-diagrams/<_ftd>',
-                '/fault-tree-diagrams/<_ftd:(delete-prohibition)>' =>
+                '/fault-tree-diagrams/<_ftd:(edit-undeveloped-event|copy-undeveloped-event|edit-transfer-valve|edit-hidden-event|edit-conditional-event)>' =>
+                    'ftde/fault-tree-diagrams/<_ftd>',
+                '/fault-tree-diagrams/<_ftd:(delete-prohibition|delete-majority-valve|delete-and-with-priority|delete-undeveloped-event|delete-not|delete-transfer-valve|delete-hidden-event|delete-conditional-event)>' =>
                     'ftde/fault-tree-diagrams/<_ftd>',
                 /* Роуты для пользователей */
                 '/user/<_usr:(list|create)>' => 'main/user/<_usr>',

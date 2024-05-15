@@ -80,35 +80,37 @@ use app\modules\main\models\Lang;
                                 }
                             });
                             mas_data_state_connection_fault = temporary_mas_data_state_connection_fault;
+                       
 
-                            var temporary_mas_data_state_connection_start = {};
-                            var q = 0;
-                            $.each(mas_data_state_connection_start, function (i, elem) {
-                                if (data['id'] != elem.id){
-                                    temporary_mas_data_state_connection_start[q] = {
-                                        "id":elem.id,
-                                        "element_from":elem.element_from,
-                                        "element_to":elem.element_to,
-                                    };
-                                    q = q+1;
-                                }
-                            });
-                            mas_data_state_connection_start = temporary_mas_data_state_connection_start;
+
+                            // var temporary_mas_data_state_connection_start = {};
+                            // var q = 0;
+                            // $.each(mas_data_state_connection_start, function (i, elem) {
+                            //     if (data['id'] != elem.id){
+                            //         temporary_mas_data_state_connection_start[q] = {
+                            //             "id":elem.id,
+                            //             "element_from":elem.element_from,
+                            //             "element_to":elem.element_to,
+                            //         };
+                            //         q = q+1;
+                            //     }
+                            // });
+                            // mas_data_state_connection_start = temporary_mas_data_state_connection_start;
 
                    
-                            var temporary_mas_data_state_connection_end = {};
-                            var q = 0;
-                            $.each(mas_data_state_connection_end, function (i, elem) {
-                                if (data['id'] != elem.id){
-                                    temporary_mas_data_state_connection_end[q] = {
-                                        "id":elem.id,
-                                        "element_from":elem.element_from,
-                                        "element_to":elem.element_to,
-                                    };
-                                    q = q+1;
-                                }
-                            });
-                            mas_data_state_connection_end = temporary_mas_data_state_connection_end;
+                            // var temporary_mas_data_state_connection_end = {};
+                            // var q = 0;
+                            // $.each(mas_data_state_connection_end, function (i, elem) {
+                            //     if (data['id'] != elem.id){
+                            //         temporary_mas_data_state_connection_end[q] = {
+                            //             "id":elem.id,
+                            //             "element_from":elem.element_from,
+                            //             "element_to":elem.element_to,
+                            //         };
+                            //         q = q+1;
+                            //     }
+                            // });
+                            // mas_data_state_connection_end = temporary_mas_data_state_connection_end;
                         }
                     },
                     error: function () {

@@ -19,15 +19,33 @@ $this->params['menu_add'] = [
 
     ['label' => Yii::t('app', 'NAV_ADD_OR'), 'url' => '#',
         'linkOptions' => ['id'=>'nav_add_end']],
+    
+    ['label' => Yii::t('app', 'NAV_ADD_MAJORITY_VALVE'), 'url' => '#',
+        'linkOptions' => ['id'=>'nav_add_majority_valve']],
+
+    ['label' => Yii::t('app', 'NAV_ADD_AND_WITH_PRIORITY'), 'url' => '#',
+        'linkOptions' => ['id'=>'nav_add_and_with_priority']],
 
     ['label' => Yii::t('app', 'NAV_ADD_PROHIBITION'), 'url' => '#',
         'linkOptions' => ['id'=>'nav_add_prohibition']],
+
+    ['label' => Yii::t('app', 'NAV_ADD_NOT'), 'url' => '#',
+        'linkOptions' => ['id'=>'nav_add_not']],
+    
+    ['label' => Yii::t('app', 'NAV_ADD_TRANSFER_VALVE'), 'url' => '#',
+        'linkOptions' => ['data-bs-toggle'=>'modal', 'data-bs-target'=>'#addTransferValveModalForm']],
 
     ['label' => Yii::t('app', 'NAV_BASIC_EVENT'), 'url' => '#',
         'linkOptions' => ['data-bs-toggle'=>'modal', 'data-bs-target'=>'#addBasicEventModalForm']],
 
     ['label' => Yii::t('app', 'NAV_UNDEVELOPED_EVENT'), 'url' => '#',
         'linkOptions' => ['data-bs-toggle'=>'modal', 'data-bs-target'=>'#addUndevelopedEventModalForm']],
+        
+    ['label' => Yii::t('app', 'NAV_HIDDEN_EVENT'), 'url' => '#',
+        'linkOptions' => ['data-bs-toggle'=>'modal', 'data-bs-target'=>'#addHiddenEventModalForm']],
+
+    ['label' => Yii::t('app', 'NAV_CONDITIONAL_EVENT'), 'url' => '#',
+        'linkOptions' => ['data-bs-toggle'=>'modal', 'data-bs-target'=>'#addConditionalEventModalForm']],
 ];
 
 $this->params['menu_diagram'] = [
@@ -89,11 +107,11 @@ foreach ($end_model as $e){
     array_push($end_mas, [$e->id, $e->indent_x, $e->indent_y]);
 }
 
-// создаем массив из states_connection_start для передачи в js
-$states_connection_start_mas = array();
-foreach ($states_connection_start_model_all as $s){
-    array_push($states_connection_start_mas, [$s->id, $s->element_from, $s->element_to]);
-}
+// // создаем массив из states_connection_start для передачи в js
+// $states_connection_start_mas = array();
+// foreach ($states_connection_start_model_all as $s){
+//     array_push($states_connection_start_mas, [$s->id, $s->element_from, $s->element_to]);
+// }
 
 // создаем массив из states_connection_end для передачи в js
 $states_connection_end_mas = array();
@@ -112,15 +130,51 @@ foreach ($basic_event_model as $be){
     array_push($basic_event_mas, [$be->id, $be->indent_x, $be->indent_y, $be->name, $be->description]);
 }
 
-$basic_event_connection_mas = array();
-foreach ($connection_basic_event_model_all as $s){
-    array_push($basic_event_mas, [$s->id, $s->element_from, $s->element_to]);
-}
+// $basic_event_connection_mas = array();
+// foreach ($connection_basic_event_model_all as $s){
+//     array_push($basic_event_mas, [$s->id, $s->element_from, $s->element_to]);
+// }
 
 $prohibition_mas = array();
 foreach ($prohibition_model as $e){
     array_push($prohibition_mas, [$e->id, $e->indent_x, $e->indent_y]);
 }
+
+$majority_valve_mas = array();
+foreach ($majority_valve_model as $e){
+    array_push($majority_valve_mas, [$e->id, $e->indent_x, $e->indent_y]);
+}
+
+$and_with_priority_mas = array();
+foreach ($and_with_priority_model as $e){
+    array_push($and_with_priority_mas, [$e->id, $e->indent_x, $e->indent_y]);
+}
+
+$undeveloped_event_mas = array();
+foreach ($undeveloped_event_model as $u){
+    array_push($undeveloped_event_mas, [$u->id, $u->indent_x, $u->indent_y, $u->name, $u->description]);
+}
+
+$not_mas = array();
+foreach ($not_model as $u){
+    array_push($not_mas, [$u->id, $u->indent_x, $u->indent_y]);
+}
+
+$transfer_valve_mas = array();
+foreach ($transfer_valve_model as $u){
+    array_push($transfer_valve_mas, [$u->id, $u->indent_x, $u->indent_y, $u->name, $u->description]);
+}
+
+$hidden_event_mas = array();
+foreach ($hidden_event_model as $u){
+    array_push($hidden_event_mas, [$u->id, $u->indent_x, $u->indent_y, $u->name, $u->description]);
+}
+
+$conditional_event_mas = array();
+foreach ($conditional_event_model as $u){
+    array_push($conditional_event_mas, [$u->id, $u->indent_x, $u->indent_y, $u->name, $u->description]);
+}
+
 
 ?>
 
@@ -131,6 +185,11 @@ foreach ($prohibition_model as $e){
 ]) ?>
 
 <?= $this->render('_modal_form_basic_event', [
+    'model' => $model,
+    'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('_modal_form_undeveloped_event', [
     'model' => $model,
     'state_model' => $state_model,
 ]) ?>
@@ -150,7 +209,68 @@ foreach ($prohibition_model as $e){
     'transition_property_model' => $transition_property_model,
 ]) ?>
 
+<?= $this->render('_modal_form_transfer_valve', [
+    'model' => $model,
+    'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('_modal_form_conditional_event', [
+    'model' => $model,
+    'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('_modal_form_hidden_event', [
+    'model' => $model,
+    'state_model' => $state_model,
+]) ?>
+
 <?= $this->render('_modal_form_view_message', [
+]) ?>
+
+<?= $this->render('ftde_not', [
+    'model' => $model,
+    'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('ftde_majority', [
+        'model' => $model,
+        'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('ftde_and_with_priority', [
+        'model' => $model,
+        'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('ftde_prohibition', [
+        'model' => $model,
+        'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('ftde_transfer_valve', [
+        'model' => $model,
+        'state_model' => $state_model,
+]) ?>
+
+<?= $this->render('ftde_state_start', [
+]) ?>
+
+<?= $this->render('ftde_basic_event', [
+]) ?>
+
+<?= $this->render('ftde_and', [
+]) ?>
+
+<?= $this->render('ftde_or', [
+]) ?>
+
+<?= $this->render('ftde_undeveloped_event', [
+]) ?>
+
+<?= $this->render('ftde_hidden_event', [
+]) ?>
+
+<?= $this->render('ftde_conditional_event', [
 ]) ?>
 
 <?= $this->render('_modal_form_delete_connection', [
@@ -162,6 +282,9 @@ foreach ($prohibition_model as $e){
 
 <!-- Подключение скрипта для модальных форм -->
 <?php
+$this->registerJsFile('/js/ftde_modal_forms.js', ['position' => yii\web\View::POS_HEAD]);
+$this->registerJsFile('/js/ftde_dstribution.js', ['position' => yii\web\View::POS_HEAD]);
+$this->registerJsFile('/js/ftde_draggable.js', ['position' => yii\web\View::POS_HEAD]);
 $this->registerJsFile('/js/modal-form.js', ['position' => yii\web\View::POS_HEAD]);
 $this->registerCssFile('/css/fault-tree-diagram.css', ['position'=>yii\web\View::POS_HEAD]);
 $this->registerCssFile('/css/ftde.css', ['position'=>yii\web\View::POS_HEAD]);
@@ -193,12 +316,20 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     var transitions_property_mas = <?php echo json_encode($transitions_property_mas); ?>;//прием массива условий из php
     var start_mas = <?php echo json_encode($start_mas); ?>;//прием массива начал из php
     var end_mas = <?php echo json_encode($end_mas); ?>;//прием массива завершений из php
-    var states_connection_start_mas = <?php echo json_encode($states_connection_start_mas); ?>;//прием массива соединений с началом из php
+
     var states_connection_end_mas = <?php echo json_encode($states_connection_end_mas); ?>;//прием массива соединений завершений из php
     var states_connection_fault_mas = <?php echo json_encode($states_connection_fault_mas); ?>;//прием массива соединений завершений из php
-    var basic_event_connection_mas = <?php echo json_encode($basic_event_connection_mas); ?>;//прием массива соединений завершений из php
+
     var basic_event_mas = <?php echo json_encode($basic_event_mas); ?>;//прием массивабазовых событий из php
     var prohibition_mas =  <?php echo json_encode($prohibition_mas); ?>;//прием запретов из php
+    var majority_valve_mas =  <?php echo json_encode($majority_valve_mas); ?>;//прием Мажоритарных вентилей из php
+    var and_with_priority_mas =  <?php echo json_encode($and_with_priority_mas); ?>;//прием И с приоритетом из php
+    var undeveloped_event_mas =  <?php echo json_encode($undeveloped_event_mas); ?>;//прием М с приоритетом из php
+    var not_mas =  <?php echo json_encode($not_mas); ?>;//прием Не из php
+    var transfer_valve_mas =  <?php echo json_encode($transfer_valve_mas); ?>;//прием Не из php
+    var hidden_event_mas =  <?php echo json_encode($hidden_event_mas); ?>;//прием скрытых событий из php
+    var conditional_event_mas =  <?php echo json_encode($conditional_event_mas); ?>;//прием условных событий  из php
+    
     var message_label = "<?php echo Yii::t('app', 'CONNECTION_DELETE'); ?>";
 
     var element_from_source = "";
@@ -415,44 +546,207 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         q = q+1;
     });
 
-    var mas_data_state_connection_start = {};
+    var mas_data_majority_valve = {};
     var q = 0;
     var id = "";
-    var element_from = "";
-    var element_to = "";
-    $.each(states_connection_start_mas, function (i, mas) {
+    var indent_x = "";
+    var indent_y = "";
+    $.each(majority_valve_mas, function (i, mas) {
         $.each(mas, function (j, elem) {
             if (j == 0) {id = elem;}//записываем id
-            if (j == 1) {element_from = elem;}
-            if (j == 2) {element_to = elem;}
-            mas_data_state_connection_start[q] = {
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            mas_data_majority_valve[q] = {
                 "id":id,
-                "element_from":element_from,
-                "element_to":element_to,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
             }
         });
         q = q+1;
     });
 
 
-    var mas_data_basic_event_connection = {};
+    var mas_data_and_with_priority = {};
     var q = 0;
     var id = "";
-    var element_from = "";
-    var element_to = "";
-    $.each(basic_event_connection_mas, function (i, mas) {
+    var indent_x = "";
+    var indent_y = "";
+    $.each(and_with_priority_mas, function (i, mas) {
         $.each(mas, function (j, elem) {
             if (j == 0) {id = elem;}//записываем id
-            if (j == 1) {element_from = elem;}
-            if (j == 2) {element_to = elem;}
-            mas_data_basic_event_connection[q] = {
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            mas_data_and_with_priority[q] = {
                 "id":id,
-                "element_from":element_from,
-                "element_to":element_to,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
             }
         });
         q = q+1;
     });
+
+
+    var mas_data_undeveloped_event = {};
+    var q = 0;
+    var id = "";
+    var indent_x = "";
+    var indent_y = "";
+    var name = "";
+    var description = "";
+    $.each(undeveloped_event_mas, function (i, mas) {
+        $.each(mas, function (j, elem) {
+            if (j == 0) {id = elem;}//записываем id
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            if (j == 3) {name = elem;}
+            if (j == 4) {description = elem;}
+            mas_data_undeveloped_event[q] = {
+                "id":id,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
+                "name":name,
+                "description":description,
+            }
+        });
+        q = q+1;
+    });
+
+    
+    var mas_data_hidden_event = {};
+    var q = 0;
+    var id = "";
+    var indent_x = "";
+    var indent_y = "";
+    var name = "";
+    var description = "";
+    $.each(hidden_event_mas, function (i, mas) {
+        $.each(mas, function (j, elem) {
+            if (j == 0) {id = elem;}//записываем id
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            if (j == 3) {name = elem;}
+            if (j == 4) {description = elem;}
+            mas_data_hidden_event[q] = {
+                "id":id,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
+                "name":name,
+                "description":description,
+            }
+        });
+        q = q+1;
+    });
+
+
+    
+    var mas_data_conditional_event = {};
+    var q = 0;
+    var id = "";
+    var indent_x = "";
+    var indent_y = "";
+    var name = "";
+    var description = "";
+    $.each(conditional_event_mas, function (i, mas) {
+        $.each(mas, function (j, elem) {
+            if (j == 0) {id = elem;}//записываем id
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            if (j == 3) {name = elem;}
+            if (j == 4) {description = elem;}
+            mas_data_conditional_event[q] = {
+                "id":id,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
+                "name":name,
+                "description":description,
+            }
+        });
+        q = q+1;
+    });
+
+    var mas_data_not = {};
+    var q = 0;
+    var id = "";
+    var indent_x = "";
+    var indent_y = "";
+    $.each(not_mas, function (i, mas) {
+        $.each(mas, function (j, elem) {
+            if (j == 0) {id = elem;}//записываем id
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            mas_data_not[q] = {
+                "id":id,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
+            }
+        });
+        q = q+1;
+    });
+
+
+    var mas_data_transfer_valve = {};
+    var q = 0;
+    var id = "";
+    var indent_x = "";
+    var indent_y = "";
+    var name = "";
+    var description = "";
+    $.each(transfer_valve_mas, function (i, mas) {
+        $.each(mas, function (j, elem) {
+            if (j == 0) {id = elem;}//записываем id
+            if (j == 1) {indent_x = elem;}
+            if (j == 2) {indent_y = elem;}
+            if (j == 3) {name = elem;}
+            if (j == 4) {description = elem;}
+            mas_data_transfer_valve[q] = {
+                "id":id,
+                "indent_x":indent_x,
+                "indent_y":indent_y,
+                "name":name,
+                "description":description,
+            }
+        });
+        q = q+1;
+    });
+
+    // var mas_data_state_connection_start = {};
+    // var q = 0;
+    // var id = "";
+    // var element_from = "";
+    // var element_to = "";
+    // $.each(states_connection_start_mas, function (i, mas) {
+    //     $.each(mas, function (j, elem) {
+    //         if (j == 0) {id = elem;}//записываем id
+    //         if (j == 1) {element_from = elem;}
+    //         if (j == 2) {element_to = elem;}
+    //         mas_data_state_connection_start[q] = {
+    //             "id":id,
+    //             "element_from":element_from,
+    //             "element_to":element_to,
+    //         }
+    //     });
+    //     q = q+1;
+    // });
+
+
+    // var mas_data_basic_event_connection = {};
+    // var q = 0;
+    // var id = "";
+    // var element_from = "";
+    // var element_to = "";
+    // $.each(basic_event_connection_mas, function (i, mas) {
+    //     $.each(mas, function (j, elem) {
+    //         if (j == 0) {id = elem;}//записываем id
+    //         if (j == 1) {element_from = elem;}
+    //         if (j == 2) {element_to = elem;}
+    //         mas_data_basic_event_connection[q] = {
+    //             "id":id,
+    //             "element_from":element_from,
+    //             "element_to":element_to,
+    //         }
+    //     });
+    //     q = q+1;
+    // });
 
     // console.log(mas_data_state_connection_start);
 
@@ -500,103 +794,8 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     //console.log(mas_data_state_connection_end);
 
 
-    $(document).ready(function() {
-        if (!guest){
-            var nav_add_start = document.getElementById('nav_add_start');
-            var nav_add_end = document.getElementById('nav_add_end');
-
-            // Включение кнопок добавления начала и завершения если их нет
-            if ('<?php echo $start_count; ?>' == 0){
-                nav_add_start.className = 'dropdown-item';
-            }
-            if ('<?php echo $end_count; ?>' == 0){
-                nav_add_end.className = 'dropdown-item';
-            }
-
-            // Обработка закрытия модального окна добавления нового состояния
-            $("#addFaultModalForm").on("hidden.bs.modal", function() {
-                // Скрытие списка ошибок ввода в модальном окне
-                $("#add-state-form .error-summary").hide();
-                var elem = document.getElementById("add-state-form").elements;
-                $.each(elem, function (i, e) {
-                    e.classList.remove("is-invalid");
-                    e.classList.remove("is-valid");
-                    e.removeAttribute("aria-invalid");
-                });
-                $("#add-state-form .invalid-feedback").each(function() {
-                    $(this).text("");
-                });
-            });
-
-            // Обработка закрытия модального окна добавления нового состояния
-            $("#addBasicEventModalForm").on("hidden.bs.modal", function() {
-                // Скрытие списка ошибок ввода в модальном окне
-                $("#add-basic-event-form .error-summary").hide();
-                var elem = document.getElementById("add-basic-event-form").elements;
-                $.each(elem, function (i, e) {
-                    e.classList.remove("is-invalid");
-                    e.classList.remove("is-valid");
-                    e.removeAttribute("aria-invalid");
-                });
-                $("#add-basic-event-form .invalid-feedback").each(function() {
-                    $(this).text("");
-                });
-            });
-
-            // Обработка закрытия модального окна добавления нового свойства состояния
-            $("#addStatePropertyModalForm").on("hidden.bs.modal", function() {
-                // Скрытие списка ошибок ввода в модальном окне
-                $("#add-state-property-form .error-summary").hide();
-                var elem = document.getElementById("add-state-property-form").elements;
-                $.each(elem, function (i, e) {
-                    e.classList.remove("is-invalid");
-                    e.classList.remove("is-valid");
-                    e.removeAttribute("aria-invalid");
-                });
-                $("#add-state-property-form .invalid-feedback").each(function() {
-                    $(this).text("");
-                });
-            });
-
-            // Обработка закрытия модального окна добавления нового перехода
-            $("#addTransitionModalForm").on("hidden.bs.modal", function() {
-                //если это не добавление новой связи
-                if(added_transition != true){
-                    removed_transition = true;
-                    //то удаляем связь
-                    instance.deleteConnection(current_connection);
-                }
-                added_transition = false;
-
-                // Скрытие списка ошибок ввода в модальном окне
-                $("#add-transition-form .error-summary").hide();
-                var elem = document.getElementById("add-transition-form").elements;
-                $.each(elem, function (i, e) {
-                    e.classList.remove("is-invalid");
-                    e.classList.remove("is-valid");
-                    e.removeAttribute("aria-invalid");
-                });
-                $("#add-transition-form .invalid-feedback").each(function() {
-                    $(this).text("");
-                });
-            });
-
-            // Обработка закрытия модального окна добавления нового условия
-            $("#addTransitionPropertyModalForm").on("hidden.bs.modal", function() {
-                // Скрытие списка ошибок ввода в модальном окне
-                $("#add-transition-property-form .error-summary").hide();
-                var elem = document.getElementById("add-state-form").elements;
-                $.each(elem, function (i, e) {
-                    e.classList.remove("is-invalid");
-                    e.classList.remove("is-valid");
-                    e.removeAttribute("aria-invalid");
-                });
-                $("#add-transition-property-form .invalid-feedback").each(function() {
-                    $(this).text("");
-                });
-            });
-        }
-    });
+    //Обработка модальных окон
+    processingOfModalForms()
 
 
     //-----начало кода jsPlumb-----
@@ -612,266 +811,104 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             Container: "visual_diagram_field"
         });
 
-
-        //Распределение state (состояний) на диаграмме
-        $.each(mas_data_state, function (j, elem) {
-
-            console.log(elem)
-            if(elem["type"] == 3){
-                $(".div-state-start").each(function(i) {
-                    var state = $(this).attr('id');
-                    var state_id = parseInt(state.match(/\d+/));
-
-                    if (elem.id == state_id) {
-                        $(this).css({
-                            left: parseInt(elem.indent_x),
-                            top: parseInt(elem.indent_y)
-                        });
-                    }
-                });
-            }else{
-                $(".div-state").each(function(i) {
-                    var state = $(this).attr('id');
-                    var state_id = parseInt(state.match(/\d+/));
-
-                    if (elem.id == state_id) {
-                        $(this).css({
-                            left: parseInt(elem.indent_x),
-                            top: parseInt(elem.indent_y)
-                        });
-                    }
-                });
-            }
-           
-        });
-
-        //Распределение basic_event (базовых состояний) на диаграмме
-        $.each(mas_data_basic_event, function (j, elem) {
-            $(".div-basic-event").each(function(i) {
-                var basic_event = $(this).attr('id');
-                var basic_event_id = parseInt(basic_event.match(/\d+/));
-
-                if (elem.id == basic_event_id) {
-                    $(this).css({
-                        left: parseInt(elem.indent_x),
-                        top: parseInt(elem.indent_y)
-                    });
-                }
-            });
-        });
-
-        //Распределение start (начала) на диаграмме
-        $.each(mas_data_start, function (j, elem) {
-            $(".div-and").each(function(i) {
-                var start = $(this).attr('id');
-                var start_id = parseInt(start.match(/\d+/));
-
-                if (elem.id == start_id) {
-                    $(this).css({
-                        left: parseInt(elem.indent_x),
-                        top: parseInt(elem.indent_y)
-                    });
-                }
-            });
-        });
-
-
-        //Распределение end (завершения) на диаграмме
-        $.each(mas_data_end, function (j, elem) {
-            $(".div-or").each(function(i) {
-                var end = $(this).attr('id');
-                var end_id = parseInt(end.match(/\d+/));
-
-                if (elem.id == end_id) {
-                    $(this).css({
-                        left: parseInt(elem.indent_x),
-                        top: parseInt(elem.indent_y)
-                    });
-                }
-            });
-        });
-
-        $.each(mas_data_prohibition, function (j, elem) {
-            $(".div-prohibition").each(function(i) {
-                var prohibition = $(this).attr('id');
-                var prohibition_id = parseInt(prohibition.match(/\d+/));
-
-                if (elem.id == prohibition_id) {
-                    $(this).css({
-                        left: parseInt(elem.indent_x),
-                        top: parseInt(elem.indent_y)
-                    });
-                }
-            });
-        });
+       // Распределение элементов
+        deleteDistributionOfElements()
+        
         mousemoveState();
 
-
-        var div_visual_diagram_field = document.getElementById('visual_diagram_field');
-        //создаем группу с определенным именем group
-        instance.addGroup({
-            el: div_visual_diagram_field,
-            id: 'group_field',
-            draggable: false, //перетаскивание группы
-            dropOverride:true,
-        });
+        // Делаем элементы двигаемыми
+        draggableElements()
 
 
-        //находим все элементы с классом div-state и делаем их двигаемыми
-        $(".div-state").each(function(i) {
-            var id_state = $(this).attr('id');
-            var state = document.getElementById(id_state);
-            //делаем state перетаскиваемыми
-            instance.draggable(state);
-            //добавляем элемент state в группу с именем group_field
-            instance.addToGroup('group_field', state);
-        });
-
-                //находим все элементы с классом div-state и делаем их двигаемыми
-        $(".div-state-start").each(function(i) {
-            var id_state = $(this).attr('id');
-            var state = document.getElementById(id_state);
-            //делаем state перетаскиваемыми
-            instance.draggable(state);
-            //добавляем элемент state в группу с именем group_field
-            instance.addToGroup('group_field', state);
-        });
-
-                //находим все элементы с классом div-state и делаем их двигаемыми
-        $(".div-basic-event").each(function(i) {
-            var id_state = $(this).attr('id');
-            var state = document.getElementById(id_state);
-            //делаем state перетаскиваемыми
-            instance.draggable(state);
-            //добавляем элемент state в группу с именем group_field
-            instance.addToGroup('group_field', state);
-        });
-
-
-        //находим все элементы с классом div-and и делаем их двигаемыми
-        $(".div-and").each(function(i) {
-            var id_start = $(this).attr('id');
-            var start = document.getElementById(id_start);
-            //делаем start перетаскиваемыми
-            instance.draggable(start);
-            //добавляем элемент start в группу с именем group_field
-            instance.addToGroup('group_field', start);
-        });
-
-
-        //находим все элементы с классом div-or и делаем их двигаемыми
-        $(".div-or").each(function(i) {
-            var id_end = $(this).attr('id');
-            var end = document.getElementById(id_end);
-            //делаем end перетаскиваемыми
-            instance.draggable(end);
-            //добавляем элемент end в группу с именем group_field
-            instance.addToGroup('group_field', end);
-        });
-
-        //находим все элементы с классом div-prohibition и делаем их двигаемыми
-        $(".div-prohibition").each(function(i) {
-            var id_prohibition = $(this).attr('id');
-            var eprohibition = document.getElementById(id_prohibition);
-            //делаем end перетаскиваемыми
-            instance.draggable(eprohibition);
-            //добавляем элемент end в группу с именем group_field
-            instance.addToGroup('group_field', eprohibition);
-        });
-
-
-        //находим все элементы с классом div-transition и делаем их двигаемыми
-        //$(".div-transition").each(function(i) {
-        //    var id_state = $(this).attr('id');
-        //    var state = document.getElementById(id_state);
-        //    //делаем state перетаскиваемыми
-        //    instance.draggable(state);
-        //    //добавляем элемент state в группу с именем group_field
-        //    instance.addToGroup('group_field', state);
-        //});
 
 
         var windows = jsPlumb.getSelector(".div-state");
-        var windows_fault_start = jsPlumb.getSelector(".div-state-start");
-        var windows_start = jsPlumb.getSelector(".div-and");
-        var windows_end = jsPlumb.getSelector(".div-or");
-        var windows_basic_event = jsPlumb.getSelector(".div-basic-event");
-        var windows_prohibition = jsPlumb.getSelector(".div-prohibition");
+       
+        
+
 
         instance.bind("beforeDrop", function (info) {
-            var source_id = info.sourceId;
-            var target_id = info.targetId;
+        var source_id = info.sourceId;
+        var target_id = info.targetId;
 
-            var name_source = source_id.split('_')[0];
-            var name_target = target_id.split('_')[0];
+        var name_source = source_id.split('_')[0];
+        var name_target = target_id.split('_')[0];
 
 
-            var connection_is = false;
-            id_source = parseInt(source_id.match(/\d+/));
-            id_target = parseInt(target_id.match(/\d+/));
-            $.each(mas_data_state_connection_end, function (i, elem) {
-                if ((id_target == elem.element_from) && (id_source == elem.element_to)){
-                    connection_is = true;
-                }
-            });
-            console.log(name_source)
-            console.log(name_target)
+        var connection_is = false;
+        id_source = parseInt(source_id.match(/\d+/));
+        id_target = parseInt(target_id.match(/\d+/));
+        $.each(mas_data_state_connection_end, function (i, elem) {
+            if ((id_target == elem.element_from) && (id_source == elem.element_to)){
+                connection_is = true;
+            }
+        });
+        console.log(name_source)
+        console.log(name_target)
 
-            // Запреты на соединения
-            if (((name_source == 'and') && (name_target == 'or' || name_target == 'prohibition' || name_target == 'and' || name_target == 'basic')) 
-            || ((name_source == 'or') && (name_target == 'and' || name_target == 'prohibition' || name_target == 'or' || name_target == 'basic')) 
-            || ((name_source == 'state-start') && (name_target == 'and' || name_target == 'or'|| name_target == 'basic'|| name_target == 'prohibition'))
-            || ((name_source == 'prohibition') && (name_target == 'and' || name_target == 'or'|| name_target == 'basic'|| name_target == 'prohibition'))){
-                var message = "<?php echo Yii::t('app', 'AND_OR_CANNOT_BE_LINKED'); ?>";
+        // Запреты на соединения
+        if (((name_source == 'and') && (name_target == 'or' || name_target == 'prohibition' || name_target == 'and'   || name_target == 'and-with' || name_target == 'majority' || name_target == 'not')) 
+        || ((name_source == 'or') && (name_target == 'and' || name_target == 'prohibition' || name_target == 'or'   || name_target == 'and-with' || name_target == 'majority' || name_target == 'not')) 
+        //|| ((name_source == 'state-start') && (name_target == 'and' || name_target == 'or' || name_target == 'prohibition' || name_target == 'and-with' || name_target == 'majority' || name_target == 'not'))
+        || ((name_source == 'prohibition') && (name_target == 'and' || name_target == 'or' || name_target == 'prohibition' || name_target == 'and-with' || name_target == 'majority' || name_target == 'not'))
+        || ((name_source == 'majority') && (name_target == 'and' || name_target == 'or' || name_target == 'prohibition' || name_target == 'and-with' || name_target == 'majority' || name_target == 'not'))
+        || ((name_source == 'and-with') && (name_target == 'and' || name_target == 'or' || name_target == 'prohibition' || name_target == 'and-with' || name_target == 'majority' || name_target == 'not'))
+        || ((name_source == 'not') && (name_target == 'and' || name_target == 'or' || name_target == 'prohibition' || name_target == 'and-with' || name_target == 'majority' || name_target == 'not'))
+        ){
+            var message = "<?php echo Yii::t('app', 'AND_OR_CANNOT_BE_LINKED'); ?>";
+            document.getElementById("message-text").lastChild.nodeValue = message;
+            $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+            return false;
+        } else {
+            if (connection_is == true){
+                var message = "<?php echo Yii::t('app', 'CONNECTION_IS_ALREADY_THERE'); ?>";
                 document.getElementById("message-text").lastChild.nodeValue = message;
                 $("#viewMessageErrorLinkingItemsModalForm").modal("show");
                 return false;
             } else {
-                if (connection_is == true){
-                    var message = "<?php echo Yii::t('app', 'CONNECTION_IS_ALREADY_THERE'); ?>";
-                    document.getElementById("message-text").lastChild.nodeValue = message;
-                    $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    return false;
-                } else {
-                    return true;
-                }
+                return true;
             }
-        });
-
-
+        }
+    });
         //построение переходов (связей)
         instance.batch(function () {
+
+            majorityConnectionsStyle()
+            hiddenEventConnectionsStyle()
+            stateStartConnectionsStyle()
+            andWithPriorityConnectionsStyle()
+            undevelopedEventConnectionsStyle()
+            transferValveConnectionsStyle()
+            notConnectionsStyle()
+            conditionalEventConnectionsStyle()
+            basicEventConnectionsStyle()
+            andConnectionsStyle()
+            orConnectionsStyle()
+            prohibitionConnectionsStyle()
 
             for (var i = 0; i < windows.length; i++) {
 
                 instance.makeSource(windows[i], {
                     filter: ".fa-share",
                     anchor: "Bottom", //непрерывный анкер
+                    maxConnections: 1,
                 });
 
                 instance.makeTarget(windows[i], {
                     dropOptions: { hoverClass: "dragHover" },
                     anchor: "Top", //непрерывный анкер
                     allowLoopback: false, // Разрешение создавать кольцевую связь
-                });
-            }
-
-            for (var i = 0; i < windows_fault_start.length; i++) {
-
-                instance.makeSource(windows_fault_start[i], {
-                    filter: ".fa-share",
-                    anchor: "Bottom", //непрерывный анкер
                     maxConnections: 1,
                     onMaxConnections: function (info, e) {
                         //отображение сообщения об ограничении
                         var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
                         document.getElementById("message-text").lastChild.nodeValue = message;
                         $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    }
-                });
-
-
             }
+                });
+            }
+
+
 
              //построение связей из mas_data_state_connection_fault
             $.each(mas_data_state_connection_fault, function (j, elem) {
@@ -891,288 +928,6 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             //построение связей из mas_data_state_connection_fault
             $.each(mas_data_state_connection_fault, function (j, elem) {
                 var c = instance.connect({
-                    source: "state-start_" + elem.element_from,
-                    target: "state_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-
-            for (var i = 0; i < windows_basic_event.length; i++) {
-
-                // instance.makeSource(windows_basic_event[i], {
-                //     filter: ".fa-share",
-                //     anchor: "Bottom", //непрерывный анкер
-                // });
-
-                instance.makeTarget(windows_basic_event[i], {
-                    dropOptions: { hoverClass: "dragHover" },
-                    anchor: "Top", //непрерывный анкер
-                    allowLoopback: false, // Разрешение создавать кольцевую связь
-                    maxConnections: 1,
-                    onMaxConnections: function (info, e) {
-                        //отображение сообщения об ограничении
-                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                        document.getElementById("message-text").lastChild.nodeValue = message;
-                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    }
-                });
-            }
-
-                 //построение связей из mas_data_state_connection_fault
-                $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "basic_event_" + elem.element_from,
-                    target: "state_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "basic_event_" + elem.element_from,
-                    target: "or_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "basic_event_" + elem.element_from,
-                    target: "and_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "state_" + elem.element_from,
-                    target: "basic_event_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-
-
-
-   
-
-            
-
-
-            // //построение связей из mas_data_transition
-            // $.each(mas_data_transition, function (j, elem) {
-            //     var c = instance.connect({
-            //         source: "state_" + elem.state_from,
-            //         target: "state_" + elem.state_to,
-            //         overlays: [
-            //             ['Label', {
-            //                 label: elem.name,
-            //                 location: 0.5, //расположение посередине
-            //                 cssClass: "transitions-style",
-            //                 id:"label_id_"+ elem.id
-            //             }]
-            //         ],
-            //     });
-            //     //создаем параметр для связи id_transition куда прописываем название связи "transition_connect_" +  data['id'] (как замена id)
-            //     c.setParameter('id_transition',"transition_connect_" +  elem.id);
-            // });
-
-
-            //стиль точки выхода линии "начала"
-            for (var i = 0; i < windows_start.length; i++) {
-                instance.makeSource(windows_start[i], {
-                    filter: ".fa-share",
-                    anchor: [ 0.5, 1, 0, 1, 0, -20 ], //непрерывный анкер
-                    maxConnections: -1, //ограничение на одно соединение из элемента "начала"
-                    // onMaxConnections: function (info, e) {
-                    //     //отображение сообщения об ограничении
-                    //     var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                    //     document.getElementById("message-text").lastChild.nodeValue = message;
-                    //     $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    // }
-                });
-
-                instance.makeTarget(windows_start[i], {
-                    filter: ".fa-share",
-                    dropOptions: { hoverClass: "dragHover" },
-                    anchor: [ 0.5, 0, 0, -1, 0, 20 ], //непрерывный анкер
-                    maxConnections: 1,
-                    allowLoopback: false,
-                    onMaxConnections: function (info, e) {
-                        //отображение сообщения об ограничении
-                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                        document.getElementById("message-text").lastChild.nodeValue = message;
-                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    }
-                });
-            }
-
-            //стиль точки выхода линии "Запрета"
-            for (var i = 0; i < windows_prohibition.length; i++) {
-                instance.makeSource(windows_prohibition[i], {
-                    filter: ".fa-share",
-                    anchor: [ 0.53, 1, 0, 1, 0, 0 ], //непрерывный анкер
-                    maxConnections: -1, //ограничение на одно соединение из элемента "начала"
-                    // onMaxConnections: function (info, e) {
-                    //     //отображение сообщения об ограничении
-                    //     var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                    //     document.getElementById("message-text").lastChild.nodeValue = message;
-                    //     $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    // }
-                });
-
-                instance.makeTarget(windows_prohibition[i], {
-                    filter: ".fa-share",
-                    dropOptions: { hoverClass: "dragHover" },
-                    anchor: [ 0.51, 0, 0, -1, 0, 0 ], //непрерывный анкер
-                    maxConnections: 1,
-                    allowLoopback: false,
-                    onMaxConnections: function (info, e) {
-                        //отображение сообщения об ограничении
-                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                        document.getElementById("message-text").lastChild.nodeValue = message;
-                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    }
-                });
-            }
-
-            //построение связей из mas_data_state_connection_start
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "and_" + elem.element_from,
-                    target: "state_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-
-
-            // //стиль точки выхода линии "or"
-            // for (var i = 0; i < windows_end.length; i++) {
-            //     instance.makeSource(windows_end[i], {
-            //         filter: ".fa-share",
-            //         anchor: "Bottom", //непрерывный анкер
-            //         maxConnections: -1, //ограничение на одно соединение из элемента "начала"
-            //         // onMaxConnections: function (info, e) {
-            //         //     //отображение сообщения об ограничении
-            //         //     var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-            //         //     document.getElementById("message-text").lastChild.nodeValue = message;
-            //         //     $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-            //         // }
-            //     });
-            // }
-
-
-
-
-
-
-            //стиль точки входа линии завершения
-            for (var i = 0; i < windows_end.length; i++) {
-                instance.makeSource(windows_end[i], {
-                    filter: ".fa-share",
-                    anchor: [ 0.5, 1, 0, 1, 0, -20 ], //непрерывный анкер
-                    maxConnections: -1, //ограничение на одно соединение из элемента "начала"
-                });
-                instance.makeTarget(windows_end[i], {
-                    filter: ".fa-share",
-                    anchor: [ 0.5, 0, 0, -1, 0, 20 ], //непрерывный анкер
-                    maxConnections: 1, //ог
-                    allowLoopback: false,
-                    onMaxConnections: function (info, e) {
-                        //отображение сообщения об ограничении
-                        var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                        document.getElementById("message-text").lastChild.nodeValue = message;
-                        $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                    }
-                });
-                
-            }
-
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "or_" + elem.element_from,
-                    target: "basic_event_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "and_" + elem.element_from,
-                    target: "basic_event_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });
-
-            
-            //построение связей из mas_data_state_connection_or
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
-                    source: "or_" + elem.element_from,
-                    target: "state_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
-            });     
-
-            //построение связей из mas_data_state_connection_fault
-            $.each(mas_data_state_connection_fault, function (j, elem) {
-                var c = instance.connect({
                     source: "state_" + elem.element_from,
                     target: "or_" + elem.element_to,
                     overlays: [
@@ -1195,17 +950,6 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     ],
                 });
 
-                var c = instance.connect({
-                    source: "prohibition_" + elem.element_from,
-                    target: "state_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
 
                 var c = instance.connect({
                     source: "state_" + elem.element_from,
@@ -1219,18 +963,21 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     ],
                 });
 
-                var c = instance.connect({
-                    source: "prohibition_" + elem.element_from,
-                    target: "basic_event_" + elem.element_to,
-                    overlays: [
-                        ['Label', {
-                            label: message_label,
-                            location: 0.5, //расположение посередине
-                            cssClass: "connections-style",
-                        }]
-                    ],
-                });
             });
+
+            //Соединения
+            prohibitionConnections()
+            andConnections()
+            orConnections()
+            basicEventConnections()
+            undevelopedEventConnections()
+            majorityConnections()
+            andWithPriorityConnections()
+            notConnections()
+            transferValveConnections()
+            hiddenEventConnections()
+            conditionalEventConnections()
+            stateStartConnections()
         });
 
 
@@ -1243,90 +990,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             element_from = parseInt(element_from_source.match(/\d+/));
             element_to = parseInt(element_to_target.match(/\d+/));
             $("#deleteConnectionStartModalForm").modal("show");
-            // // console.log(element_from_source)
-            // // console.log(element_to_source)
-            // var name_source = source_id.split('_')[0];
-            // var name_target = target_id.split('_')[0];
-   
-
-
-            // if ((name_source == 'state') && (name_target == 'state')){
-            //     aaa = source_id
-            //     bbb = target_id
-            //     element_from = parseInt(source_id.match(/\d+/));
-            //     element_to = parseInt(target_id.match(/\d+/));
-            //     $("#deleteConnectionStartModalForm").modal("show");
-            //     // var ind_x;
-            //     // var ind_y;
-            //     // //получение id_transition параметра для идентификации связи
-            //     // var id_transition = parseInt(c.getParameters().id_transition.match(/\d+/));
-
-            //     // //поиск перехода относящегося к выбранной связи
-            //     // var transition = document.getElementById("transition_" + id_transition);
-            //     // if (transition.style.visibility == 'hidden'){
-            //     //     transition.style.visibility = 'visible';//делаем переход видимым
-            //     // } else {
-            //     //     transition.style.visibility='hidden';//скрываем переход
-            //     // }
-
-            //     // //поиск связанных элементов
-            //     // var source = document.getElementById(c.sourceId);
-            //     // var target = document.getElementById(c.targetId);
-
-            //     // var x_source = source.offsetLeft;//нахождение отступа слева от первого элемента
-            //     // var x_target = target.offsetLeft;//нахождение отступа слева от второго элемента
-            //     // var distance_x = Math.abs(x_source - x_target); //расстояние между элементами
-            //     // //нахождение отступа от крайнего слева элемента
-            //     // if (x_source < x_target){
-            //     //     ind_x = x_source;
-            //     // } else {
-            //     //     ind_x = x_target;
-            //     // }
-
-            //     // var y_source = source.offsetTop;//нахождение отступа сверху от первого элемента
-            //     // var y_target = target.offsetTop;//нахождение отступа сверху от второго элемента
-            //     // var distance_y = Math.abs(y_source - y_target); //расстояние между элементами
-            //     // //нахождение отступа от крайнего слева элемента
-            //     // if (y_source < y_target){
-            //     //     ind_y = y_source;
-            //     // } else {
-            //     //     ind_y = y_target;
-            //     // }
-
-            //     // if ((distance_x == 0)&&(distance_y == 0)){
-            //     //     transition.style.left = ind_x + 'px';
-            //     //     transition.style.top = ind_y - 120 + 'px';
-            //     // } else {
-            //     //     //выравниваем переход по центру между связанными элементами
-            //     //     transition.style.left = distance_x/2 + ind_x + 'px';
-            //     //     transition.style.top = distance_y/2 + ind_y + 'px';
-            //     // }
-            // } else if ((name_source == 'and') && (name_target == 'state')){//связь из начала
-            //     aaa = source_id
-            //     bbb = target_id
-            //     element_from = parseInt(source_id.match(/\d+/));
-            //     element_to = parseInt(target_id.match(/\d+/));
-            //     $("#deleteConnectionStartModalForm").modal("show");
-                
-            // }else if ((name_source == 'state') && (name_target == 'and')){//связь из начала
-            //     aaa = source_id
-            //     bbb = target_id
-            //     element_from = parseInt(source_id.match(/\d+/));
-            //     element_to = parseInt(target_id.match(/\d+/));
-            //     $("#deleteConnectionStartModalForm").modal("show");
-            // }else if ((name_source == 'or') && (name_target == 'state')){//связь из or
-            //     aaa = source_id
-            //     bbb = target_id
-            //     element_from = parseInt(source_id.match(/\d+/));
-            //     element_to = parseInt(target_id.match(/\d+/));
-            //     $("#deleteConnectionStartModalForm").modal("show");
-            // }else if ((name_source == 'state') && (name_target == 'or')){//связь в конец
-            //     aaa = source_id
-            //     bbb = target_id
-            //     element_from = parseInt(source_id.match(/\d+/));
-            //     element_to  = parseInt(target_id.match(/\d+/));
-            //     $("#deleteConnectionStartModalForm").modal("show");
-            // }
+           
         });
 
 
@@ -1458,6 +1122,92 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
             if (w > max_w){max_w = w;}
             if (h > max_h){max_h = h;}
+
+        });
+
+        $(".div-prohibition").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
+        });
+
+        $(".div-majority-valve").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
+        });
+
+        $(".div-and-with-priority").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
+        });
+
+        $(".div-undeveloped-event").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
+        });
+
+        $(".div-not").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
+        });
+
+        $(".div-hidden-event").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
+        });
+
+
+        $(".div-conditional-event").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
         });
 
         field.style.width = max_w + 20 + 'px';
@@ -1522,6 +1272,55 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         instance.repaintEverything();
     });
 
+        //при движении блока завершения расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-prohibition', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    });
+
+        //при движении блока завершения расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-majority-valve', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    });
+
+        //при движении блока завершения расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-and-with-priority', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    }); 
+
+    //при движении блока завершения расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-undeveloped-event', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    }); 
+
+    //при движении блока завершения расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-not', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    }); 
+
+    //при движении блока завершения расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-hidden-event', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    }); 
+
+    //при движении блока завершения расширяем или сужаем поле visual_diagram_field
+    $(document).on('mousemove', '.div-conditional-event', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    }); 
+
     //сохранение расположения элемента
     $(document).on('mouseup', '.div-state', function() {
         if (!guest) {
@@ -1558,57 +1357,6 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         }
     });
 
-
-
-    //перемещение элементов div-transition при перемещении элемента div-state
-    // $(document).on('mousemove', '.div-state', function() {
-    //     var state = $(this).attr('id');
-    //     var state_id = parseInt(state.match(/\d+/));
-
-    //     //поиск div-transition связанных с div-state по значению state_id
-    //     $.each(mas_data_transition, function (i, elem) {
-    //         if ((elem.state_from == state_id)||(elem.state_to == state_id)) {
-    //             var ind_x;
-    //             var ind_y;
-
-    //             //поиск перехода относящегося к выбранной связи
-    //             var transition = document.getElementById("transition_" + elem.id);
-
-    //             //поиск связанных элементов
-    //             var source = document.getElementById("state_" + elem.state_from);
-    //             var target = document.getElementById("state_" + elem.state_to);
-
-    //             var x_source = source.offsetLeft;//нахождение отступа слева от первого элемента
-    //             var x_target = target.offsetLeft;//нахождение отступа слева от второго элемента
-    //             var distance_x = Math.abs(x_source - x_target); //расстояние между элементами
-    //             //нахождение отступа от крайнего слева элемента
-    //             if (x_source < x_target){
-    //                 ind_x = x_source;
-    //             } else {
-    //                 ind_x = x_target;
-    //             }
-
-    //             var y_source = source.offsetTop;//нахождение отступа сверху от первого элемента
-    //             var y_target = target.offsetTop;//нахождение отступа сверху от второго элемента
-    //             var distance_y = Math.abs(y_source - y_target); //расстояние между элементами
-    //             //нахождение отступа от крайнего слева элемента
-    //             if (y_source < y_target){
-    //                 ind_y = y_source;
-    //             } else {
-    //                 ind_y = y_target;
-    //             }
-
-    //             if ((distance_x == 0)&&(distance_y == 0)){
-    //                 transition.style.left = ind_x + 'px';
-    //                 transition.style.top = ind_y - 120 + 'px';
-    //             } else {
-    //                 //выравниваем переход по центру между связанными элементами
-    //                 transition.style.left = distance_x/2 + ind_x + 'px';
-    //                 transition.style.top = distance_y/2 + ind_y + 'px';
-    //             }
-    //         }
-    //     });
-    // });
 
 
     // редактирование состояния
@@ -2200,145 +1948,56 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     });
 
 
+    //Не
+    deleteNot()
+    saveIndentNot()
 
-        //добавление элемента "начало" на диаграмму
-        $('#nav_add_prohibition').on('click', function() {
-        $.ajax({
-            //переход на экшен левел
-            url: "<?= Yii::$app->request->baseUrl . '/' . Lang::getCurrent()->url .
-            '/fault-tree-diagrams/add-prohibition/' . $model->id ?>",
-            type: "post",
-            data: "YII_CSRF_TOKEN=<?= Yii::$app->request->csrfToken ?>",
-            dataType: "json",
-            success: function (data) {
-                if (data['success']) {
-                    //создание div состояния
-                    var div_visual_diagram_field = document.getElementById('visual_diagram_field');
+    //Неразвитое событие
+    editUndevelopedEvent()
+    deleteUndevelopedEvent() 
+    copyUndevelopedEvent()
+    saveIndentUndevelopedEvent()
 
-                    var div_prohibition = document.createElement('div');
-                    div_prohibition.id = 'prohibition_' + data['id'];
-                    div_prohibition.className = 'div-prohibition';
-                    div_visual_diagram_field.append(div_prohibition);
+    //Скрытое событие
+    editHiddenEvent()
+    deleteHiddenEvent() 
+    copyHiddenEvent()
+    saveIndentHiddenEvent()
 
-                    // var div_prohibition_and = document.createElement('div');
-                    // div_and_and.className = 'div-and-and' ;
-                    // div_and_and.innerHTML = 'И';
-                    // div_and.append(div_and_and);
-
-                    var div_content_start = document.createElement('div');
-                    div_content_start.className = 'content-prohibition';
-                    div_prohibition.append(div_content_start);
-
-                    var div_del = document.createElement('div');
-                    div_del.id = 'prohibition_del_' + data['id'];
-                    div_del.className = 'del-prohibition' ;
-                    div_del.title = '<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>';
-                    div_del.innerHTML = '<i class="fa-solid fa-trash"></i>'
-                    div_content_start.append(div_del);
-
-                    var div_connect = document.createElement('div');
-                    div_connect.className = 'connect-prohibition' ;
-                    div_connect.title = '<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>' ;
-                    div_connect.innerHTML = '<i class="fa-solid fa-share"></i>';
-                    div_content_start.append(div_connect);
-
-                    //сделать div двигаемым
-                    var div_prohibition = document.getElementById('prohibition_' + data['id']);
-                    instance.draggable(div_prohibition);
-                    //добавляем элемент div_prohibition в группу с именем group_field
-                    instance.addToGroup('group_field', div_prohibition);
-
-                    instance.makeSource(div_prohibition, {
-                            filter: ".fa-share",
-                            anchor: [0.53, 1, 0, 1, 0, 0], //непрерывный анкер
-                            maxConnections: -1, //ограничение на одно соединение из элемента "начала"
-                            // onMaxConnections: function (info, e) {
-                            //     //отображение сообщения об ограничении
-                            //     var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                            //     document.getElementById("message-text").lastChild.nodeValue = message;
-                            //     $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                            // }
-                    });
-                    instance.makeTarget(div_prohibition, {
-                        filter: ".fa-share",
-                        anchor: [ 0.51, 0, 0, -1, 0, 0 ], //непрерывный анкер
-                        maxConnections: 1, //ог
-                        allowLoopback: false,
-                        onMaxConnections: function (info, e) {
-                            //отображение сообщения об ограничении
-                            var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
-                            document.getElementById("message-text").lastChild.nodeValue = message;
-                            $("#viewMessageErrorLinkingItemsModalForm").modal("show");
-                        }
-                    });
-
-                    var nav_add_prohibition = document.getElementById('nav_add_prohibition');
-                    // Выключение кнопки добавления начала
-                    nav_add_prohibition.className = 'dropdown-item';
-                }
-            },
-            error: function () {
-                alert('Error!');
-            }
-        });
-    });
-
-    //удаление запрета
-    $(document).on('click', '.del-prohibition', function() {
-        if (!guest) {
-            var prohibition = $(this).attr('id');
-            id_prohibition = parseInt(prohibition.match(/\d+/));
-
-            $("#deleteProhibitionModalForm").modal("show");
-        }
-    });
-
-      //сохранение расположения элемента запрета
-      $(document).on('mouseup', '.div-prohibition', function() {
-        if (!guest) {
-            var start_or_end = $(this).attr('id');
-            var start_or_end_id = parseInt(start_or_end.match(/\d+/));
-            var indent_x = $(this).position().left;
-            var indent_y = $(this).position().top;
-            //если отступ элемента отрицательный делаем его нулевым
-            if (indent_x < 0){
-                indent_x = 0;
-            }
-            if (indent_y < 0){
-                indent_y = 0;
-            }
-            saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
-        }
-    });
+    //Условное событие
+    editConditionalEvent()
+    deleteConditionalEvent() 
+    copyConditionalEvent()
+    saveIndentConditionalEvent()
 
     // document.addEventListener('wheel', function(e) {
     // e.ctrlKey && e.preventDefault();
     // }, {
     // passive: false,
     // });
-    document.addEventListener("DOMContentLoaded", function(){ 
+    // document.addEventListener("DOMContentLoaded", function(){ 
    
 
-        const zoomElement = document.getElementById("visual_diagram_field");
-        console.log(zoomElement)
-        let zoom = 1;
-        const ZOOM_SPEED = 0.1;
-        document.addEventListener("wheel", function(e) {  
-            if(event.ctrlKey == true)
-        {
-            e.ctrlKey && e.preventDefault();
-            
-            if(e.deltaY > 0){    
-                zoomElement.style.transform = `scale(${zoom += ZOOM_SPEED})`;  
-            }else{    
-                zoomElement.style.transform = `scale(${zoom -= ZOOM_SPEED})`;  }
-            }
+    //         const zoomElement = document.getElementById("visual_diagram_field");
+    //         console.log(zoomElement)
+    //         let zoom = 1;
+    //         const ZOOM_SPEED = 0.1;
+    //         document.addEventListener("wheel", function(e) {  
+    //             if(event.ctrlKey == true)
+    //         {
+    //             e.ctrlKey && e.preventDefault();
+                
+    //             if(e.deltaY > 0){    
+    //                 zoomElement.style.transform = `scale(${zoom += ZOOM_SPEED})`;  
+    //             }else{    
+    //                 zoomElement.style.transform = `scale(${zoom -= ZOOM_SPEED})`;  }
+    //             }
 
-        }, {
-    passive: false,
-    });
+    //         }, {
+    //     passive: false,
+    //     });
         
-    })
+    // })
     
  
 
@@ -2417,10 +2076,10 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             <div id="basic_event_<?= $basic_event->id ?>" class="div-basic-event" title="<?= $basic_event->description ?>">
                 <div class="content-basic-event">
                     <div id="basic_event_name_<?= $basic_event->id ?>" class="div-basic-event-name"><?= $basic_event->name ?></div>
-                    <div class="connect-basic-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                    <!-- <div class="connect-basic-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div> -->
                     <div id="basic_event_del_<?= $basic_event->id ?>" class="del-basic-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div id="basic_event_edit_<?= $basic_event->id ?>" class="edit-basic-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
-                    <div id="basic_event_property_<?= $basic_event->id ?>" class="add-basic-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div>
+                    <!-- <div id="basic_event_property_<?= $basic_event->id ?>" class="add-basic-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
                     <div id="basic_event_copy_<?= $basic_event->id ?>" class="copy-basic-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
                 </div>
                 
@@ -2498,6 +2157,97 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                     <div id="prohibition_del_<?= $prohibition->id ?>" class="del-prohibition" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div class="connect-prohibition" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
                 </div>
+            </div>
+        <?php endforeach; ?>
+
+        <?php foreach ($majority_valve_model as $majority): ?>
+            <div id="majority_valve_<?= $majority->id ?>" class="div-majority-valve">
+            <div class="div-majority-valve-text">МАЖ</div>
+                <div class="content-majority-valve">
+                    <div id="majority_valve_del_<?= $majority->id ?>" class="del-majority-valve" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div class="connect-majority-valve" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <?php foreach ($and_with_priority_model as $and_with): ?>
+            <div id="and-with_priority_<?= $and_with->id ?>" class="div-and-with-priority">
+            <div class="div-and-with-priority-text">ИП</div>
+                <div class="content-and-with-priority">
+                    <div id="and_with_priority_del_<?= $and_with->id ?>" class="del-and-with-priority" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div class="connect-and-with-priority" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+
+         <!-- отображение неразвитых событий -->
+         <?php foreach ($undeveloped_event_model as $undeveloped_event): ?>
+            <div id="undeveloped_event_<?= $undeveloped_event->id ?>" class="div-undeveloped-event" title="<?= $undeveloped_event->description ?>">
+                <div class="content-undeveloped-event">
+                    <div id="undeveloped_event_name_<?= $undeveloped_event->id ?>" class="div-undeveloped-event-name"><?= $undeveloped_event->name ?></div>
+                    <!-- <div class="connect-undeveloped-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div> -->
+                    <div id="undeveloped_event_del_<?= $undeveloped_event->id ?>" class="del-undeveloped-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div id="undeveloped_event_edit_<?= $undeveloped_event->id ?>" class="edit-undeveloped-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
+                    <!-- <div id="undeveloped_event_property_<?= $undeveloped_event->id ?>" class="add-undeveloped-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
+                    <div id="undeveloped_event_copy_<?= $undeveloped_event->id ?>" class="copy-undeveloped-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                </div>
+                
+            </div>
+         <?php endforeach; ?>
+
+
+         <?php foreach ($not_model as $not): ?>
+            <div id="not_<?= $not->id ?>" class="div-not">
+            <div class="div-not-text">НЕ</div>
+                <div class="content-not">
+                    <div id="not_del_<?= $not->id ?>" class="del-not" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div class="connect-not" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+
+        <?php foreach ($transfer_valve_model as $transfer_valve): ?>
+            <div id="transfer_valve_<?= $transfer_valve->id ?>" class="div-transfer-valve">
+                <div class="content-transfer-valve">
+                    <div id="transfer_valve_name_<?= $transfer_valve->id ?>" class="div-transfer-valve-name"><?= $transfer_valve->name ?></div>
+                    <div id="transfer_valve_del_<?= $transfer_valve->id ?>" class="del-transfer-valve" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div id="transfer_valve_edit_<?= $transfer_valve->id ?>" class="edit-transfer-valve glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
+                    <!-- <div class="connect-transfer-valve" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div> -->
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+
+                 <!-- отображение неразвитых событий -->
+        <?php foreach ($hidden_event_model as $hidden_event): ?>
+            <div id="hidden_event_<?= $hidden_event->id ?>" class="div-hidden-event" title="<?= $hidden_event->description ?>">
+                <div class="content-hidden-event">
+                    <div id="hidden_event_name_<?= $hidden_event->id ?>" class="div-hidden-event-name"><?= $hidden_event->name ?></div>
+                    <!-- <div class="connect-hidden-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div> -->
+                    <div id="hidden_event_del_<?= $hidden_event->id ?>" class="del-hidden-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div id="hidden_event_edit_<?= $hidden_event->id ?>" class="edit-hidden-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
+                    <!-- <div id="hidden_event_property_<?= $hidden_event->id ?>" class="add-hidden-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
+                    <div id="hidden_event_copy_<?= $hidden_event->id ?>" class="copy-hidden-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                </div>
+                
+            </div>
+        <?php endforeach; ?>
+
+
+                 <!-- отображение неразвитых событий -->
+        <?php foreach ($conditional_event_model as $conditional_event): ?>
+            <div id="conditional_event_<?= $conditional_event->id ?>" class="div-conditional-event" title="<?= $conditional_event->description ?>">
+                <div class="content-conditional-event">
+                    <div id="conditional_event_name_<?= $conditional_event->id ?>" class="div-conditional-event-name"><?= $conditional_event->name ?></div>
+                    <!-- <div class="connect-conditional-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div> -->
+                    <div id="conditional_event_del_<?= $conditional_event->id ?>" class="del-conditional-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                    <div id="conditional_event_edit_<?= $conditional_event->id ?>" class="edit-conditional-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
+                    <!-- <div id="conditional_event_property_<?= $conditional_event->id ?>" class="add-conditional-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
+                    <div id="conditional_event_copy_<?= $conditional_event->id ?>" class="copy-conditional-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                </div>
+                
             </div>
         <?php endforeach; ?>
 

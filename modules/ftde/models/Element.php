@@ -34,6 +34,12 @@ class Element extends \yii\db\ActiveRecord
     const BASIC_EVENT = 4;      //Базисное событие
     const UNDEVELOPED_EVENT = 5;
     const PROHIBITION_TYPE = 6;
+    const MAJORITY_VALVE = 7;
+    const AND_WITH_PRIORITY = 8;
+    const NOT_TYPE = 9;
+    const TRANSFER_VALVE = 10;
+    const HIDDEN_EVENT = 11;
+    const CONDITIONAL_EVENT = 12;
    
 
 
@@ -112,6 +118,14 @@ class Element extends \yii\db\ActiveRecord
             self::COMMON_FAULT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
             self::INITIAL_FAULT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
             self::BASIC_EVENT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::UNDEVELOPED_EVENT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::PROHIBITION_TYPE => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::AND_WITH_PRIORITY => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::MAJORITY_VALVE => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::TRANSFER_VALVE => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::NOT_TYPE => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::CONDITIONAL_EVENT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
+            self::HIDDEN_EVENT => Yii::t('app', 'START_TO_END_MODEL_END_TYPE'),
         ];
     }
 
@@ -137,6 +151,14 @@ class Element extends \yii\db\ActiveRecord
             self::COMMON_FAULT => 'Fault',
             self::INITIAL_FAULT => 'Initial fault',
             self::BASIC_EVENT => 'Basic event',
+            self::UNDEVELOPED_EVENT => 'Undeveloped event',
+            self::PROHIBITION_TYPE => 'Prohibition',
+            self::AND_WITH_PRIORITY => 'And with priority',
+            self::MAJORITY_VALVE => 'Majotity valve',
+            self::TRANSFER_VALVE => 'Transfer valve',
+            self::NOT_TYPE => 'Not',
+            self::CONDITIONAL_EVENT => 'Conditional event',
+            self::HIDDEN_EVENT => 'Hidden event',
         ];
     }
 

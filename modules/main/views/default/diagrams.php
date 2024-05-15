@@ -168,6 +168,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ) : false;
                     },
+                    'clips' => function ($url, $model, $key) {
+                        return $model->type == Diagram::FAULT_TREE_TYPE ? Html::a(
+                            '<i class="fa-solid fa-download"></i>',
+                            ['clips', 'id' => $model->id],
+                            [
+                                'title' => Yii::t('app', 'BUTTON_UPLOAD_ONTOLOGY'),
+                                'aria-label' => Yii::t('app', 'BUTTON_UPLOAD_ONTOLOGY')
+                            ]
+                        ) : false;
+                    },
                 ]
             ]
         ]

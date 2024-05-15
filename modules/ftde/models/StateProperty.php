@@ -87,7 +87,7 @@ class StateProperty extends \yii\db\ActiveRecord
      */
     public function getStateFk()
     {
-        return $this->hasOne(State::className(), ['id' => 'state']);
+        return $this->hasOne(Element::className(), ['id' => 'state']);
     }
 
     /**

@@ -8,8 +8,6 @@ use app\modules\ftde\models\Element;
 use app\modules\ftde\models\StateConnection;
 use app\modules\ftde\models\StateProperty;
 use app\modules\ftde\models\StartToEnd;
-use app\modules\ftde\models\Transition;
-use app\modules\ftde\models\TransitionProperty;
 
 
 class FaultTreeXMLGenerator

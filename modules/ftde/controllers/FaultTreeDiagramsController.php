@@ -10,17 +10,16 @@ use yii\web\UploadedFile;
 use yii\bootstrap5\ActiveForm;
 use app\modules\main\models\Diagram;
 use app\modules\ftde\models\StateProperty;
-use app\modules\ftde\models\Transition;
-use app\modules\ftde\models\TransitionProperty;
 use app\modules\ftde\models\Element;
 use app\modules\ftde\models\StateConnection;
 use app\components\FaultTreeXMLGenerator;
 use app\components\DecisionTableGenerator;
+use app\components\FaultTreeCLIPSGenerator;
 use Psy\Readline\Hoa\ConsoleInput;
 use yii\helpers\Console;
 
 /**
- * StateTransitionDiagramsController implements the CRUD actions for State Transition Diagram model.
+ * DiagramsController implements the CRUD actions for  Diagram model.
  */
 class FaultTreeDiagramsController extends Controller
 {
@@ -40,8 +39,6 @@ class FaultTreeDiagramsController extends Controller
 
         $state_model = new Element();
         $state_property_model = new StateProperty();
-        $transition_model = new Transition();
-        $transition_property_model = new TransitionProperty();
         $element_model_all = Element::find()->all();
         $states_model_all = Element::find()->where(['diagram' => $id, 'type' => Element::COMMON_FAULT] )->orWhere(['diagram' => $id, 'type' => Element::INITIAL_FAULT])->all();
 
@@ -55,25 +52,6 @@ class FaultTreeDiagramsController extends Controller
             }
         }
 
-        $transitions_all = Transition::find()->all();
-        $transitions_model_all = array();//массив связей
-        foreach ($transitions_all as $t){
-            foreach ($states_model_all as $s){
-                if ($t->state_from == $s->id){
-                    array_push($transitions_model_all, $t);
-                }
-            }
-        }
-
-        $transitions_property_all = TransitionProperty::find()->all();
-        $transitions_property_model_all = array();//массив условий
-        foreach ($transitions_property_all as $p){
-            foreach ($transitions_model_all as $t){
-                if ($p->transition == $t->id){
-                    array_push($transitions_property_model_all, $p);
-                }
-            }
-        }
 
         //экспорт диаграммы
         if (Yii::$app->request->isPost) {
@@ -84,6 +62,10 @@ class FaultTreeDiagramsController extends Controller
             if (Yii::$app->request->post('value', null) == 'csv'){
                 $code_generator = new DecisionTableGenerator();
                 $code_generator->generateCSVCode($id);
+            }
+            if (Yii::$app->request->post('value', null) == 'clips'){
+                $code_generator = new FaultTreeCLIPSGenerator();
+                $code_generator->generateCLIPSCode($id);
             }
         }
 
@@ -279,12 +261,9 @@ class FaultTreeDiagramsController extends Controller
             'model' => $this->findModel($id),
             'state_model' => $state_model,
             'state_property_model' => $state_property_model,
-            'transition_model' => $transition_model,
-            'transition_property_model' => $transition_property_model,
             'states_model_all' => $states_model_all,
             'states_property_model_all' => $states_property_model_all,
-            'transitions_model_all' => $transitions_model_all,
-            'transitions_property_model_all' => $transitions_property_model_all,
+
             'start_model' => $start_model,
             'end_model' => $end_model,
           //  'states_connection_start_model_all' => $states_connection_start_model_all,
@@ -742,242 +721,7 @@ class FaultTreeDiagramsController extends Controller
     }
 
 
-    /**
-     * Добавление нового перехода.
-     *
-     */
-    public function actionAddTransition()
-    {
-        //Ajax-запрос
-        if (Yii::$app->request->isAjax) {
-            // Определение массива возвращаемых данных
-            $data = array();
-            // Установка формата JSON для возвращаемых данных
-            $response = Yii::$app->response;
-            $response->format = Response::FORMAT_JSON;
-
-            // Формирование модели перехода
-            $model = new Transition();
-
-            $model->state_from = Yii::$app->request->post('id_state_from');
-            $model->state_to = Yii::$app->request->post('id_state_to');
-
-            // Определение полей модели перехода и валидация формы
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                // Успешный ввод данных
-                $data["success"] = true;
-                // Добавление нового перехода в БД
-                $model->save();
-                // Формирование данных о новом переходе
-                $data["id"] = $model->id;
-                $data["name"] = $model->name;
-                $data["description"] = $model->description;
-                $data["state_from"] = $model->state_from;
-                $data["state_to"] = $model->state_to;
-
-                // ----------Формирование модели условия
-                $transition_property = new TransitionProperty();
-                $transition_property->name = $model->name_property;
-                $transition_property->description = $model->description_property;
-                $transition_property->operator = $model->operator_property;
-                $transition_property->value = $model->value_property;
-                $transition_property->transition = $model->id;
-                $transition_property->save();
-
-                // --------------Формирование данных о новом переходе
-                $data["id_property"] = $transition_property->id;
-                $data["name_property"] = $transition_property->name;
-                $data["description_property"] = $transition_property->description;
-                $data["operator_property"] = $transition_property->getOperatorName();
-                $data["value_property"] = $transition_property->value;
-
-            } else
-                $data = ActiveForm::validate($model);
-            // Возвращение данных
-            $response->data = $data;
-            return $response;
-        }
-        return false;
-    }
-
-
-    /**
-     * Изменение перехода.
-     */
-    public function actionEditTransition()
-    {
-        //Ajax-запрос
-        if (Yii::$app->request->isAjax) {
-            // Определение массива возвращаемых данных
-            $data = array();
-            // Установка формата JSON для возвращаемых данных
-            $response = Yii::$app->response;
-            $response->format = Response::FORMAT_JSON;
-
-            $model = Transition::find()->where(['id' => Yii::$app->request->post('transition_id_on_click')])->one();
-
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                // Успешный ввод данных
-                $data["success"] = true;
-                // Формирование данных об измененном событии
-                $data["id"] = $model->id;
-                $data["name"] = $model->name;
-                $data["description"] = $model->description;
-                $data["state_from"] = $model->state_from;
-                $data["state_to"] = $model->state_to;
-            } else
-                $data = ActiveForm::validate($model);
-
-            // Возвращение данных
-            $response->data = $data;
-            return $response;
-        }
-        return false;
-    }
-
-
-    /**
-     * Удаление перехода.
-     */
-    public function actionDeleteTransition()
-    {
-        //Ajax-запрос
-        if (Yii::$app->request->isAjax) {
-            // Определение массива возвращаемых данных
-            $data = array();
-            // Установка формата JSON для возвращаемых данных
-            $response = Yii::$app->response;
-            $response->format = Response::FORMAT_JSON;
-
-            $model = Transition::find()->where(['id' => Yii::$app->request->post('transition_id_on_click')])->one();
-            $data["state_from"] = $model->state_from;
-            $data["state_to"] = $model->state_to;
-            $model -> delete();
-
-            $data["success"] = true;
-
-            // Возвращение данных
-            $response->data = $data;
-            return $response;
-        }
-        return false;
-    }
-
-
-    /**
-     * Добавление нового условия.
-     *
-     */
-    public function actionAddTransitionProperty()
-    {
-        //Ajax-запрос
-        if (Yii::$app->request->isAjax) {
-            // Определение массива возвращаемых данных
-            $data = array();
-            // Установка формата JSON для возвращаемых данных
-            $response = Yii::$app->response;
-            $response->format = Response::FORMAT_JSON;
-            // Формирование модели уровня
-            $model = new TransitionProperty();
-
-            $model->transition = Yii::$app->request->post('transition_id_on_click');
-
-            //поиск количества условий
-            $transition_property_count = TransitionProperty::find()->where(['transition' => Yii::$app->request->post('transition_id_on_click')])->count();
-            $data["transition_property_count"] = $transition_property_count;
-
-            // Определение полей модели уровня и валидация формы
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                // Успешный ввод данных
-                $data["success"] = true;
-                // Добавление нового уровня в БД
-                $model->save();
-                // Формирование данных о новом уровне
-                $data["id"] = $model->id;
-                $data["name"] = $model->name;
-                $data["description"] = $model->description;
-                $data["operator"] = $model->operator;
-                $data["operator_name"] = $model->getOperatorName();
-                $data["value"] = $model->value;
-                $data["transition"] = $model->transition;
-
-            } else
-                $data = ActiveForm::validate($model);
-            // Возвращение данных
-            $response->data = $data;
-            return $response;
-        }
-        return false;
-    }
-
-
-    /**
-     * Изменение условия.
-     */
-    public function actionEditTransitionProperty()
-    {
-        //Ajax-запрос
-        if (Yii::$app->request->isAjax) {
-            // Определение массива возвращаемых данных
-            $data = array();
-            // Установка формата JSON для возвращаемых данных
-            $response = Yii::$app->response;
-            $response->format = Response::FORMAT_JSON;
-
-            $model = TransitionProperty::find()->where(['id' => Yii::$app->request->post('transition_property_id_on_click')])->one();
-
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                // Успешный ввод данных
-                $data["success"] = true;
-
-                $data["id"] = $model->id;
-                $data["name"] = $model->name;
-                $data["description"] = $model->description;
-                $data["operator_name"] = $model->getOperatorName();
-                $data["operator"] = $model->operator;
-                $data["value"] = $model->value;
-
-            } else
-                $data = ActiveForm::validate($model);
-
-            // Возвращение данных
-            $response->data = $data;
-            return $response;
-        }
-        return false;
-    }
-
-
-    /**
-     * Удаление условия.
-     */
-    public function actionDeleteTransitionProperty()
-    {
-        //Ajax-запрос
-        if (Yii::$app->request->isAjax) {
-            // Определение массива возвращаемых данных
-            $data = array();
-            // Установка формата JSON для возвращаемых данных
-            $response = Yii::$app->response;
-            $response->format = Response::FORMAT_JSON;
-
-            $model = TransitionProperty::find()->where(['id' => Yii::$app->request->post('transition_property_id_on_click')])->one();
-            $transition_id = $model->transition;
-            $model -> delete();
-
-            //поиск количества свойст у выбранного состояния
-            $transition_property_count = TransitionProperty::find()->where(['transition' => $transition_id])->count();
-            $data["transition_property_count"] = $transition_property_count;
-            $data["transition_id"] = $transition_id;
-
-            $data["success"] = true;
-
-            // Возвращение данных
-            $response->data = $data;
-            return $response;
-        }
-        return false;
-    }
+ 
 
 
     /**

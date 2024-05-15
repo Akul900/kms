@@ -11,6 +11,7 @@ use app\components\StateTransitionXMLGenerator;
 use app\components\EventTreeXMLGenerator;
 use app\components\StateTransitionXMLImport;
 use app\components\EventTreeXMLImport;
+use app\components\FaultTreeCLIPSGenerator;
 use app\components\FaultTreeXMLGenerator;
 use app\components\FaultTreeXMLImport;
 
@@ -201,6 +202,22 @@ class ApiController extends Controller
         $code_generator = new FaultTreeXMLGenerator();
         //Генерация кода диаграммы переходов состояний
         $code_generator->generateSTDXMLCode($id);
+    }
+
+
+    /**
+     * Генератор CLIPS конкретной публичной (public) диаграммы отказовпо id
+     * @param $id - идентификатор диаграммы отказов
+     * @return string - код сгенерированной диаграммы отказов
+     */
+    public function actionClipsFaultTreeDiagram($id)
+    {
+        //Текущая (выбранная) диаграмма переходов состояний
+        $model = Diagram::find()->where(['id' => $id, 'status' => Diagram::PUBLIC_STATUS])->one();
+        //Создание экземпляра класса StateTransitionXMLGenerator (генератора кода диаграмм переходов состояний)
+        $code_generator = new FaultTreeCLIPSGenerator();
+        //Генерация кода диаграммы переходов состояний
+        $code_generator->generateCLIPSCode($id);
     }
 
 

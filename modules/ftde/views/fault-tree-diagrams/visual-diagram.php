@@ -56,7 +56,11 @@ $this->params['menu_diagram'] = [
         'url' => '#', 'linkOptions' => ['data-method' => 'post', 'data-params' => [
         'value' => 'xml',
     ]]],
-
+    
+    ['label' => '<i class="fa-solid fa-file-code"></i> ' . Yii::t('app', 'NAV_CLIPS'),
+    'url' => '#', 'linkOptions' => ['data-method' => 'post', 'data-params' => [
+    'value' => 'clips',
+    ]]],
     // ['label' => '<i class="fa-solid fa-align-center"></i> ' . Yii::t('app', 'NAV_ALIGNMENT'),
     //     'url' => '#', 'linkOptions' => ['id'=>'nav_alignment']],
 
@@ -83,17 +87,6 @@ foreach ($states_property_model_all as $sp){
     array_push($states_property_mas, [$sp->id, $sp->name, $sp->description, $sp->operator, $sp->value, $sp->fault]);
 }
 
-// создаем массив из transition для передачи в jsplumb
-$transitions_mas = array();
-foreach ($transitions_model_all as $t){
-    array_push($transitions_mas, [$t->id, $t->name, $t->description, $t->state_from, $t->state_to]);
-}
-
-// создаем массив из transition_property для передачи в js
-$transitions_property_mas = array();
-foreach ($transitions_property_model_all as $tp){
-    array_push($transitions_property_mas, [$tp->id, $tp->name, $tp->description, $tp->operator, $tp->value, $tp->transition]);
-}
 
 // создаем массив из start_model для передачи в js
 $start_mas = array();
@@ -199,15 +192,6 @@ foreach ($conditional_event_model as $u){
     'state_property_model' => $state_property_model,
 ]) ?>
 
-<?= $this->render('_modal_form_transition_editor', [
-    'model' => $model,
-    'transition_model' => $transition_model,
-]) ?>
-
-<?= $this->render('_modal_form_transition_property_editor', [
-    'model' => $model,
-    'transition_property_model' => $transition_property_model,
-]) ?>
 
 <?= $this->render('_modal_form_transfer_valve', [
     'model' => $model,
@@ -304,16 +288,11 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     var state_id_on_click = 0; //id состояния к которому назначается свойство
     var basic_event_id_on_click = 0; //id базового события к которому назначается свойство
     var state_property_id_on_click = 0; //id свойство состояния
-    var transition_id_on_click = 0; //id перехода
-    var transition_property_id_on_click = 0;//id условия
 
-    var added_transition = false;
-    var removed_transition = false;
 
     var states_mas = <?php echo json_encode($states_mas); ?>;//прием массива состояний из php
     var states_property_mas = <?php echo json_encode($states_property_mas); ?>;//прием массива свойств состояний из php
-    var transitions_mas = <?php echo json_encode($transitions_mas); ?>;//прием массива переходов из php
-    var transitions_property_mas = <?php echo json_encode($transitions_property_mas); ?>;//прием массива условий из php
+
     var start_mas = <?php echo json_encode($start_mas); ?>;//прием массива начал из php
     var end_mas = <?php echo json_encode($end_mas); ?>;//прием массива завершений из php
 
@@ -395,33 +374,6 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     //console.log(mas_data_basic_event);
 
 
-    var mas_data_transition = {};
-    var q = 0;
-    var id = "";
-    var name = "";
-    var description = "";
-    var state_from = "";
-    var state_to = "";
-    $.each(transitions_mas, function (i, mas) {
-        $.each(mas, function (j, elem) {
-            if (j == 0) {id = elem;}//записываем id
-            if (j == 1) {name = elem;}
-            if (j == 2) {description = elem;}
-            if (j == 3) {state_from = elem;}
-            if (j == 4) {state_to = elem;}
-            mas_data_transition[q] = {
-                "id":id,
-                "name":name,
-                "description":description,
-                "state_from":state_from,
-                "state_to":state_to,
-            }
-        });
-        q = q+1;
-    });
-
-    //console.log(mas_data_transition);
-
 
     var mas_data_state_property = {};
     var q = 0;
@@ -454,35 +406,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     //console.log(mas_data_state_property);
 
 
-    var mas_data_transition_property = {};
-    var q = 0;
-    var id = "";
-    var name = "";
-    var description = "";
-    var operator = "";
-    var value = "";
-    var transition = "";
-    $.each(transitions_property_mas, function (i, mas) {
-        $.each(mas, function (j, elem) {
-            if (j == 0) {id = elem;}//записываем id
-            if (j == 1) {name = elem;}
-            if (j == 2) {description = elem;}
-            if (j == 3) {operator = elem;}
-            if (j == 4) {value = elem;}
-            if (j == 5) {transition = elem;}
-            mas_data_transition_property[q] = {
-                "id":id,
-                "name":name,
-                "description":description,
-                "operator":operator,
-                "value":value,
-                "transition":transition,
-            }
-        });
-        q = q+1;
-    });
-
-    //console.log(mas_data_transition_property);
+    
 
 
     var mas_data_start = {};
@@ -1054,15 +978,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         });
 
 
-        //возврат связи на место если оторвалось
-        instance.bind("beforeDetach", function (e) {
-            //проверка является ли разрыв связи удалением
-            if(removed_transition != true){
-                return false;
-            } else {
-                removed_transition = false;
-            }
-        });
+        
     });
     //-----конец кода jsPlumb-----
 
@@ -1565,89 +1481,14 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     });
 
 
-    //скрытие блоков переходов
-    $(document).on('click', '.hide-transition', function() {
-        var transition = $(this).attr('id');
-        var transition_id = parseInt(transition.match(/\d+/));
-
-        //Поиск блока перехода
-        var div_transition = document.getElementById("transition_" + transition_id);
-        div_transition.style.visibility='hidden'
-    });
+   
 
 
-    //изменение перехода
-    $(document).on('click', '.edit-transition', function() {
-        if (!guest) {
-            var transition = $(this).attr('id');
-            transition_id_on_click = parseInt(transition.match(/\d+/));
-
-            $.each(mas_data_transition, function (i, elem) {
-                if (elem.id == transition_id_on_click) {
-                    document.forms["edit-transition-form"].reset();
-                    document.forms["edit-transition-form"].elements["Transition[name]"].value = elem.name;
-                    document.forms["edit-transition-form"].elements["Transition[description]"].value = elem.description;
-                    //Скрытые обязательные поля (заполняем не пустыми значениями)
-                    document.forms["edit-transition-form"].elements["Transition[name_property]"].value = "test";
-                    document.forms["edit-transition-form"].elements["Transition[operator_property]"].value = 0;
-                    document.forms["edit-transition-form"].elements["Transition[value_property]"].value = "test";
-                    $("#editTransitionModalForm").modal("show");
-                }
-            });
-        }
-    });
+  
 
 
-    // //удаленеи перехода
-    // $(document).on('click', '.del-transition', function() {
-    //     if (!guest) {
-    //         var transition = $(this).attr('id');
-    //         transition_id_on_click = parseInt(transition.match(/\d+/));
-    //         $("#deleteTransitionModalForm").modal("show");
-    //     }
-    // });
 
-
-    // добавление условия
-    $(document).on('click', '.add-transition-property', function() {
-        if (!guest) {
-            var transition = $(this).attr('id');
-            transition_id_on_click = parseInt(transition.match(/\d+/));
-            $("#addTransitionPropertyModalForm").modal("show");
-        }
-    });
-
-
-    // изменение условия
-    $(document).on('click', '.edit-transition-property', function() {
-        if (!guest) {
-            var transition_property = $(this).attr('id');
-            transition_property_id_on_click = parseInt(transition_property.match(/\d+/));
-
-            $.each(mas_data_transition_property, function (i, elem) {
-                if (elem.id == transition_property_id_on_click) {
-                    document.forms["edit-transition-property-form"].reset();
-                    document.forms["edit-transition-property-form"].elements["TransitionProperty[name]"].value = elem.name;
-                    document.forms["edit-transition-property-form"].elements["TransitionProperty[description]"].value = elem.description;
-                    document.forms["edit-transition-property-form"].elements["TransitionProperty[operator]"].value = elem.operator;
-                    document.forms["edit-transition-property-form"].elements["TransitionProperty[value]"].value = elem.value;
-                    $("#editTransitionPropertyModalForm").modal("show");
-                }
-            });
-        }
-    });
-
-
-    // удаление условия
-    $(document).on('click', '.del-transition-property', function() {
-        if (!guest) {
-            var transition_property = $(this).attr('id');
-            transition_property_id_on_click = parseInt(transition_property.match(/\d+/));
-            $("#deleteTransitionPropertyModalForm").modal("show");
-            // Обновление формы редактора
-            instance.repaintEverything();
-        }
-    });
+   
 
 
     //равномерное распределение и выравнивание элементов по диаграмме
@@ -2101,45 +1942,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         <?php endforeach; ?>
 
 
-        <!-- отображение блоков переходов -->
-        <?php foreach ($transitions_model_all as $transition): ?>
-            <div id="transition_<?= $transition->id ?>" class="div-transition" style="visibility:hidden;">
-                <div class="content-transition">
-                    <div id="transition_name_<?= $transition->id ?>" class="div-transition-name"><?= $transition->name ?></div>
-                    <div id="transition_del_<?= $transition->id ?>" class="del-transition glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
-                    <div id="transition_edit_<?= $transition->id ?>" class="edit-transition glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
-                    <div id="transition_hide_<?= $transition->id ?>" class="hide-transition glyphicon-eye-close" title="<?php echo Yii::t('app', 'BUTTON_HIDE'); ?>"><i class="fa-solid fa-eye-slash"></i></div>
-                    <div id="transition_add_property_<?= $transition->id ?>" class="add-transition-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <!-- отображение разделительной пунктирной линии -->
-                <?php
-                    $line = false;
-                    foreach ($transitions_property_model_all as $transition_property){
-                        if ($transition_property->transition == $transition->id){
-                            $line = true;
-                        }
-                    }
-                ?>
-                <?php if ($line == true){ ?>
-                    <div id="transition_line_<?= $transition->id ?>" class="div-line"></div>
-                <?php } ?>
-
-                <!-- отображение условий -->
-                <?php foreach ($transitions_property_model_all as $transition_property): ?>
-                    <?php if ($transition_property->transition == $transition->id){ ?>
-                        <div id="transition_property_<?= $transition_property->id ?>" class="div-transition-property">
-                            <div class="button-transition-property">
-                                <div id="transition_property_edit_<?= $transition_property->id ?>" class="edit-transition-property glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
-                                <div id="transition_property_del_<?= $transition_property->id ?>" class="del-transition-property glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
-                            </div>
-                            <?= $transition_property->name ?> <?= $transition_property->getOperatorName()?> <?= $transition_property->value ?>
-                        </div>
-                    <?php } ?>
-                <?php endforeach; ?>
-
-            </div>
-        <?php endforeach; ?>
+        
 
         <?php foreach ($end_model as $end): ?>
             <div id="or_<?= $end->id ?>" class="div-or">

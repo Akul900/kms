@@ -87,6 +87,7 @@ $config = [
                 '/api/import-state-transition-diagram/<id:\d+>' => 'api/api/import-state-transition-diagram',
                 '/api/import-event-tree-diagram/<id:\d+>' => 'api/api/import-event-tree-diagram',
                 '/api/import-fault-tree-diagram/<id:\d+>' => 'api/api/import-fault-tree-diagram',
+                '/api/clips-fault-tree-diagram/<id:\d+>' => 'api/api/clips-fault-tree-diagram',
             ],
         ],
         'cache' => [

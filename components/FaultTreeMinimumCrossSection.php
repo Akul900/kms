@@ -4,18 +4,15 @@ namespace app\components;
 
 use Transliterator;
 use app\modules\ftde\models\Element;
-use app\modules\main\models\Diagram;
 use app\modules\ftde\models\StateConnection;
+//include 'vendor/autoload.php';
 
-use function PHPSTORM_META\elementType;
+class FaultTreeMinimumCrossSection
+{ 
+    
 
-class FaultTreeCLIPSGenerator
-{
-
-    public function generateCLIPSCode($id)
+    public function generateMinimumCrossSection($id)
     {
-        $diagram = Diagram::find()->where(['id' => $id])->one();
-        $arr = explode(' ',trim($diagram->name));
        // Получение всех элементов
         $elements = Element::find()->where(['diagram' => $id])->orderBy(['id' => SORT_ASC])->all();
 
@@ -24,20 +21,9 @@ class FaultTreeCLIPSGenerator
         $transliterator = Transliterator::create('Any-Latin; Latin-ASCII');
         $element_to_mas = array();
         $elemet_from_mas = null;
-        $next_elements = array();
+        $mcs = [];
 
-
-        // Функция генерации правил CLIPS
-
-        $clips = "";
-   
-
-        // Шаблоны для построения событий
-        $clips .= "(deftemplate Event\n";
-        $clips .= "  (slot Name (default \"Отказ сети\"))\n";
-        $clips .= "  (slot ID (default \"E1\"))\n";
-        $clips .= "  (slot Type (default \"Отказ\"))\n";
-        $clips .= ")\n\n";
+ 
 
         $connection_elements = array();//массив связей
         foreach ($connections as $t){
@@ -49,152 +35,162 @@ class FaultTreeCLIPSGenerator
         }
         
         $elementStartTo = findStart($connection_elements, $elements);
-        $elemet_from_mas = findType($elements, $elementStartTo);
+        $elemet_from_mas = findType($connection_elements, $elements, $elementStartTo);
         $element_to_mas = findToElements($connections, $elements, $elemet_from_mas);
+        $mcs[] = array_merge($mcs, $elementStartTo);
         // var_dump($elemet_from_mas);
         //     foreach($element_to_mas  as $ne){
         //         print_r($ne);
         //       //  echo "<script>console.log('PHP aaaa: " . $ne->name . "');</script>";
         // }
-        
+    
         if($elemet_from_mas[0][1] == Element::OR_TYPE){
-            $clips .= orClips($elementStartTo, $transliterator, $element_to_mas);
+            $mcs = orClips($mcs, $transliterator, $element_to_mas, $elementStartTo);
         }elseif($elemet_from_mas[0][1] == Element::AND_TYPE){
-            $clips .= andClips($elementStartTo, $transliterator, $element_to_mas);
+            $mcs = andClips($mcs, $transliterator, $element_to_mas, $elementStartTo);
         }elseif($elemet_from_mas[0][1] == Element::AND_WITH_PRIORITY){
-            $clips .= andClips($elementStartTo, $transliterator, $element_to_mas);
+            $mcs = andClips($elementStartTo, $transliterator, $element_to_mas, $elementStartTo);
         }elseif($elemet_from_mas[0][1] == Element::PROHIBITION_TYPE){
-            $clips .= andClips($elementStartTo, $transliterator, $element_to_mas);
+            $mcs = andClips($elementStartTo, $transliterator, $element_to_mas, $elementStartTo);
         }elseif($elemet_from_mas[0][1] == Element::MAJORITY_VALVE){
-            $clips .= orClips($elementStartTo, $transliterator, $element_to_mas);
+            $mcs = orClips($elementStartTo, $transliterator, $element_to_mas, $elementStartTo);
         }elseif($elemet_from_mas[0][1] == Element::COMMON_FAULT || $elemet_from_mas[0][1] == Element::BASIC_EVENT
         || $elemet_from_mas[0][1] == Element::UNDEVELOPED_EVENT || $elemet_from_mas[0][1] == Element::CONDITIONAL_EVENT || $elemet_from_mas[0][1] == Element::HIDDEN_EVENT){
-            $clips .= faultClips($elementStartTo, $transliterator, $element_to_mas);
+            $mcs = faultClips($mcs, $transliterator, $element_to_mas, $elementStartTo);
+    
         }
 
         
-        $clips .= clipsCreate($connections, $elements, $element_to_mas, $transliterator, "");
+        $mcs = clipsCreate($connections, $elements, $element_to_mas, $transliterator, $mcs);
 
-        $file = $diagram->id.'_'.$arr[0].'.clp';
+      //  echo "<script>console.log('PHP mas: \"" . json_encode($mcs) . "\"');</script>";
 
-        file_put_contents($file, $clips);
-        header("Content-type: application/octet-stream");
-        header('Content-Disposition: filename="'.$file.'"');
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        readfile($file);
+        // foreach ($mcs as $e){
+        //          echo "<script>console.log('PHP 99999: \"" . $e->id. "\"');</script>";
+        
+        // }
+        
+      
+        //d($mcs);
+      
 
-        // Удаление файла после скачивания, если необходимо
-        unlink($file);
-        exit;
+       // Kint::dump($array);
+
+
+       // print_r($mcs);
+      //  var_dump($mcs);
+     
+       // file_put_contents('mcs.txt', $mcs);
+       // header("Content-type: application/octet-stream");
+       // header('Content-Disposition: filename="mcs.txt"');
+       // exit;
+       return $mcs;
     }
 }
 
 
-function findType($elements, $elementStartTo){
+
+
+
+function findType($connections, $elements, $elementStartTo){
     $elemet_from_mas = array();
-    foreach ($elements as $e){
-        if ($elementStartTo[0][3] == $e->id){
-          //  $elemet_from = $elementStartTo[0][2];
-            array_push($elemet_from_mas , [$elementStartTo[0][3], $e->type]);
+    $to = 0;
+    foreach ($connections as $c){
+        foreach ($elements as $e){
+            foreach ($elementStartTo as $et){
+                if ($et->id == $c->element_from ){
+                    $to = $c->element_to;
+                }
+            }
         }
     }
+
+    foreach ($elements as $e){
+            if ($e->id == $to ){
+                array_push($elemet_from_mas , [$to, $e->type]);
+            }
+    }
+   // echo "<script>console.log('PHP type: \"" . $elemet_from_mas[0][1]. "\"');</script>";
     return $elemet_from_mas;
 }
 
 
-function orClips($elementStartTo, $transliterator, $element_to_mas){
-    $clips="";
-    $sourceRu = "";
-    $sourceEng = "";
-    $targetRu = $elementStartTo[0][1];
-    $targetEng = str_replace(' ', '-', $transliterator->transliterate($elementStartTo[0][1]));
-    foreach ($element_to_mas as $mas){
-        $sourceRu  .= "{$mas->name} или ";
-        $sourceEng .= "{$transliterator->transliterate($mas->name)}+";
-    }
-    $sourceRu = substr($sourceRu, 0, -8);
-    $sourceEng = substr(str_replace(' ', '-', $sourceEng), 0, -1);
-    $clips .= "(defrule {$sourceEng}>{$targetEng} \"Описание правила: {$sourceRu} > {$targetRu}\"\n";
-    $clips .= "(declare (salience 1))\n";
-    $clips .= "  (or\n";
-    foreach ($element_to_mas as $mas){
-        $clips .= "  (Event ; Event\n    (Name \"" . mb_strtoupper($mas->name) . "\")\n    (Type \"{$mas->getTypeNameEn()}\")\n)\n";
-    }
-    $clips .= "  )\n";
-   
-   
+function orClips($mcs, $transliterator, $element_to_mas, $elementStartTo){
+    $i=0;
+    $index_mas=0;
+    $mcs_old = array();
+    foreach ($element_to_mas as $e){
+        if($i < count($element_to_mas))
+        {   
+            if ($i==0){
+                foreach ($mcs as $index => $m){
+                    foreach ($m as $ms ){
+                        if ($ms->id == $elementStartTo[0]->id){
+                            $mcs_old = $m;
+                            $index_mas = $index;
+                            
+                        }
+                    }
+                }
+                array_push($mcs[$index_mas], $e);  
+            }
+            if ($i>=1){
 
-    $clips .= "=>\n";
-    $clips .= "(assert\n  (Event ; Event\n    (Name \"" . mb_strtoupper($targetRu) . "\")\n  (Type \"{$elementStartTo[0][2]}\")\n))\n";
-    $clips .= ")\n\n"; 
-    return $clips;
+                $mcs[]  = $mcs_old;
+                array_push($mcs[array_key_last($mcs)], $e);
+
+            }
+           
+        }
+        $i++;
+    }
+
+    return $mcs;
 }
 
 
-function andClips($elementStartTo, $transliterator, $element_to_mas){
-    $clips="";
-    $sourceRu = "";
-    $sourceEng = "";
-    $targetRu = $elementStartTo[0][1];
-    $targetType = $elementStartTo[0][2];
-    $targetEng = str_replace(' ', '-', $transliterator->transliterate($elementStartTo[0][1]));
-    foreach ($element_to_mas as $mas){
-        $sourceRu  .= "{$mas->name} и ";
-        $sourceEng .= "{$transliterator->transliterate($mas->name)}+";
-    }
-    $sourceRu = substr($sourceRu, 0, -4);
-    $sourceEng = substr(str_replace(' ', '-', $sourceEng), 0, -1);
-    $clips .= "(defrule {$sourceEng}>{$targetEng} \"Описание правила: {$sourceRu} > {$targetRu}\"\n";
-    $clips .= "(declare (salience 1))\n";
-    foreach ($element_to_mas as $mas){
-        $clips .= "  (Event ; Event\n    (Name \"" . mb_strtoupper($mas->name) . "\")\n    (Type \"{$mas->getTypeNameEn()}\")\n)\n";
-    }
-  
-   
-   
+function andClips($mcs, $transliterator, $element_to_mas, $elementStartTo){
+    $index_mas= 0;
 
-    $clips .= "=>\n";
-    $clips .= "(assert\n  (Event ; Event\n    (Name \"" . mb_strtoupper($targetRu) . "\")\n     (Type \"{$targetType}\")\n))\n";
-    $clips .= ")\n\n"; 
-    return $clips;
+    foreach ($mcs as $index => $m){
+        foreach ($m as $ms ){
+            if ($ms->id == $elementStartTo[0]->id){
+                $index_mas = $index; 
+                
+            }
+        }
+    }
+
+    foreach ($element_to_mas as $e){
+         array_push($mcs[$index_mas], $e);  
+    }
+
+    return $mcs;
 }
 
 
-function faultClips($elementStartTo, $transliterator, $element_to_mas){
-    $clips="";
-    $sourceRu = "";
-    $sourceEng = "";
-   // $sourceType = "";
-    $targetRu = $elementStartTo[0][1];
-    $targetType = $elementStartTo[0][2];
-    
-    $targetEng = str_replace(' ', '-', $transliterator->transliterate($elementStartTo[0][1]));
+function faultClips($mcs, $transliterator, $element_to_mas, $elementStartTo){
 
-    foreach ($element_to_mas as $mas){
-        $sourceRu  .= "{$mas->name} и ";
-        $sourceEng .= "{$transliterator->transliterate($mas->name)}+";
-    }
-        // $sourceRu  .= "{$next_element->name} и ";
-        // $sourceEng .= "{$transliterator->transliterate($next_element->name)}+";
-    
-    $sourceRu = substr($sourceRu, 0, -4);
-    $sourceEng = substr(str_replace(' ', '-', $sourceEng), 0, -1);
-    $clips .= "(defrule {$sourceEng}>{$targetEng} \"Описание правила: {$sourceRu} > {$targetRu}\"\n";
-    $clips .= "(declare (salience 1))\n";
-   
-    foreach ($element_to_mas as $mas){
-        $clips .= "  (Event ; Event\n    (Name \"" . mb_strtoupper($mas->name) . "\")\n    (Type \"{$mas->getTypeNameEn()}\")\n)\n";
-    }
-      //  $clips .= "  (Event ; Event\n    (Name \"" . mb_strtoupper($next_element->name) . "\")\n    (Type \"{$next_element->getTypeNameEn()}\")\n)\n";
+  //  d($elementStartTo);
+   // d($mcs);
+    $index_mas= 0;
 
-    $clips .= "=>\n";
-    $clips .= "(assert\n  (Event ; Event\n    (Name \"" . mb_strtoupper($targetRu) . "\")\n     (Type \"{$targetType}\")\n))\n";
-    $clips .= ")\n\n"; 
-    return $clips;
+    foreach ($mcs as $index => $m){
+        foreach ($m as $ms ){
+            if ($ms->id == $elementStartTo[0]->id){
+                $index_mas = $index; 
+                
+            }
+        }
+    }
+    //d($element_to_mas);
+    foreach ($element_to_mas as $e){
+         array_push($mcs[$index_mas], $e);  
+    }
+
+    return $mcs;
 }
+
 
 
 function findStart($connections, $elements){
@@ -202,11 +198,15 @@ function findStart($connections, $elements){
     foreach ($connections as $c){
         foreach ($elements as $e){
             if ($c->element_from == $e->id && $e->type == Element::INITIAL_FAULT){
-                array_push($elementStartTo, [$e->id, $e->name, $e->getTypeNameEn(), $c->element_to ]);
+                array_push($elementStartTo, $e);
 
             }
         }
     }
+    // foreach ($elementStartTo as $e){
+
+    //     echo "<script>console.log('PHP zzzzz: \"" . $e->name . "\"');</script>";
+    // }
     
     return $elementStartTo;
 }
@@ -216,10 +216,11 @@ function findStart2($connections, $elements, $next_elements){
     foreach ($connections as $c){
         foreach ($elements as $e){
                 if ($c->element_from == $e->id && $next_elements->id == $c->element_to){
-                array_push($elementStartName, [$e->id, $e->name, $e->getTypeNameEn()]);
+                array_push($elementStartName, $e);
             }
         }
     }
+
     return $elementStartName;
 }
 
@@ -244,6 +245,11 @@ function findToElements($connections, $elements, $elemet_from){
             }
         }
     }
+    // foreach ($element_to_mas as $e){
+
+    //     echo "<script>console.log('PHP 1111: \"" . $e->name . "\"');</script>";
+    // }
+return $element_to_mas;
 
     return $element_to_mas;
 }
@@ -284,25 +290,19 @@ function findToElements2($connections, $elements, $elemet_from){
 
 function findToElements3($connections, $elements, $elemet_from){
     $element_to_mas = array();//массив связей
-    // if($elemet_from->type == Element::OR_TYPE){
-    //     d("fd");
-    // }
-    
     foreach ($connections as $c){
 
             if($c->element_from == $elemet_from->id && $elemet_from->type != Element::COMMON_FAULT && $elemet_from->type != Element::UNDEVELOPED_EVENT
-                    && $elemet_from->type != Element::CONDITIONAL_EVENT && $elemet_from->type != Element::HIDDEN_EVENT  && $elemet_from->type != Element::BASIC_EVENT ){
+                    && $elemet_from->type != Element::CONDITIONAL_EVENT && $elemet_from->type != Element::HIDDEN_EVENT){
                         foreach ($elements as $e){
                             if ($c->element_to == $e->id){
                              //   echo "<script>console.log('PHP 8678678яя: \"" . $e->getTypeNameEn() . "\"');</script>";
                                 array_push($element_to_mas, $e);
-                          
                             }
                         }
                     }elseif(($c->element_to == $elemet_from->id && $elemet_from->type == Element::COMMON_FAULT) || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::BASIC_EVENT)
                     || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::UNDEVELOPED_EVENT) || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::CONDITIONAL_EVENT)
                     || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::HIDDEN_EVENT)){
-                     //  d($elemet_from->type);
                         foreach ($elements as $e){
                             if ($c->element_to == $e->id){
                             //    echo "<script>console.log('PHP 8678678: \"" . $e->getTypeNameEn() . "\"');</script>";
@@ -317,7 +317,7 @@ function findToElements3($connections, $elements, $elemet_from){
 
     // foreach ($element_to_mas as $e){
 
-    //         echo "<script>console.log('PHP 4444: \"" . $e->name . "\"');</script>";
+    //         echo "<script>console.log('PHP 3333: \"" . $e->name . "\"');</script>";
     //     }
     return $element_to_mas;
 }
@@ -357,7 +357,7 @@ function clipsCreate($connections, $elements, $element_to_mas, $transliterator, 
     
     
     foreach($next_elements as $ne){
-      //  d($ne);
+        
         $elementStartName = findStart2($connections, $elements, $ne);
         $element_to_mas = findToElements3($connections, $elements, $ne);
         // foreach($element_to_mas  as $ne){
@@ -368,20 +368,21 @@ function clipsCreate($connections, $elements, $element_to_mas, $transliterator, 
         // echo "<script>console.log('PHP : zzz" . $ne->getTypeNameEn() . "');</script>";
        // echo "<script>console.log('PHP value: " . $elementStartName[0][1] . "');</script>";
         if($ne->type == Element::OR_TYPE){
-            $clips .= orClips($elementStartName, $transliterator, $element_to_mas);
+            $clips = orClips($clips, $transliterator, $element_to_mas, $elementStartName);
         }elseif($ne->type  == Element::AND_TYPE){
-            $clips .= andClips($elementStartName, $transliterator, $element_to_mas);
+            $clips = andClips($clips, $transliterator, $element_to_mas, $elementStartName);
         }
         elseif($ne->type  == Element::PROHIBITION_TYPE){
-            $clips .= andClips($elementStartName, $transliterator, $element_to_mas);
+            $clips = andClips($clips, $transliterator, $element_to_mas, $elementStartName);
         }
         elseif($ne->type  == Element::AND_WITH_PRIORITY){
-            $clips .= andClips($elementStartName, $transliterator, $element_to_mas);
+            $clips = andClips($clips, $transliterator, $element_to_mas, $elementStartName);
         }
         elseif($ne->type  == Element::MAJORITY_VALVE){
-            $clips .= orClips($elementStartName, $transliterator, $element_to_mas);
+            $clips = orClips($clips, $transliterator, $element_to_mas, $elementStartName);
         }elseif($ne->type == Element::COMMON_FAULT || Element::BASIC_EVENT || Element::UNDEVELOPED_EVENT || Element::CONDITIONAL_EVENT || Element::HIDDEN_EVENT){
-            $clips .= faultClips($elementStartName, $transliterator, $element_to_mas);
+           
+            $clips = faultClips($clips, $transliterator, $element_to_mas, $elementStartName);
         }
     }
     $element_to_mas = findToElements2($connections, $elements, $next_elements);
@@ -396,13 +397,5 @@ function clipsCreate($connections, $elements, $element_to_mas, $transliterator, 
 }
 
 
-
-    
-
- 
-
-
-
-
-
 ?>
+

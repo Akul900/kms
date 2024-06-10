@@ -16,6 +16,7 @@ function stateStartConnectionsStyle(){
             filter: ".fa-share",
             anchor: "Bottom", //непрерывный анкер
             maxConnections: 1,
+            allowLoopback: false, // Разрешение создавать кольцевую связь
             onMaxConnections: function (info, e) {
                 //отображение сообщения об ограничении
                 var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;

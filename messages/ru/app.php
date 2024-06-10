@@ -68,6 +68,7 @@ return [
     'NAV_IMPORT' => 'Импортировать',
     'NAV_EXPORT' => 'Экспортировать',
     'NAV_CLIPS' => 'Генерация CLIPS',
+    'NAV_MINIMUN_CROSS_SECTION' => 'Минимальное сечение',
     'NAV_VERIFY' => 'Проверить',
     'NAV_ALIGNMENT' => 'Выравнивание',
     'NAV_UNLOAD_DECISION_TABLE' => 'Выгрузить таблицу решений',
@@ -501,6 +502,7 @@ return [
     'DELETE_RELATIONSHIP' => 'Удаление связи',
     'IMPORT_FORM' => 'Импортирование',
     'ERROR_COPY_EVENT' => 'Ошибка копирования события',
+    'MCS_TITLE' => 'Минимальные сечения',
 
     /* Заголовки модальных форм STDE */
     'STATE_ADD_NEW_STATE' => 'Добавить новое состояние',

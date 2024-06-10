@@ -15,6 +15,7 @@ use app\modules\ftde\models\StateConnection;
 use app\components\FaultTreeXMLGenerator;
 use app\components\DecisionTableGenerator;
 use app\components\FaultTreeCLIPSGenerator;
+use app\components\FaultTreeMinimumCrossSection;
 use Psy\Readline\Hoa\ConsoleInput;
 use yii\helpers\Console;
 
@@ -52,7 +53,6 @@ class FaultTreeDiagramsController extends Controller
             }
         }
 
-
         //экспорт диаграммы
         if (Yii::$app->request->isPost) {
             if (Yii::$app->request->post('value', null) == 'xml'){
@@ -66,6 +66,11 @@ class FaultTreeDiagramsController extends Controller
             if (Yii::$app->request->post('value', null) == 'clips'){
                 $code_generator = new FaultTreeCLIPSGenerator();
                 $code_generator->generateCLIPSCode($id);
+            }
+            if (Yii::$app->request->post('value', null) == 'mcs'){
+                $code_generator = new FaultTreeMinimumCrossSection();
+                $code_generator->generateMinimumCrossSection($id);
+
             }
         }
 
@@ -299,6 +304,54 @@ class FaultTreeDiagramsController extends Controller
             return $model;
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+
+         /**
+     * Добавление нового базвовго события.
+     *
+     * @param $id - id дерева 
+     * @return bool|\yii\console\Response|Response
+     */
+    public function actionMcs($id)
+    {
+        //Ajax-запрос
+        if (Yii::$app->request->isAjax) {
+            // Определение массива возвращаемых данных
+            $data = array();
+            
+            // Установка формата JSON для возвращаемых данных
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_JSON;
+
+            $code_generator = new FaultTreeMinimumCrossSection();
+            $data = $code_generator->generateMinimumCrossSection($id);
+            
+            // Определение полей модели уровня и валидация формы
+        
+                // Условие проверки является ли состояние инициирующим
+
+                // Успешный ввод данных
+                $data["success"] = true;
+                unset($data['success']);
+
+                // Нахождение минимального размера массива
+                $minSize = min(array_map('count', $data));
+            
+                // Нахождение всех массивов с минимальным размером
+                $minArrays = array_filter($data, function($arr) use ($minSize) {
+                    return count($arr) == $minSize;
+                });
+            
+                // Конвертация в массив для дальнейшей обработки
+                $minArrays = array_values($minArrays);
+
+            
+            // Возвращение данных
+            $response->data = $minArrays;
+            return $response;
+        }
+        return false;
     }
 
   

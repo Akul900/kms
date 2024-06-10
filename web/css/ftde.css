@@ -138,6 +138,7 @@
 .div-basic-event {
     /* форма*/
     min-width: 100px;
+    max-width: 400px;
     min-height: 100px;
     border:2px solid #337ab7;
     background-color:#f5f5f5;
@@ -150,6 +151,7 @@
 }
 
 .div-basic-event:hover {
+
     border:2px solid #337ab7;
     background-color: #b9def0;
     opacity:0.9;
@@ -163,14 +165,17 @@
 .content-basic-event{
     position: relative;
     padding-top: 35px;
+    min-width: 90px;
     min-height: 60px;
     padding-bottom: 20px;
     font-size: 80%;
 }
 
 .div-basic-event-name {
-    padding-left: 8px;
-    padding-right: 8px;
+  
+    margin-right: 8px;
+    margin-left: 8px;
+
     font-weight: bold;
     /* текст по центру*/
     position: relative;
@@ -181,8 +186,8 @@
 /*кнопки состояний*/
 .edit-basic-event {
     position: absolute;
-    right: 30px;
-    top: 5px;
+    right: 40px;
+    top: 10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -191,8 +196,8 @@
 
 .del-basic-event {
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 20px;
+    top: 10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -201,7 +206,7 @@
 
 .connect-basic-event {
     position: absolute;
-    top: 5px;
+    top: 10px;
     right: 50px;
     display:none;
     color: #337ab7;
@@ -211,8 +216,8 @@
 
 .copy-basic-event {
     position: absolute;
-    left: 5px;
-    top: 5px;
+    left: 20px;
+    top: 10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -447,21 +452,48 @@
 
 
 /* -Стили для состояний- */
-.div-undeveloped-event {
+/* .div-undeveloped-event {
     background-image:url(../images/undeveloped_event.png);
     background-size: contain;
     width:175px;
     height:113px;
     filter: drop-shadow(5px 5px 5px #b9def0);
     position: absolute;
+} */
+
+.div-undeveloped-event {
+    background-image: url(../images/undeveloped_event.png);
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 175px;
+    min-height: 113px;
+  
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание текста */
+    justify-content: center; /* Горизонтальное выравнивание текста */
+    overflow: hidden; /* Прячет текст, выходящий за границы */
+    text-align: center; /* Центрирование текста */
+
 }
 
+
+
 .div-undeveloped-event:hover {
-    width:175px;
-    height:113px;
+
     background-image:url(../images/undeveloped_event_activ.png);
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 175px;
+    min-height: 113px;
     cursor: pointer;
 }
+
+
 
 .div-undeveloped-event:active {
     cursor: move;
@@ -470,29 +502,39 @@
 .content-undeveloped-event{
     position: relative;
 
-    padding-top: 39px;
-    min-height: 60px;
-    width: 175px;
-    padding-bottom: 20px;
+    min-width: 175px;
+    min-height: 113px;
+    max-width: 400px;
     font-size: 80%;
+
+
+
+    
 }
 
 .div-undeveloped-event-name {
   
     position: relative;
-    padding-left: 35px;
-    padding-right: 35px;
  
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     font-weight: bold;
     /* текст по центру*/
     text-align: center;
     word-wrap: break-word; /* перенос строк */
+    border-radius: 50%;
+   
+ 
+    
+
 }
 
 /*кнопки состояний*/
 .edit-undeveloped-event {
     position: absolute;
-    right: 30px;
+    left: 30px;
     top: 5px;
     display:none;
     color: #337ab7;
@@ -502,7 +544,7 @@
 
 .del-undeveloped-event {
     position: absolute;
-    right: 10px;
+    right: 5px;
     top: 5px;
     display:none;
     color: #337ab7;
@@ -513,7 +555,7 @@
 .connect-undeveloped-event {
     position: absolute;
     top: 5px;
-    right: 50px;
+    right: 30px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -724,18 +766,32 @@
 
 /* -Стили для состояний- */
 .div-hidden-event{
+
     background-image:url(../images/hidden_event.png);
-    background-size: contain;
-    width:185px;
-    height:186px;
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 185px;
+    min-height: 186px;
+  
     filter: drop-shadow(5px 5px 5px #b9def0);
     position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание текста */
+    justify-content: center; /* Горизонтальное выравнивание текста */
+    overflow: hidden; /* Прячет текст, выходящий за границы */
+    text-align: center; /* Центрирование текста */
 }
 
 .div-hidden-event:hover {
-    width:185px;
-    height:186px;
+
     background-image:url(../images/hidden_event_activ.png);
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 185px;
+    min-height: 186px;
     cursor: pointer;
 }
 
@@ -745,21 +801,23 @@
 
 .content-hidden-event{
     position: relative;
-
-    padding-top: 70px;
-    min-height: 60px;
-    width: 185px;
-    padding-bottom: 20px;
+    min-height: 186px;
+    min-width: 185px;
+    max-width: 400px;
     font-size: 80%;
+
 }
 
 .div-hidden-event-name {
   
     position: relative;
-    padding-left: 35px;
-    padding-top: 1px;
-    padding-right: 36px;
- 
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+
+    max-width: 400px;
+  
     font-weight: bold;
     /* текст по центру*/
     text-align: center;
@@ -769,7 +827,7 @@
 /*кнопки состояний*/
 .edit-hidden-event {
     position: absolute;
-    right: 30px;
+    left: 35px;
     top: 40px;
     display:none;
     color: #337ab7;
@@ -789,8 +847,8 @@
 
 .connect-hidden-event {
     position: absolute;
-    top: 5px;
-    right: 50px;
+    top: 40px;
+    right: 35px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -839,8 +897,8 @@
 /* -Стили для состояний- */
 .div-conditional-event{
     /* форма*/
-    width: 150px;
-    min-height: 60px;
+    min-width: 150px;
+    max-width: 300px;
     border:2px solid #337ab7;
     background-color:#f5f5f5;
     border-radius: 60px;
@@ -905,7 +963,7 @@
 .connect-conditional-event {
     position: absolute;
     top: 5px;
-    right: 50px;
+    right: 58px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -943,4 +1001,34 @@
 }
 .content-conditional-event:hover .copy-conditional-event {
     display:block;
+}
+
+.mcs-modal{
+    width: 700px;
+}
+
+
+
+@media screen and (device-width: 1920px) {
+    #minimumCrossSectionModalForm{
+        position: fixed;
+        left: 1615px;
+        top: 97px;
+        width: 300px;
+        margin: 0;
+        overflow-y: auto;
+        max-height: 80vh; 
+    
+    }
+}
+
+@media screen and (device-width: 2560px) {
+    #minimumCrossSectionModalForm{
+        position: fixed;
+        left: 1915px;
+        top: 97px;
+        width: 600px;
+        margin: 0;
+    
+    }
 }

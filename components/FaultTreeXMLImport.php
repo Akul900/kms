@@ -59,10 +59,10 @@ class FaultTreeXMLImport
             if ((string)$state['type'] == 'Fault'){
                 $state_model->type = Element::COMMON_FAULT;
             }
-            if ((string)$state['type'] == 'Start'){
+            if ((string)$state['type'] == 'And'){
                 $state_model->type = Element::AND_TYPE;
             }
-            if ((string)$state['type'] == 'End'){
+            if ((string)$state['type'] == 'Or'){
                 $state_model->type = Element::OR_TYPE;
             }
             if ((string)$state['type'] == 'Basic event'){
@@ -77,7 +77,7 @@ class FaultTreeXMLImport
             if ((string)$state['type'] == 'And with priority'){
                 $state_model->type = Element::AND_WITH_PRIORITY;
             }
-            if ((string)$state['type'] == 'Majotity valvet'){
+            if ((string)$state['type'] == 'Majotity valve'){
                 $state_model->type = Element::MAJORITY_VALVE;
             }
             if ((string)$state['type'] == 'Transfer valve'){
@@ -98,7 +98,7 @@ class FaultTreeXMLImport
             $state_model->indent_y = (string)$state['indent_y'];
             $state_model->diagram = $id;
             $state_model->save();
-
+            echo "<script>console.log('PHP zzzz " . $state_model->id. "');</script>";
             // Таблица $array_states внесение значений, где:
             // 'state_template' значение id state из xml
             // 'state' значение нового id state из только что созданного
@@ -141,18 +141,21 @@ class FaultTreeXMLImport
         }
 
         // Создание Connection
-        foreach($file->Connection as $transition) {
+        foreach($file->Connection as $connection ) {
             $conncetion_model = new StateConnection();
             for ($i = 0; $i < self::$j; $i++){
-                if ((integer)$transition['element-from'] == self::$array_states[$i]['state_template']){
+                if ((integer)$connection['element-from'] == self::$array_states[$i]['state_template']){
                     $conncetion_model->element_from = self::$array_states[$i]['state'];
                 }
             }
             for ($i = 0; $i < self::$j; $i++){
-                if ((integer)$transition['element-to'] == self::$array_states[$i]['state_template']){
+                if ((integer)$connection['element-to'] == self::$array_states[$i]['state_template']){
                     $conncetion_model->element_to = self::$array_states[$i]['state'];
                 }
             }
+
+          
+       
             // $conncetion_model->name_property = "0";
             // $conncetion_model->operator_property = 1;
             // $conncetion_model->value_property = "0";

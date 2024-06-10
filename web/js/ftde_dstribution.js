@@ -2,7 +2,7 @@ function deleteDistributionOfElements() {
     //Распределение state (состояний) на диаграмме
     $.each(mas_data_state, function (j, elem) {
 
-    console.log(elem)
+   // console.log(elem)
     if(elem["type"] == 3){
             $(".div-state-start").each(function(i) {
                 var state = $(this).attr('id');

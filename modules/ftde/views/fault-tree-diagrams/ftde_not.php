@@ -17,6 +17,7 @@ function deleteNot(){
 function saveIndentNot(){
     //сохранение расположения элемента запрета
       $(document).on('mouseup', '.div-not', function() {
+        var field = document.getElementById('visual_diagram_field');
         if (!guest) {
             var start_or_end = $(this).attr('id');
             var start_or_end_id = parseInt(start_or_end.match(/\d+/));
@@ -29,7 +30,7 @@ function saveIndentNot(){
             if (indent_y < 0){
                 indent_y = 0;
             }
-            saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
+            saveIndentStartOrEnd(start_or_end_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
         }
     });
 }
@@ -45,7 +46,13 @@ function notConnectionsStyle(){
         instance.makeSource(windows_not[i], {
             filter: ".fa-share",
             anchor: [ 0.5, 1, 0, 1, 0, -20 ], //непрерывный анкер
-            maxConnections: -1, //ограничение на одно соединение из элемента "начала"
+            maxConnections: 1, //ограничение на одно соединение из элемента "начала"
+            onMaxConnections: function (info, e) {
+                //отображение сообщения об ограничении
+                var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                document.getElementById("message-text").lastChild.nodeValue = message;
+                $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+            }
         });
         instance.makeTarget(windows_not[i], {
             filter: ".fa-share",

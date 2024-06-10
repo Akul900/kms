@@ -57,11 +57,11 @@ use app\modules\main\models\Lang;
                         div_conditional_event_name.innerHTML = data['name'];
                         div_content_conditional_event.append(div_conditional_event_name);
 
-                        // var div_connect = document.createElement('div');
-                        // div_connect.className = 'connect-conditional-event' ;
-                        // div_connect.title = '<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>' ;
-                        // div_connect.innerHTML = '<i class="fa-solid fa-share"></i>';
-                        // div_content_conditional_event.append(div_connect);
+                        var div_connect = document.createElement('div');
+                        div_connect.className = 'connect-conditional-event' ;
+                        div_connect.title = '<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>' ;
+                        div_connect.innerHTML = '<i class="fa-solid fa-share"></i>';
+                        div_content_conditional_event.append(div_connect);
 
                         var div_del = document.createElement('div');
                         div_del.id = 'conditional_event_del_' + data['id'];
@@ -99,11 +99,32 @@ use app\modules\main\models\Lang;
 
 
 
-                        instance.makeTarget(div_conditional_event, {
-                            dropOptions: { hoverClass: "dragHover" },
-                            anchor: "Continuous", //непрерывный анкер
-                            allowLoopback: false, // Разрешение создавать кольцевую связь
-                        });
+
+                        
+                        instance.makeSource(div_conditional_event, {
+            filter: ".fa-share",
+            anchor: "Bottom", //непрерывный анкер
+            maxConnections: 1,
+            onMaxConnections: function (info, e) {
+                //отображение сообщения об ограничении
+                var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                document.getElementById("message-text").lastChild.nodeValue = message;
+                $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+            }
+        });
+
+    instance.makeTarget(div_conditional_event, {
+        dropOptions: { hoverClass: "dragHover" },
+        anchor: "Top", //непрерывный анкер
+        allowLoopback: false, // Разрешение создавать кольцевую связь
+        maxConnections: 1,
+        onMaxConnections: function (info, e) {
+            //отображение сообщения об ограничении
+            var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+            document.getElementById("message-text").lastChild.nodeValue = message;
+            $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+        }
+    });
 
 
                         //добавлены новые записи в массив состояний для изменений

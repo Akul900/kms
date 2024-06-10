@@ -121,13 +121,27 @@ use app\modules\main\models\Lang;
                         }else{
                             instance.makeSource(div_state, {
                                 filter: ".fa-share",
-                                anchor: "Continuous", //непрерывный анкер
+                                anchor: "Bottom", //непрерывный анкер
+                                maxConnections: 1,
+                                onMaxConnections: function (info, e) {
+                                    //отображение сообщения об ограничении
+                                    var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                                    document.getElementById("message-text").lastChild.nodeValue = message;
+                                    $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                                }
                             });
 
                             instance.makeTarget(div_state, {
                                 dropOptions: { hoverClass: "dragHover" },
-                                anchor: "Continuous", //непрерывный анкер
+                                anchor: "Top", //непрерывный анкер
                                 allowLoopback: false, // Разрешение создавать кольцевую связь
+                                maxConnections: 1,
+                                onMaxConnections: function (info, e) {
+                                    //отображение сообщения об ограничении
+                                    var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                                    document.getElementById("message-text").lastChild.nodeValue = message;
+                                    $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                                }
                             });
                         }
 

@@ -57,11 +57,11 @@ use app\modules\main\models\Lang;
                         div_undeveloped_event_name.innerHTML = data['name'];
                         div_content_undeveloped_event.append(div_undeveloped_event_name);
 
-                        // var div_connect = document.createElement('div');
-                        // div_connect.className = 'connect-undeveloped-event' ;
-                        // div_connect.title = '<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>' ;
-                        // div_connect.innerHTML = '<i class="fa-solid fa-share"></i>';
-                        // div_content_undeveloped_event.append(div_connect);
+                        var div_connect = document.createElement('div');
+                        div_connect.className = 'connect-undeveloped-event' ;
+                        div_connect.title = '<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>' ;
+                        div_connect.innerHTML = '<i class="fa-solid fa-share"></i>';
+                        div_content_undeveloped_event.append(div_connect);
 
                         var div_del = document.createElement('div');
                         div_del.id = 'undeveloped_event_del_' + data['id'];
@@ -99,13 +99,27 @@ use app\modules\main\models\Lang;
 
                         instance.makeSource(div_undeveloped_event, {
                             filter: ".fa-share",
-                            anchor: "Continuous", //непрерывный анкер
+                            anchor: "Bottom", //непрерывный анкер
+                            maxConnections: 1,
+                            onMaxConnections: function (info, e) {
+                                //отображение сообщения об ограничении
+                                var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                                document.getElementById("message-text").lastChild.nodeValue = message;
+                                $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                            }
                         });
 
                         instance.makeTarget(div_undeveloped_event, {
                             dropOptions: { hoverClass: "dragHover" },
-                            anchor: "Continuous", //непрерывный анкер
+                            anchor: "Top", //непрерывный анкер
                             allowLoopback: false, // Разрешение создавать кольцевую связь
+                            maxConnections: 1,
+                            onMaxConnections: function (info, e) {
+                                //отображение сообщения об ограничении
+                                var message = "<?php echo Yii::t('app', 'MAXIMUM_CONNECTIONS'); ?>" + info.maxConnections;
+                                document.getElementById("message-text").lastChild.nodeValue = message;
+                                $("#viewMessageErrorLinkingItemsModalForm").modal("show");
+                            }
                         });
 
 
@@ -198,7 +212,7 @@ use app\modules\main\models\Lang;
                         // Если валидация прошла успешно (нет ошибок ввода)
                         if (data['success']) {
                             // Скрывание модального окна
-                            $("#editundevelopedEventModalForm").modal("hide");
+                            $("#editUndevelopedEventModalForm").modal("hide");
 
                             //изменение div состояния
                             var div_undeveloped_event_name = document.getElementById('undeveloped_event_name_' + data['id']);

@@ -131,6 +131,7 @@ function majorityConnections(){
 
       //сохранение расположения мажоритароного вентеля
       $(document).on('mouseup', '.div-majority-valve', function() {
+        var field = document.getElementById('visual_diagram_field');
         if (!guest) {
             var start_or_end = $(this).attr('id');
             var start_or_end_id = parseInt(start_or_end.match(/\d+/));
@@ -143,7 +144,7 @@ function majorityConnections(){
             if (indent_y < 0){
                 indent_y = 0;
             }
-            saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
+            saveIndentStartOrEnd(start_or_end_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
         }
     });
 

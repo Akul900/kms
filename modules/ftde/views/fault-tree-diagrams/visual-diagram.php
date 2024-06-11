@@ -287,10 +287,12 @@ $this->registerJsFile('/js/ftde_draggable.js', ['position' => yii\web\View::POS_
 $this->registerJsFile('/js/modal-form.js', ['position' => yii\web\View::POS_HEAD]);
 $this->registerCssFile('/css/fault-tree-diagram.css', ['position'=>yii\web\View::POS_HEAD]);
 $this->registerCssFile('/css/ftde.css', ['position'=>yii\web\View::POS_HEAD]);
+$this->registerCssFile('/css/selected.css', ['position'=>yii\web\View::POS_HEAD]);
 $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  // jsPlumb 2.12.9
+$this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD]);  // jsPlumb 2.12.9
 ?>
 
-<script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+
 
 
 
@@ -766,7 +768,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
        
        
         
-
+        console.log(instance + 'gdfgfdgdfgfdgdf')
 
         instance.bind("beforeDrop", function (info) {
         var source_id = info.sourceId;
@@ -934,7 +936,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
 
 
-    //функция расширения или сужения поля visual_diagram_field для размещения элементов
+   // функция расширения или сужения поля visual_diagram_field для размещения элементов
     var mousemoveState = function() {
         var field = document.getElementById('visual_diagram_field');
 
@@ -1088,11 +1090,24 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             if (h > max_h){max_h = h;}
 
         });
+         
+        $(".div-transfer-valve").each(function(i) {
+            var id_end = $(this).attr('id');
+            var end = document.getElementById(id_end);
+
+            var w = end.offsetLeft + end.clientWidth;
+            var h = end.offsetTop + end.clientHeight;
+
+            if (w > max_w){max_w = w;}
+            if (h > max_h){max_h = h;}
+
+        });
      
         field.style.width = max_w + 20 + 'px' ;
         field.style.height = max_h + 20 + 'px';
     };
 
+ 
 
     //функция сохранения расположения элемента
     var saveIndent = function(state_id, indent_x, indent_y) {
@@ -1195,6 +1210,12 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
     //при движении блока завершения расширяем или сужаем поле visual_diagram_field
     $(document).on('mousemove', '.div-conditional-event', function() {
+        mousemoveState();
+        // Обновление формы редактора
+        instance.repaintEverything();
+    }); 
+
+    $(document).on('mousemove', '.div-transfer-valve', function() {
         mousemoveState();
         // Обновление формы редактора
         instance.repaintEverything();
@@ -1551,6 +1572,8 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
                     //сделать div двигаемым
                     var div_and = document.getElementById('and_' + data['id']);
+
+
                     instance.draggable(div_and);
                     //добавляем элемент div_and в группу с именем group_field
                     instance.addToGroup('group_field', div_and);
@@ -1839,7 +1862,9 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
     document.addEventListener("DOMContentLoaded", function() {
     const selectButton = document.getElementById("selectButton");
     let isSelecting = false;
-    let selectedElements = [];
+    let allSelectedElements = []; // Persistent array to keep track of all selected elements
+    let currentSelection = []; // Array to keep track of the current selection
+
 
 
 
@@ -1858,6 +1883,11 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
         }
     });
 
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            clearSelection();
+        }
+    });
 
 
     function enableSelectionMode() {
@@ -1872,6 +1902,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
         const startX = event.clientX;
         const startY = event.clientY;
+
 
         function moveSelecting(event) {
             const currentX = event.clientX;
@@ -1893,9 +1924,9 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             const selectionRect = rect.getBoundingClientRect();
             document.body.removeChild(rect);
 
-            selectedElements = [];
+            currentSelection = [];
             const elements = document.querySelectorAll('#visual_diagram_field .div-state, #visual_diagram_field .div-state-start, #visual_diagram_field .div-and, #visual_diagram_field .div-or, ' +
-                 '#visual_diagram_field .div-basic-event, #visual_diagram_field .div-hidden-event, #visual_diagram_field .div-undeveloped-event,' + 
+                 '#visual_diagram_field .div-basic-event, #visual_diagram_field .div-hidden-event, #visual_diagram_field .div-undeveloped-event, #visual_diagram_field .div-transfer-valve, ' + 
              '#visual_diagram_field .div-conditional-event, #visual_diagram_field .div-not, #visual_diagram_field .div-prohibition, #visual_diagram_field .div-majority-valve, #visual_diagram_field .div-and-with-priority');
  
             elements.forEach(element => {
@@ -1903,7 +1934,7 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
                 if (elementRect.left >= selectionRect.left && elementRect.right <= selectionRect.right &&
                     elementRect.top >= selectionRect.top && elementRect.bottom <= selectionRect.bottom) {
                     element.classList.add('selected');
-                    selectedElements.push(element);
+                    currentSelection.push(element);
                 } else {
                     element.classList.remove('selected');
                 }
@@ -1915,11 +1946,12 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
             // Отключаем режим выделения после завершения
             isSelecting = false;
             selectButton.classList.remove("active");
+
             disableSelectionMode();
             console.log("Selection mode disabled");
 
             // Enable dragging for the selected elements
-            enableDragForSelectedElements();
+            updateSelectionState();
         }
 
         interact(document).on('move', moveSelecting);
@@ -1928,32 +1960,41 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
 
 
     function clearSelection() {
-        selectedElements.forEach(element => {
+        allSelectedElements.forEach(element => {
             element.classList.remove('selected');
+            instance.removeFromPosse(element, "posse1");
         });
-        selectedElements = [];
-        instance.clearDragSelection();
+        allSelectedElements = [];
+        currentSelection = [];
+     
     }
 
     function disableSelectionMode() {
         interact('#visual_diagram_field').off('down', startSelecting);
         interact(document).off('move').off('up');
+
     }
 
-    function enableDragForSelectedElements() {
-        instance.clearDragSelection();
-  
-            instance.addToDragSelection(selectedElements);
-     
-            instance.draggable(selectedElements, {
-            grid: [10, 10],
-            containment: true
-        })
+    function updateSelectionState() {
+        // Remove elements that are no longer selected
+        allSelectedElements = allSelectedElements.filter(element => {
+            if (!element.classList.contains('selected')) {
+                instance.removeFromPosse(element, "posse1");
+                return false;
+            }
+            return true;
+        });
 
-        console.log(selectedElements)
+        // Add newly selected elements
+        currentSelection.forEach(element => {
+            if (!allSelectedElements.includes(element)) {
+                instance.addToPosse(element, "posse1");
+                allSelectedElements.push(element);
+            }
+        });
+
+
     }
-
-
 
 
 });
@@ -1965,9 +2006,9 @@ $this->registerJsFile('/js/jsplumb.js', ['position'=>yii\web\View::POS_HEAD]);  
  
 </script>
 
-<!-- <button id="selectButton" class="select-button">
-    <img src="/path/to/your/icon.png" alt="Select" />
-</button> -->
+<button id="selectButton" class="select-button">
+    <i class="fa-solid fa-object-group"></i>
+</button>
 
 
 

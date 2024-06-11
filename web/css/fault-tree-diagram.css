@@ -6,10 +6,26 @@
         border:1px solid #b9def0;
         background-color:white;
         cursor:default;
+
         /* Вкл Прокрутку (отдельно чтобы функция расширения increaseLevel корректно работала )*/
         overflow: auto;
+    
         
     }
+
+    .select-button {
+        position: absolute; /* Или относительное положение в зависимости от вашей разметки */
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+        cursor: pointer;
+
+       font-size: 1.5em;
+        top: 130px;
+        left: 250px;
+    }
+    
 }
 
 @media screen and (device-width: 2560px) {
@@ -19,13 +35,29 @@
         border:1px solid #b9def0;
         background-color:white;
         cursor:default;
+
+     
+
         /* Вкл Прокрутку (отдельно чтобы функция расширения increaseLevel корректно работала )*/
         overflow: auto;
+    }
+
+    .select-button {
+        position: absolute; /* Или относительное положение в зависимости от вашей разметки */
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+        cursor: pointer;
+        font-size: 2em;
+        top: 130px;
+        left: 550px;
     }
 }
 
 .visual-diagram-top-layer {
     position:relative;
+
    
    
 }
@@ -38,19 +70,8 @@
     z-index: 1000;
 }
 
-.selected {
-    
-    border: 2px solid blue; /* Или любой другой стиль, который вы хотите применить для выделенных элементов */
-}
 
-.select-button {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 5px;
-    cursor: pointer;
-    position: absolute; /* Или относительное положение в зависимости от вашей разметки */
-}
+
 
 .select-button.active {
     background-color: #0099FF;

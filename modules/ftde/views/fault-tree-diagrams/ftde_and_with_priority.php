@@ -130,23 +130,23 @@ function andWithPriorityConnections(){
         }
     });
 
-      //сохранение расположения элемента запрета
-      $(document).on('mouseup', '.div-and-with-priority', function() {
-        if (!guest) {
-            var start_or_end = $(this).attr('id');
-            var start_or_end_id = parseInt(start_or_end.match(/\d+/));
-            var indent_x = $(this).position().left;
-            var indent_y = $(this).position().top;
-            //если отступ элемента отрицательный делаем его нулевым
-            if (indent_x < 0){
-                indent_x = 0;
-            }
-            if (indent_y < 0){
-                indent_y = 0;
-            }
-            saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
-        }
-    });
+    //   //сохранение расположения элемента запрета
+    //   $(document).on('mouseup', '.div-and-with-priority', function() {
+    //     if (!guest) {
+    //         var start_or_end = $(this).attr('id');
+    //         var start_or_end_id = parseInt(start_or_end.match(/\d+/));
+    //         var indent_x = $(this).position().left;
+    //         var indent_y = $(this).position().top;
+    //         //если отступ элемента отрицательный делаем его нулевым
+    //         if (indent_x < 0){
+    //             indent_x = 0;
+    //         }
+    //         if (indent_y < 0){
+    //             indent_y = 0;
+    //         }
+    //         saveIndentStartOrEnd(start_or_end_id, indent_x, indent_y);
+    //     }
+    // });
 
 
    //добавление элемента "начало" на диаграмму

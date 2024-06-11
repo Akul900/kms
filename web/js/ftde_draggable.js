@@ -15,7 +15,12 @@ function draggableElements(){
         var id_state = $(this).attr('id');
         var state = document.getElementById(id_state);
         //делаем state перетаскиваемыми
-        instance.draggable(state);
+        instance.draggable(state,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', state);
     });
@@ -25,7 +30,12 @@ function draggableElements(){
         var id_state = $(this).attr('id');
         var state = document.getElementById(id_state);
         //делаем state перетаскиваемыми
-        instance.draggable(state);
+        instance.draggable(state,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', state);
     });
@@ -35,7 +45,12 @@ function draggableElements(){
         var id_state = $(this).attr('id');
         var state = document.getElementById(id_state);
         //делаем state перетаскиваемыми
-        instance.draggable(state);
+        instance.draggable(state,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', state);
     });
@@ -46,7 +61,12 @@ function draggableElements(){
         var id_start = $(this).attr('id');
         var start = document.getElementById(id_start);
         //делаем start перетаскиваемыми
-        instance.draggable(start);
+        instance.draggable(start,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент start в группу с именем group_field
         instance.addToGroup('group_field', start);
     });
@@ -57,7 +77,12 @@ function draggableElements(){
         var id_end = $(this).attr('id');
         var end = document.getElementById(id_end);
         //делаем end перетаскиваемыми
-        instance.draggable(end);
+        instance.draggable(end,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент end в группу с именем group_field
         instance.addToGroup('group_field', end);
     });
@@ -67,7 +92,12 @@ function draggableElements(){
         var id_prohibition = $(this).attr('id');
         var prohibition = document.getElementById(id_prohibition);
         //делаем end перетаскиваемыми
-        instance.draggable(prohibition);
+        instance.draggable(prohibition,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент end в группу с именем group_field
         instance.addToGroup('group_field', prohibition);
     });
@@ -77,7 +107,12 @@ function draggableElements(){
         var id_majority_valve = $(this).attr('id');
         var majority_valve = document.getElementById(id_majority_valve);
         //делаем end перетаскиваемыми
-        instance.draggable(majority_valve);
+        instance.draggable(majority_valve,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент end в группу с именем group_field
         instance.addToGroup('group_field', majority_valve);
     });
@@ -87,7 +122,12 @@ function draggableElements(){
         var id_and_with_priority = $(this).attr('id');
         var and_with_priority = document.getElementById(id_and_with_priority);
         //делаем end перетаскиваемыми
-        instance.draggable(and_with_priority);
+        instance.draggable(and_with_priority,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент end в группу с именем group_field
         instance.addToGroup('group_field', and_with_priority);
     });
@@ -97,7 +137,12 @@ function draggableElements(){
         var id_undeveloped = $(this).attr('id');
         var undeveloped = document.getElementById(id_undeveloped);
         //делаем state перетаскиваемыми
-        instance.draggable(undeveloped);
+        instance.draggable(undeveloped,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', undeveloped);
     });
@@ -107,7 +152,13 @@ function draggableElements(){
         var id_not = $(this).attr('id');
         var not = document.getElementById(id_not);
         //делаем state перетаскиваемыми
-        instance.draggable(not);
+        instance.draggable(not,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
+      
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', not);
     });
@@ -118,7 +169,12 @@ function draggableElements(){
         var id_transfer_valve = $(this).attr('id');
         var transfer_valve = document.getElementById(id_transfer_valve);
         //делаем state перетаскиваемыми
-        instance.draggable(transfer_valve);
+        instance.draggable(transfer_valve,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', transfer_valve);
     });
@@ -128,7 +184,12 @@ function draggableElements(){
         var id_hidden_event = $(this).attr('id');
         var hidden_event = document.getElementById(id_hidden_event);
         //делаем state перетаскиваемыми
-        instance.draggable(hidden_event);
+        instance.draggable(hidden_event,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', hidden_event);
     });
@@ -139,9 +200,34 @@ function draggableElements(){
         var id_conditional_event = $(this).attr('id');
         var conditional_event = document.getElementById(id_conditional_event);
         //делаем state перетаскиваемыми
-        instance.draggable(conditional_event);
+        instance.draggable(conditional_event,{
+            stop: function(params) {
+                savePosition(params.el);
+               
+            }
+        });
         //добавляем элемент state в группу с именем group_field
         instance.addToGroup('group_field', conditional_event);
     });
+
+
+    function savePosition(element) {
+        var field = document.getElementById('visual_diagram_field');
+           if (!guest) {
+        var state = element.getAttribute('id');
+        var state_id = parseInt(state.match(/\d+/));
+        var indent_x = element.style.left.replace('px', '');
+        var indent_y = element.style.top.replace('px', '');
+
+        // Ensure the element's position is non-negative
+        indent_x = Math.max(0, indent_x);
+        indent_y = Math.max(0, indent_y);
+
+        saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
+           }
+    }
+
+
+     
     
 }

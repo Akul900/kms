@@ -1224,42 +1224,42 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
     
 
     //сохранение расположения элемента
-    $(document).on('mouseup', '.div-state', function() {
-        var field = document.getElementById('visual_diagram_field');
-        if (!guest) {
-            var state = $(this).attr('id');
-            var state_id = parseInt(state.match(/\d+/));
-            var indent_x = $(this).position().left;
-            var indent_y = $(this).position().top;
-            //если отступ элемента отрицательный делаем его нулевым
-            if (indent_x < 0){
-                indent_x = 0;
-            }
-            if (indent_y < 0){
-                indent_y = 0;
-            }
-            saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
-        }
-    });
+    // $(document).on('mouseup', '.div-state', function() {
+    //     var field = document.getElementById('visual_diagram_field');
+    //     if (!guest) {
+    //         var state = $(this).attr('id');
+    //         var state_id = parseInt(state.match(/\d+/));
+    //         var indent_x = $(this).position().left;
+    //         var indent_y = $(this).position().top;
+    //         //если отступ элемента отрицательный делаем его нулевым
+    //         if (indent_x < 0){
+    //             indent_x = 0;
+    //         }
+    //         if (indent_y < 0){
+    //             indent_y = 0;
+    //         }
+    //         saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
+    //     }
+    // });
 
-        //сохранение расположения элемента
-        $(document).on('mouseup', '.div-state-start', function() {
-        var field = document.getElementById('visual_diagram_field');
-        if (!guest) {
-            var state = $(this).attr('id');
-            var state_id = parseInt(state.match(/\d+/));
-            var indent_x = $(this).position().left;
-            var indent_y = $(this).position().top;
-            //если отступ элемента отрицательный делаем его нулевым
-            if (indent_x < 0){
-                indent_x = 0;
-            }
-            if (indent_y < 0){
-                indent_y = 0;
-            }
-            saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
-        }
-    });
+    //     //сохранение расположения элемента
+    //     $(document).on('mouseup', '.div-state-start', function() {
+    //     var field = document.getElementById('visual_diagram_field');
+    //     if (!guest) {
+    //         var state = $(this).attr('id');
+    //         var state_id = parseInt(state.match(/\d+/));
+    //         var indent_x = $(this).position().left;
+    //         var indent_y = $(this).position().top;
+    //         //если отступ элемента отрицательный делаем его нулевым
+    //         if (indent_x < 0){
+    //             indent_x = 0;
+    //         }
+    //         if (indent_y < 0){
+    //             indent_y = 0;
+    //         }
+    //         saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
+    //     }
+    // });
 
 
 
@@ -1355,25 +1355,25 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
         }
     });
 
-    //сохранение расположения элемента
-    $(document).on('mouseup', '.div-basic-event', function() {
-        var field = document.getElementById('visual_diagram_field');
-        if (!guest) {
-            var state = $(this).attr('id');
-            var state_id = parseInt(state.match(/\d+/));
-            var indent_x = $(this).position().left;
-            var indent_y = $(this).position().top;
-            //если отступ элемента отрицательный делаем его нулевым
-            if (indent_x < 0){
-                indent_x = 0;
-            }
-            if (indent_y < 0){
-                indent_y = 0;
-            }
-            saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
+    // //сохранение расположения элемента
+    // $(document).on('mouseup', '.div-basic-event', function() {
+    //     var field = document.getElementById('visual_diagram_field');
+    //     if (!guest) {
+    //         var state = $(this).attr('id');
+    //         var state_id = parseInt(state.match(/\d+/));
+    //         var indent_x = $(this).position().left;
+    //         var indent_y = $(this).position().top;
+    //         //если отступ элемента отрицательный делаем его нулевым
+    //         if (indent_x < 0){
+    //             indent_x = 0;
+    //         }
+    //         if (indent_y < 0){
+    //             indent_y = 0;
+    //         }
+    //         saveIndent(state_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
          
-        }
-    });
+    //     }
+    // });
 
 
      // редактирование базового события
@@ -1718,92 +1718,71 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
     });
 
 
-    //функция сохранения расположения элемента начала или завершения
-    var saveIndentStartOrEnd = function(start_or_end_id, indent_x, indent_y) {
-        $.ajax({
-            //переход на экшен левел
-            url: "<?= Yii::$app->request->baseUrl . '/' . Lang::getCurrent()->url .
-            '/fault-tree-diagrams/save-indent-start-or-end'?>",
-            type: "post",
-            data: "YII_CSRF_TOKEN=<?= Yii::$app->request->csrfToken ?>" + "&start_or_end_id=" + start_or_end_id +
-            "&indent_x=" + indent_x + "&indent_y=" + indent_y,
-            dataType: "json",
-            success: function (data) {
-                if (data['success']) {
-                    //console.log("x = " + data['indent_x']);
-                    //console.log("y = " + data['indent_y']);
-                }
-            },
-            error: function () {
-                alert('Error!');
-            }
-        });
-    };
 
 
-    //сохранение расположения элемента начала
-    $(document).on('mouseup', '.div-and', function() {
-        var field = document.getElementById('visual_diagram_field');
-        if (!guest) {
-            var start_or_end = $(this).attr('id');
-            var start_or_end_id = parseInt(start_or_end.match(/\d+/));
-            var indent_x = $(this).position().left;
-            var indent_y = $(this).position().top;
-            //если отступ элемента отрицательный делаем его нулевым
-            if (indent_x < 0){
-                indent_x = 0;
-            }
-            if (indent_y < 0){
-                indent_y = 0;
-            }
-            saveIndentStartOrEnd(start_or_end_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
-        }
-    });
+    // //сохранение расположения элемента начала
+    // $(document).on('mouseup', '.div-and', function() {
+    //     var field = document.getElementById('visual_diagram_field');
+    //     if (!guest) {
+    //         var start_or_end = $(this).attr('id');
+    //         var start_or_end_id = parseInt(start_or_end.match(/\d+/));
+    //         var indent_x = $(this).position().left;
+    //         var indent_y = $(this).position().top;
+    //         //если отступ элемента отрицательный делаем его нулевым
+    //         if (indent_x < 0){
+    //             indent_x = 0;
+    //         }
+    //         if (indent_y < 0){
+    //             indent_y = 0;
+    //         }
+    //         saveIndentStartOrEnd(start_or_end_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
+    //     }
+    // });
 
 
-    //сохранение расположения элемента завершения
-    $(document).on('mouseup', '.div-or', function() {
-        var field = document.getElementById('visual_diagram_field');
-        if (!guest) {
-            var start_or_end = $(this).attr('id');
-            var start_or_end_id = parseInt(start_or_end.match(/\d+/));
-            var indent_x = $(this).position().left;
-            var indent_y = $(this).position().top;
-            //если отступ элемента отрицательный делаем его нулевым
-            if (indent_x < 0){
-                indent_x = 0;
-            }
-            if (indent_y < 0){
-                indent_y = 0;
-            }
-            saveIndentStartOrEnd(start_or_end_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
-        }
-    });
+    // //сохранение расположения элемента завершения
+    // $(document).on('mouseup', '.div-or', function() {
+    //     var field = document.getElementById('visual_diagram_field');
+    //     if (!guest) {
+    //         var start_or_end = $(this).attr('id');
+    //         var start_or_end_id = parseInt(start_or_end.match(/\d+/));
+    //         var indent_x = $(this).position().left;
+    //         var indent_y = $(this).position().top;
+    //         //если отступ элемента отрицательный делаем его нулевым
+    //         if (indent_x < 0){
+    //             indent_x = 0;
+    //         }
+    //         if (indent_y < 0){
+    //             indent_y = 0;
+    //         }
+    //         saveIndentStartOrEnd(start_or_end_id, indent_x / parseFloat(field.style.transform.split('(')[1].split(')')[0]), indent_y / parseFloat(field.style.transform.split('(')[1].split(')')[0]));
+    //     }
+    // });
 
 
 
 
     //Не
     deleteNot()
-    saveIndentNot()
+    //saveIndentNot()
 
     //Неразвитое событие
     editUndevelopedEvent()
     deleteUndevelopedEvent() 
     copyUndevelopedEvent()
-    saveIndentUndevelopedEvent()
+   // saveIndentUndevelopedEvent()
 
     //Скрытое событие
     editHiddenEvent()
     deleteHiddenEvent() 
     copyHiddenEvent()
-    saveIndentHiddenEvent()
+    //saveIndentHiddenEvent()
 
     //Условное событие
     editConditionalEvent()
     deleteConditionalEvent() 
     copyConditionalEvent()
-    saveIndentConditionalEvent()
+   // saveIndentConditionalEvent()
 
     document.addEventListener('wheel', function(e) {
     e.ctrlKey && e.preventDefault();
@@ -1864,6 +1843,7 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
     let isSelecting = false;
     let allSelectedElements = []; // Persistent array to keep track of all selected elements
     let currentSelection = []; // Array to keep track of the current selection
+
 
 
 
@@ -1995,6 +1975,7 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
 
 
     }
+
 
 
 });

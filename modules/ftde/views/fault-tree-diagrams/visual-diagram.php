@@ -761,7 +761,9 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
         mousemoveState();
 
         // Делаем элементы двигаемыми
-        draggableElements()
+        if (!guest) {
+            draggableElements()
+        }
 
 
 
@@ -856,6 +858,7 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
      
 
         //обработка клика на связь для просмотра перехода
+        if(!guest){
         instance.bind("click", function (c) {
             // var source_id = c.sourceId;
             // var target_id = c.targetId;
@@ -866,6 +869,7 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             $("#deleteConnectionStartModalForm").modal("show");
            
         });
+    }
 
 
         //обработка построения связи (добавление перехода) и связей с началом и завершением
@@ -1986,10 +1990,12 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
 //             '#visual_diagram_field .div-conditional-event, #visual_diagram_field .div-not, #visual_diagram_field .div-prohibition, #visual_diagram_field .div-majority-valve, #visual_diagram_field .div-and-with-priority');
  
 </script>
-
+<?php if ( !Yii::$app->user->isGuest): ?>
 <button id="selectButton" class="select-button">
     <i class="fa-solid fa-object-group"></i>
 </button>
+<?php else: ?>
+    <?php endif; ?>
 
 
 
@@ -2006,8 +2012,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
         <div id="and_<?= $and->id ?>" class="div-and">
             <div class="div-and-and">И</div>
             <div class="content-and">
+            <?php if ( !Yii::$app->user->isGuest): ?>
                 <div id="and_del_<?= $and->id ?>" class="del-and" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                 <div class="connect-and" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+            <?php else: ?>
+            <?php endif; ?>
             </div>
         </div>
         <?php endforeach; ?>
@@ -2021,11 +2030,14 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <?php endif; ?>
                 <div class="content-state">
                     <div id="state_name_<?= $state->id ?>" class="div-state-name"><?= $state->name ?></div>
+                    <?php if ( !Yii::$app->user->isGuest): ?>
                     <div class="connect-state" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
                     <div id="state_del_<?= $state->id ?>" class="del-state glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div id="state_edit_<?= $state->id ?>" class="edit-state glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
                     <div id="state_add_property_<?= $state->id ?>" class="add-state-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div>
                     <div id="state_copy_<?= $state->id ?>" class="copy-state glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                    <?php else: ?>
+                    <?php endif; ?>
                 </div>
 
                 <!-- отображение разделительной пунктирной линии -->
@@ -2046,8 +2058,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
                     <?php if ($state_property->fault == $state->id){ ?>
                         <div id="state_property_<?= $state_property->id ?>" class="div-state-property">
                             <div class="button-state-property">
+                            <?php if ( !Yii::$app->user->isGuest): ?>
                                 <div id="state_property_edit_<?= $state_property->id ?>" class="edit-state-property glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
                                 <div id="state_property_del_<?= $state_property->id ?>" class="del-state-property glyphicon-trash"  title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
+                                <?php else: ?>
+                                    <?php endif; ?>
                             </div>
                             <?= $state_property->name ?> <?= $state_property->getOperatorName() ?> <?= $state_property->value ?>
                         </div>
@@ -2062,11 +2077,14 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="basic_event_<?= $basic_event->id ?>" class="div-basic-event" title="<?= $basic_event->description ?>">
                 <div class="content-basic-event">
                     <div id="basic_event_name_<?= $basic_event->id ?>" class="div-basic-event-name"><?= $basic_event->name ?></div>
+                    <?php if ( !Yii::$app->user->isGuest): ?>
                     <!-- <div class="connect-basic-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div> -->
                     <div id="basic_event_del_<?= $basic_event->id ?>" class="del-basic-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div id="basic_event_edit_<?= $basic_event->id ?>" class="edit-basic-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
                     <!-- <div id="basic_event_property_<?= $basic_event->id ?>" class="add-basic-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
                     <div id="basic_event_copy_<?= $basic_event->id ?>" class="copy-basic-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
                 
                 <!-- отображение разделительной пунктирной линии -->
@@ -2093,8 +2111,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="or_<?= $end->id ?>" class="div-or">
             <div class="div-or-or">ИЛИ</div>
                 <div class="content-or">
+                <?php if ( !Yii::$app->user->isGuest): ?>
                     <div id="or_del_<?= $end->id ?>" class="del-or" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div class="connect-or" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -2102,8 +2123,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
         <?php foreach ($prohibition_model as $prohibition): ?>
             <div id="prohibition_<?= $prohibition->id ?>" class="div-prohibition">
                 <div class="content-prohibition">
+                <?php if ( !Yii::$app->user->isGuest): ?>
                     <div id="prohibition_del_<?= $prohibition->id ?>" class="del-prohibition" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div class="connect-prohibition" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -2112,8 +2136,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="majority_valve_<?= $majority->id ?>" class="div-majority-valve">
             <div class="div-majority-valve-text">МАЖ</div>
                 <div class="content-majority-valve">
+                <?php if ( !Yii::$app->user->isGuest): ?>
                     <div id="majority_valve_del_<?= $majority->id ?>" class="del-majority-valve" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div class="connect-majority-valve" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -2122,8 +2149,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="and-with_priority_<?= $and_with->id ?>" class="div-and-with-priority">
             <div class="div-and-with-priority-text">ИП</div>
                 <div class="content-and-with-priority">
+                <?php if ( !Yii::$app->user->isGuest): ?>
                     <div id="and_with_priority_del_<?= $and_with->id ?>" class="del-and-with-priority" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div class="connect-and-with-priority" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -2134,11 +2164,14 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="undeveloped_event_<?= $undeveloped_event->id ?>" class="div-undeveloped-event" title="<?= $undeveloped_event->description ?>">
                 <div class="content-undeveloped-event">
                     <div id="undeveloped_event_name_<?= $undeveloped_event->id ?>" class="div-undeveloped-event-name"><?= $undeveloped_event->name ?></div>
+                    <?php if ( !Yii::$app->user->isGuest): ?>
                     <div class="connect-undeveloped-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
                     <div id="undeveloped_event_del_<?= $undeveloped_event->id ?>" class="del-undeveloped-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div id="undeveloped_event_edit_<?= $undeveloped_event->id ?>" class="edit-undeveloped-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
                     <!-- <div id="undeveloped_event_property_<?= $undeveloped_event->id ?>" class="add-undeveloped-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
                     <div id="undeveloped_event_copy_<?= $undeveloped_event->id ?>" class="copy-undeveloped-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
                 
             </div>
@@ -2149,8 +2182,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="not_<?= $not->id ?>" class="div-not">
             <div class="div-not-text">НЕ</div>
                 <div class="content-not">
+                <?php if ( !Yii::$app->user->isGuest): ?>
                     <div id="not_del_<?= $not->id ?>" class="del-not" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div class="connect-not" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -2159,10 +2195,13 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
         <?php foreach ($transfer_valve_model as $transfer_valve): ?>
             <div id="transfer_valve_<?= $transfer_valve->id ?>" class="div-transfer-valve">
                 <div class="content-transfer-valve">
+                <?php if ( !Yii::$app->user->isGuest): ?>
                     <div id="transfer_valve_name_<?= $transfer_valve->id ?>" class="div-transfer-valve-name"><?= $transfer_valve->name ?></div>
                     <div id="transfer_valve_del_<?= $transfer_valve->id ?>" class="del-transfer-valve" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div id="transfer_valve_edit_<?= $transfer_valve->id ?>" class="edit-transfer-valve glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
                     <!-- <div class="connect-transfer-valve" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div> -->
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -2173,11 +2212,14 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="hidden_event_<?= $hidden_event->id ?>" class="div-hidden-event" title="<?= $hidden_event->description ?>">
                 <div class="content-hidden-event">
                     <div id="hidden_event_name_<?= $hidden_event->id ?>" class="div-hidden-event-name"><?= $hidden_event->name ?></div>
+                    <?php if ( !Yii::$app->user->isGuest): ?>
                     <div class="connect-hidden-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
                     <div id="hidden_event_del_<?= $hidden_event->id ?>" class="del-hidden-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div id="hidden_event_edit_<?= $hidden_event->id ?>" class="edit-hidden-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
                     <!-- <div id="hidden_event_property_<?= $hidden_event->id ?>" class="add-hidden-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
                     <div id="hidden_event_copy_<?= $hidden_event->id ?>" class="copy-hidden-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
                 
             </div>
@@ -2189,11 +2231,14 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             <div id="conditional_event_<?= $conditional_event->id ?>" class="div-conditional-event" title="<?= $conditional_event->description ?>">
                 <div class="content-conditional-event">
                     <div id="conditional_event_name_<?= $conditional_event->id ?>" class="div-conditional-event-name"><?= $conditional_event->name ?></div>
+                    <?php if ( !Yii::$app->user->isGuest): ?>
                     <div class="connect-conditional-event" title="<?php echo Yii::t('app', 'BUTTON_CONNECTION'); ?>"><i class="fa-solid fa-share"></i></div>
                     <div id="conditional_event_del_<?= $conditional_event->id ?>" class="del-conditional-event glyphicon-trash" title="<?php echo Yii::t('app', 'BUTTON_DELETE'); ?>"><i class="fa-solid fa-trash"></i></div>
                     <div id="conditional_event_edit_<?= $conditional_event->id ?>" class="edit-conditional-event glyphicon-pencil" title="<?php echo Yii::t('app', 'BUTTON_EDIT'); ?>"><i class="fa-solid fa-pen"></i></div>
                     <!-- <div id="conditional_event_property_<?= $conditional_event->id ?>" class="add-conditional-event-property glyphicon-plus" title="<?php echo Yii::t('app', 'BUTTON_ADD'); ?>"><i class="fa-solid fa-plus"></i></div> -->
                     <div id="conditional_event_copy_<?= $conditional_event->id ?>" class="copy-conditional-event glyphicon-plus-sign" title="<?php echo Yii::t('app', 'BUTTON_COPY'); ?>"><i class="fa-solid fa-circle-plus"></i></div>
+                    <?php else: ?>
+                        <?php endif; ?>
                 </div>
                 
             </div>

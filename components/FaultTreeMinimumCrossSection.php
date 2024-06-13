@@ -35,6 +35,10 @@ class FaultTreeMinimumCrossSection
         }
         
         $elementStartTo = findStart($connection_elements, $elements);
+     
+        if($elementStartTo == null){
+            return;
+        }
         $elemet_from_mas = findType($connection_elements, $elements, $elementStartTo);
         $element_to_mas = findToElements($connections, $elements, $elemet_from_mas);
         $mcs[] = array_merge($mcs, $elementStartTo);

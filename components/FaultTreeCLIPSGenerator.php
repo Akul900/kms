@@ -49,6 +49,9 @@ class FaultTreeCLIPSGenerator
         }
         
         $elementStartTo = findStart($connection_elements, $elements);
+        if($elementStartTo == null){
+            return;
+        }
         $elemet_from_mas = findType($elements, $elementStartTo);
         $element_to_mas = findToElements($connections, $elements, $elemet_from_mas);
         // var_dump($elemet_from_mas);

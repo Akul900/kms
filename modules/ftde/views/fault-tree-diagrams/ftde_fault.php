@@ -56,7 +56,7 @@ function faultConnections(){
         //     ],
             
         // });
-        console.log(c)
+       // console.log(c)
         var c = instance.connect({
             source: "state_" + elem.element_from,
             target: "or_" + elem.element_to,

@@ -208,6 +208,7 @@ class EventTreeXMLGenerator
         header("Content-type: application/octet-stream");
         header('Content-Disposition: filename="'.$file.'"');
         echo $xml->saveXML();
+
         exit;
     }
 

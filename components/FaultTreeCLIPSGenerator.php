@@ -54,12 +54,7 @@ class FaultTreeCLIPSGenerator
         }
         $elemet_from_mas = findType($elements, $elementStartTo);
         $element_to_mas = findToElements($connections, $elements, $elemet_from_mas);
-        // var_dump($elemet_from_mas);
-        //     foreach($element_to_mas  as $ne){
-        //         print_r($ne);
-        //       //  echo "<script>console.log('PHP aaaa: " . $ne->name . "');</script>";
-        // }
-        
+
         if($elemet_from_mas[0][1] == Element::OR_TYPE){
             $clips .= orClips($elementStartTo, $transliterator, $element_to_mas);
         }elseif($elemet_from_mas[0][1] == Element::AND_TYPE){
@@ -88,7 +83,7 @@ class FaultTreeCLIPSGenerator
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
         readfile($file);
-
+      
         // Удаление файла после скачивания, если необходимо
         unlink($file);
         exit;
@@ -260,14 +255,14 @@ function findToElements2($connections, $elements, $elemet_from){
                     && $em->type != Element::CONDITIONAL_EVENT && $em->type != Element::HIDDEN_EVENT){
                         foreach ($elements as $e){
                             if ($c->element_to == $e->id){
-                             //   echo "<script>console.log('PHP 8678678яя: \"" . $e->getTypeNameEn() . "\"');</script>";
+                        
                                 array_push($element_to_mas, $e);
                             }
                         }
                     }elseif($c->element_from == $em->id ){
                         foreach ($elements as $e){
                             if ($c->element_from == $e->id){
-                            //    echo "<script>console.log('PHP 8678678: \"" . $e->getTypeNameEn() . "\"');</script>";
+                     
                                 array_push($element_to_mas, $e);
                             }
                         }
@@ -277,19 +272,14 @@ function findToElements2($connections, $elements, $elemet_from){
     }
 
 
-    // foreach ($element_to_mas as $e){
 
-    //         echo "<script>console.log('PHP 4444: \"" . $e->name . "\"');</script>";
-    //     }
     return $element_to_mas;
 }
 
 
 function findToElements3($connections, $elements, $elemet_from){
     $element_to_mas = array();//массив связей
-    // if($elemet_from->type == Element::OR_TYPE){
-    //     d("fd");
-    // }
+
     
     foreach ($connections as $c){
 
@@ -297,7 +287,7 @@ function findToElements3($connections, $elements, $elemet_from){
                     && $elemet_from->type != Element::CONDITIONAL_EVENT && $elemet_from->type != Element::HIDDEN_EVENT  && $elemet_from->type != Element::BASIC_EVENT ){
                         foreach ($elements as $e){
                             if ($c->element_to == $e->id){
-                             //   echo "<script>console.log('PHP 8678678яя: \"" . $e->getTypeNameEn() . "\"');</script>";
+                    
                                 array_push($element_to_mas, $e);
                           
                             }
@@ -305,10 +295,10 @@ function findToElements3($connections, $elements, $elemet_from){
                     }elseif(($c->element_to == $elemet_from->id && $elemet_from->type == Element::COMMON_FAULT) || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::BASIC_EVENT)
                     || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::UNDEVELOPED_EVENT) || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::CONDITIONAL_EVENT)
                     || ($c->element_to == $elemet_from->id && $elemet_from->type == Element::HIDDEN_EVENT)){
-                     //  d($elemet_from->type);
+
                         foreach ($elements as $e){
                             if ($c->element_to == $e->id){
-                            //    echo "<script>console.log('PHP 8678678: \"" . $e->getTypeNameEn() . "\"');</script>";
+
                                 array_push($element_to_mas, $e);
                             }
                         }
@@ -317,11 +307,6 @@ function findToElements3($connections, $elements, $elemet_from){
         
     }
 
-
-    // foreach ($element_to_mas as $e){
-
-    //         echo "<script>console.log('PHP 4444: \"" . $e->name . "\"');</script>";
-    //     }
     return $element_to_mas;
 }
 
@@ -352,24 +337,13 @@ function clipsCreate($connections, $elements, $element_to_mas, $transliterator, 
   
     $next_elements = findNextElements($connections, $elements, $element_to_mas);
         
-    // foreach($next_elements  as $ne){
 
-    //     echo "<script>console.log('PHP aaaa: \"" . $ne->getTypeNameEn() . "\"');</script>";
-    
-    // }
     
     
     foreach($next_elements as $ne){
-      //  d($ne);
-        $elementStartName = findStart2($connections, $elements, $ne);
-        $element_to_mas = findToElements3($connections, $elements, $ne);
-        // foreach($element_to_mas  as $ne){
 
-        //echo "<script>console.log('PHP ssssssss: \"" . $ne->getTypeNameEn() . "\"');</script>";
-        
-        // }
-        // echo "<script>console.log('PHP : zzz" . $ne->getTypeNameEn() . "');</script>";
-       // echo "<script>console.log('PHP value: " . $elementStartName[0][1] . "');</script>";
+        $elementStartName = findStart2($connections, $elements, $ne);
+
         if($ne->type == Element::OR_TYPE){
             $clips .= orClips($elementStartName, $transliterator, $element_to_mas);
         }elseif($ne->type  == Element::AND_TYPE){

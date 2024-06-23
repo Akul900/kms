@@ -770,7 +770,7 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
        
        
         
-        console.log(instance + 'gdfgfdgdfgfdgdf')
+    
 
         instance.bind("beforeDrop", function (info) {
         var source_id = info.sourceId;
@@ -788,8 +788,6 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
                 connection_is = true;
             }
         });
-       // console.log(name_source)
-       // console.log(name_target)
 
         // Запреты на соединения
         if (((name_source == 'and') && (name_target == 'or' || name_target == 'prohibition' || name_target == 'and'   || name_target == 'and-with' || name_target == 'majority' || name_target == 'not')) 
@@ -853,9 +851,7 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             stateStartConnections()
         });
 
-       // console.log(instance.getConnections())
-      //  console.log(mas_data_state_connection_fault)
-     
+
 
         //обработка клика на связь для просмотра перехода
         if(!guest){
@@ -880,19 +876,9 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
                 element_to_target = connection.targetId;
                 element_from = parseInt(element_from_source.match(/\d+/));
                 element_to = parseInt(element_to_target.match(/\d+/));
-                // var source_id = connection.sourceId;
-                // var target_id = connection.targetId;
-             //   console.log(element_from)
-              //  console.log(element_to)
-                // var name_source = source_id.split('_')[0];
-                // var name_target = target_id.split('_')[0];
 
                 //параметры передаваемые на модальную форму
                 current_connection = connection.connection;
-
-                // if ((name_source == 'state') && (name_target == 'state')){
-                //     id_fault_from = parseInt(source_id.match(/\d+/));
-                //     id_fault_to = parseInt(target_id.match(/\d+/));
 
                     $.ajax({
                         //переход на экшен левел
@@ -1125,8 +1111,6 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             dataType: "json",
             success: function (data) {
                 if (data['success']) {
-                    //console.log("x = " + data['indent_x']);
-                    //console.log("y = " + data['indent_y']);
                 }
             },
             error: function () {
@@ -1525,7 +1509,6 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
         $.each(mas_data_state, function (i, elem) {
             sum = sum + elem.indent_x + elem.indent_y;
         });
-        //console.log(sum);
         if (sum == 0){
             //console.log("выровнить");
             $("#nav_alignment").click();
@@ -1796,7 +1779,6 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
 
     document.addEventListener("DOMContentLoaded", function(){
             const zoomElement = document.getElementById("visual_diagram_field");
-            console.log(zoomElement)
             let zoom = 1;
             let zoomLevel = 1;
             const ZOOM_SPEED = 0.1;
@@ -1859,11 +1841,11 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
         if (isSelecting) {
             selectButton.classList.add("active");
             enableSelectionMode();
-            console.log("Selection mode enabled");
+          //  console.log("Selection mode enabled");
         } else {
             selectButton.classList.remove("active");
             disableSelectionMode();
-            console.log("Selection mode disabled");
+           // console.log("Selection mode disabled");
         }
     });
 
@@ -1932,7 +1914,7 @@ $this->registerJsFile('/js/interact.min.js', ['position'=>yii\web\View::POS_HEAD
             selectButton.classList.remove("active");
 
             disableSelectionMode();
-            console.log("Selection mode disabled");
+          //  console.log("Selection mode disabled");
 
             // Enable dragging for the selected elements
             updateSelectionState();

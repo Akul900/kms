@@ -98,7 +98,6 @@ class FaultTreeXMLImport
             $state_model->indent_y = (string)$state['indent_y'];
             $state_model->diagram = $id;
             $state_model->save();
-            echo "<script>console.log('PHP zzzz " . $state_model->id. "');</script>";
             // Таблица $array_states внесение значений, где:
             // 'state_template' значение id state из xml
             // 'state' значение нового id state из только что созданного

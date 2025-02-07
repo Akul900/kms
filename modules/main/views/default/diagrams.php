@@ -142,6 +142,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'aria-label' => Yii::t('app', 'BUTTON_EXPORT')
                                 ];
                             }
+
+                            if ($model->type == Diagram::FAULT_TREE_TYPE){
+                                $url = ['/ftde/fault-tree-diagrams/visual-diagram/', 'id' => $model->id];
+                                $data = [
+                                    'data' => [
+                                            'method' => 'post',
+                                            'params' => ['value' => 'xml'],
+                                    ],
+                                    'title' => Yii::t('app', 'BUTTON_EXPORT'),
+                                    'aria-label' => Yii::t('app', 'BUTTON_EXPORT')
+                                ];
+                            }
                         return Html::a('<i class="fa-solid fa-file-export"></i>',
                             $url, $data
                         );
@@ -150,6 +162,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->type == Diagram::STATE_TRANSITION_DIAGRAM_TYPE ? Html::a(
                             '<i class="fa-solid fa-download"></i>',
                             ['upload-ontology', 'id' => $model->id],
+                            [
+                                'title' => Yii::t('app', 'BUTTON_UPLOAD_ONTOLOGY'),
+                                'aria-label' => Yii::t('app', 'BUTTON_UPLOAD_ONTOLOGY')
+                            ]
+                        ) : false;
+                    },
+                    'clips' => function ($url, $model, $key) {
+                        return $model->type == Diagram::FAULT_TREE_TYPE ? Html::a(
+                            '<i class="fa-solid fa-download"></i>',
+                            ['clips', 'id' => $model->id],
                             [
                                 'title' => Yii::t('app', 'BUTTON_UPLOAD_ONTOLOGY'),
                                 'aria-label' => Yii::t('app', 'BUTTON_UPLOAD_ONTOLOGY')

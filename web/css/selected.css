@@ -1,0 +1,48 @@
+.selected {
+
+    border: 2px solid blue;
+   /* Или любой другой стиль, который вы хотите применить для выделенных элементов */
+
+}
+
+.div-state.selected {
+
+    border: 2px solid blue;
+   /* Или любой другой стиль, который вы хотите применить для выделенных элементов */
+
+}
+.div-state-start.selected {
+
+    border: 2px solid blue;
+
+
+}
+.div-basic-event.selected {
+
+    border: 2px solid blue;
+
+
+}
+.div-undeveloped-event.selected {
+
+    border: 2px solid blue;
+ 
+}
+.div-hidden-event.selected {
+
+    border: 2px solid blue;
+
+}
+
+.div-transfer-valve.selected {
+
+    border: 2px solid blue;
+    box-sizing: border-box; 
+}
+
+.div-conditional-event.selected {
+
+    border: 2px solid blue;
+
+
+}

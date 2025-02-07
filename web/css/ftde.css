@@ -1,15 +1,27 @@
 .div-and{
-    background-image:url(../images/and.png);
+    background-image:url(../images/triangle.png);
     background-size:  contain;
-    width: 60px;
-    height: 120px;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
     position: absolute;
 }
 
+.div-and-and {
+    /* текст по центру*/
+    font-weight:bold;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 37%;
+    margin-right: -60%;
+    transform: translate(-50%, -50%);
+}
+
 .div-and:hover {
-    border:2px solid #337ab7;
-    background-color: #b9def0;
-    opacity:0.9;
+    width:69px;
+    height:80px;
+    background-image:url(../images/triangle_activ.png);
     cursor: pointer;
 }
 
@@ -25,8 +37,8 @@
 
 .del-and {
     position: absolute;
-    right: 0px;
-    top: 2px;
+    right: -10px;
+    top: -4px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -35,8 +47,8 @@
 
 .connect-and {
     position: absolute;
-    bottom: 20px;
-    right: 0px;
+    top: 20px;
+    right: -10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -56,17 +68,30 @@
 
 
 .div-or{
-    background-image:url(../images/or.png);
+    background-image:url(../images/triangle.png);
     background-size:  contain;
-    width: 60px;
-    height: 120px;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
     position: absolute;
 }
 
+.div-or-or {
+    /* текст по центру*/
+    font-weight:bold;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 37%;
+    margin-right: -60%;
+    transform: translate(-50%, -50%);
+}
+
+
 .div-or:hover {
-    border:2px solid #337ab7;
-    background-color: #b9def0;
-    opacity:0.9;
+    width:69px;
+    height:80px;
+    background-image:url(../images/triangle_activ.png);
     cursor: pointer;
 }
 
@@ -76,8 +101,8 @@
 
 .connect-or {
     position: absolute;
-    bottom: 5px;
-    right: 0px;
+    top: 20px;
+    right: -10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -92,8 +117,8 @@
 
 .del-or {
     position: absolute;
-    right: 0px;
-    top: 2px;
+    right: -10px;
+    top: -4px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -113,6 +138,7 @@
 .div-basic-event {
     /* форма*/
     min-width: 100px;
+    max-width: 400px;
     min-height: 100px;
     border:2px solid #337ab7;
     background-color:#f5f5f5;
@@ -125,6 +151,7 @@
 }
 
 .div-basic-event:hover {
+
     border:2px solid #337ab7;
     background-color: #b9def0;
     opacity:0.9;
@@ -138,14 +165,17 @@
 .content-basic-event{
     position: relative;
     padding-top: 35px;
+    min-width: 90px;
     min-height: 60px;
     padding-bottom: 20px;
     font-size: 80%;
 }
 
 .div-basic-event-name {
-    padding-left: 8px;
-    padding-right: 8px;
+  
+    margin-right: 8px;
+    margin-left: 8px;
+
     font-weight: bold;
     /* текст по центру*/
     position: relative;
@@ -156,8 +186,8 @@
 /*кнопки состояний*/
 .edit-basic-event {
     position: absolute;
-    right: 30px;
-    top: 5px;
+    right: 40px;
+    top: 10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -166,8 +196,8 @@
 
 .del-basic-event {
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 20px;
+    top: 10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -176,7 +206,7 @@
 
 .connect-basic-event {
     position: absolute;
-    top: 5px;
+    top: 10px;
     right: 50px;
     display:none;
     color: #337ab7;
@@ -186,8 +216,8 @@
 
 .copy-basic-event {
     position: absolute;
-    left: 5px;
-    top: 5px;
+    left: 20px;
+    top: 10px;
     display:none;
     color: #337ab7;
     font-size: 13px;
@@ -218,4 +248,787 @@
 }
 .content-basic-event:hover .add-basic-event-property {
     display:block;
+}
+
+
+
+
+
+.div-prohibition{
+    background-image:url(../images/prohibition.png);
+    background-size: contain;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+}
+
+
+.div-prohibition:hover {
+    width:69px;
+    height:80px;
+    background-image:url(../images/prohibition_activ.png);
+    cursor: pointer;
+}
+
+.div-prohibition:active {
+    cursor: move;
+}
+
+.connect-prohibition {
+    position: absolute;
+    top: 20px;
+    right: -0px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.content-prohibition{
+    position: relative;
+    height: 48px;
+    width: 90px;
+    font-size: 80%;
+}
+
+.del-prohibition {
+    position: absolute;
+    right: -0px;
+    top: -4px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+/*показать скрытые кнопки*/
+.content-prohibition:hover .del-prohibition {
+    display:block;
+}
+.content-prohibition:hover .connect-prohibition {
+    display:block;
+}
+
+
+
+.div-majority-valve{
+    background-image:url(../images/triangle.png);
+    background-size:  contain;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+}
+
+.div-majority-valve-text {
+    /* текст по центру*/
+    font-weight:bold;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 37%;
+    margin-right: -60%;
+    transform: translate(-50%, -50%);
+}
+
+
+.div-majority-valve:hover {
+    width:69px;
+    height:80px;
+    background-image:url(../images/triangle_activ.png);
+    cursor: pointer;
+}
+
+.div-majority-valve:active {
+    cursor: move;
+}
+
+.connect-majority-valve {
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.content-majority-valve{
+    position: relative;
+    height: 48px;
+    font-size: 80%;
+}
+
+.del-majority-valve {
+    position: absolute;
+    right: -10px;
+    top: -4px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+/*показать скрытые кнопки*/
+.content-majority-valve:hover .del-majority-valve {
+    display:block;
+}
+.content-majority-valve:hover .connect-majority-valve {
+    display:block;
+}
+
+
+
+
+.div-and-with-priority{
+    background-image:url(../images/triangle.png);
+    background-size:  contain;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+}
+
+.div-and-with-priority-text{
+    /* текст по центру*/
+    font-weight:bold;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 37%;
+    margin-right: -60%;
+    transform: translate(-50%, -50%);
+}
+
+
+.div-and-with-priority:hover {
+    width:69px;
+    height:80px;
+    background-image:url(../images/triangle_activ.png);
+    cursor: pointer;
+}
+
+.div-and-with-priority:active {
+    cursor: move;
+}
+
+.connect-and-with-priority {
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.content-and-with-priority{
+    position: relative;
+    height: 48px;
+    font-size: 80%;
+}
+
+.del-and-with-priority {
+    position: absolute;
+    right: -10px;
+    top: -4px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+/*показать скрытые кнопки*/
+.content-and-with-priority:hover .del-and-with-priority {
+    display:block;
+}
+.content-and-with-priority:hover .connect-and-with-priority {
+    display:block;
+}
+
+
+
+
+
+/* -Стили для состояний- */
+/* .div-undeveloped-event {
+    background-image:url(../images/undeveloped_event.png);
+    background-size: contain;
+    width:175px;
+    height:113px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+} */
+
+.div-undeveloped-event {
+    background-image: url(../images/undeveloped_event.png);
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 175px;
+    min-height: 113px;
+  
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание текста */
+    justify-content: center; /* Горизонтальное выравнивание текста */
+    overflow: hidden; /* Прячет текст, выходящий за границы */
+    text-align: center; /* Центрирование текста */
+
+}
+
+
+
+.div-undeveloped-event:hover {
+
+    background-image:url(../images/undeveloped_event_activ.png);
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 175px;
+    min-height: 113px;
+    cursor: pointer;
+}
+
+
+
+.div-undeveloped-event:active {
+    cursor: move;
+}
+
+.content-undeveloped-event{
+    position: relative;
+
+    min-width: 175px;
+    min-height: 113px;
+    max-width: 400px;
+    font-size: 80%;
+
+
+
+    
+}
+
+.div-undeveloped-event-name {
+  
+    position: relative;
+ 
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-weight: bold;
+    /* текст по центру*/
+    text-align: center;
+    word-wrap: break-word; /* перенос строк */
+    border-radius: 50%;
+   
+ 
+    
+
+}
+
+/*кнопки состояний*/
+.edit-undeveloped-event {
+    position: absolute;
+    left: 30px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.del-undeveloped-event {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.connect-undeveloped-event {
+    position: absolute;
+    top: 5px;
+    right: 30px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.copy-undeveloped-event {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.add-undeveloped-event-property {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+/*показать скрытые кнопки*/
+.content-undeveloped-event:hover .edit-undeveloped-event {
+    display:block;
+}
+.content-undeveloped-event:hover .del-undeveloped-event {
+    display:block;
+}
+.content-undeveloped-event:hover .connect-undeveloped-event {
+    display:block;
+}
+.content-undeveloped-event:hover .copy-undeveloped-event {
+    display:block;
+}
+.content-undeveloped-event:hover .add-basic-event-property {
+    display:block;
+}
+
+
+
+
+
+.div-not{
+    background-image:url(../images/triangle.png);
+    background-size:  contain;
+    width:69px;
+    height:80px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+}
+
+.div-not-text {
+    /* текст по центру*/
+    font-weight:bold;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 37%;
+    margin-right: -60%;
+    transform: translate(-50%, -50%);
+}
+
+
+.div-not:hover {
+    width:69px;
+    height:80px;
+    background-image:url(../images/triangle_activ.png);
+    cursor: pointer;
+}
+
+.div-not:active {
+    cursor: move;
+}
+
+.connect-not {
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.content-not{
+    position: relative;
+    height: 48px;
+    font-size: 80%;
+}
+
+.del-not {
+    position: absolute;
+    right: -10px;
+    top: -4px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+/*показать скрытые кнопки*/
+.content-not:hover .del-not {
+    display:block;
+}
+.content-not:hover .connect-not {
+    display:block;
+}
+
+
+
+
+.div-transfer-valve{
+    background-image:url(../images/triangle_up.png);
+    background-size:  contain;
+    width:69px;
+    height:60px;
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+}
+
+
+
+.div-transfer-valve:hover {
+    width:69px;
+    height:60px;
+    background-image:url(../images/triangle_up_activ.png);
+    cursor: pointer;
+}
+
+.div-transfer-valve:active {
+    cursor: move;
+}
+
+.content-transfer-valve{
+    position: relative;
+
+    padding-top: 27px;
+
+    padding-bottom: 20px;
+    font-size: 80%;
+}
+
+
+.div-transfer-valve-name {
+  
+    position: relative;
+    padding-left: 8px;
+    padding-right: 8px;
+ 
+    font-weight: bold;
+    /* текст по центру*/
+    text-align: center;
+    word-wrap: break-word; /* перенос строк */
+}
+
+/*кнопки состояний*/
+.edit-transfer-valve {
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.connect-transfer-valve {
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+
+.del-transfer-valve {
+    position: absolute;
+    right: -10px;
+    top: -4px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+/*показать скрытые кнопки*/
+.content-transfer-valve:hover .del-transfer-valve {
+    display:block;
+}
+.content-transfer-valve:hover .connect-transfer-valve {
+    display:block;
+}
+
+.content-transfer-valve:hover .edit-transfer-valve{
+    display:block;
+}
+
+
+
+
+
+
+/* -Стили для состояний- */
+.div-hidden-event{
+
+    background-image:url(../images/hidden_event.png);
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 185px;
+    min-height: 186px;
+  
+    filter: drop-shadow(5px 5px 5px #b9def0);
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание текста */
+    justify-content: center; /* Горизонтальное выравнивание текста */
+    overflow: hidden; /* Прячет текст, выходящий за границы */
+    text-align: center; /* Центрирование текста */
+}
+
+.div-hidden-event:hover {
+
+    background-image:url(../images/hidden_event_activ.png);
+    background-size: 100% 100%; /* Растягивает изображение по размеру контейнера */
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 185px;
+    min-height: 186px;
+    cursor: pointer;
+}
+
+.div-hidden-event:active {
+    cursor: move;
+}
+
+.content-hidden-event{
+    position: relative;
+    min-height: 186px;
+    min-width: 185px;
+    max-width: 400px;
+    font-size: 80%;
+
+}
+
+.div-hidden-event-name {
+  
+    position: relative;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+
+    max-width: 400px;
+  
+    font-weight: bold;
+    /* текст по центру*/
+    text-align: center;
+    word-wrap: break-word; /* перенос строк */
+}
+
+/*кнопки состояний*/
+.edit-hidden-event {
+    position: absolute;
+    left: 35px;
+    top: 40px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.del-hidden-event {
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.connect-hidden-event {
+    position: absolute;
+    top: 40px;
+    right: 35px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.copy-hidden-event {
+    position: absolute;
+    left: 5px;
+    top: 40px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.add-hidden-event-property {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+/*показать скрытые кнопки*/
+.content-hidden-event:hover .edit-hidden-event {
+    display:block;
+}
+.content-hidden-event:hover .del-hidden-event {
+    display:block;
+}
+.content-hidden-event:hover .connect-hidden-event {
+    display:block;
+}
+.content-hidden-event:hover .copy-hidden-event {
+    display:block;
+}
+.content-hidden-event:hover .add-basic-event-property {
+    display:block;
+}
+
+
+
+
+/* -Стили для состояний- */
+.div-conditional-event{
+    /* форма*/
+    min-width: 150px;
+    max-width: 300px;
+    border:2px solid #337ab7;
+    background-color:#f5f5f5;
+    border-radius: 60px;
+    box-shadow: 5px 5px 5px #b9def0;
+    /* текст по центру для дочернего блока div-conditional-event-name*/
+    position: absolute;
+    overflow:hidden
+}
+
+
+
+.div-conditional-event:hover {
+    border:2px solid #337ab7;
+    background-color: #b9def0;
+    opacity:0.9;
+    cursor: pointer;
+}
+
+.div-conditional-event:active {
+    cursor: move;
+}
+
+.content-conditional-event{
+    position: relative;
+    padding-top: 20px;
+    min-height: 60px;
+    padding-bottom: 20px;
+    font-size: 80%;
+}
+
+.div-conditional-event-name {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-weight: bold;
+    /* текст по центру*/
+    position: relative;
+    text-align: center;
+    word-wrap: break-word; /* перенос строк */
+}
+
+/*кнопки состояний*/
+.edit-conditional-event {
+    position: absolute;
+    right: 35px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.del-conditional-event {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.connect-conditional-event {
+    position: absolute;
+    top: 5px;
+    right: 58px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.copy-conditional-event {
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+
+.add-conditional-event-property {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    display:none;
+    color: #337ab7;
+    font-size: 13px;
+    font-family: "Glyphicons Halflings";
+}
+/*показать скрытые кнопки*/
+.content-conditional-event:hover .edit-conditional-event {
+    display:block;
+}
+.content-conditional-event:hover .del-conditional-event {
+    display:block;
+}
+.content-conditional-event:hover .connect-conditional-event {
+    display:block;
+}
+.content-conditional-event:hover .copy-conditional-event {
+    display:block;
+}
+
+.mcs-modal{
+    width: 700px;
+}
+
+
+
+@media screen and (device-width: 1920px) {
+    #minimumCrossSectionModalForm{
+        position: fixed;
+        left: 1615px;
+        top: 97px;
+        width: 300px;
+        margin: 0;
+        overflow-y: auto;
+        max-height: 80vh; 
+    
+    }
+}
+
+@media screen and (device-width: 2560px) {
+    #minimumCrossSectionModalForm{
+        position: fixed;
+        left: 1915px;
+        top: 97px;
+        width: 600px;
+        margin: 0;
+    
+    }
 }

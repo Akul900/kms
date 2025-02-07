@@ -35,6 +35,8 @@ use app\modules\main\models\Lang;
                             //поиск связи
                             var id_source = data['source_id']
                             var id_target = data['target_id']
+
+                  
   
                             // if ((data['element_from_type'] == 0) && (data['element_to_type'] == 2)){//связь из начала
                             //     id_source = "and_" + element_from;
@@ -61,24 +63,13 @@ use app\modules\main\models\Lang;
                                 target: id_target
                             })[ 0 ];
 
+         
+                         
                             //удаление связи
                             removed_transition = true;//без этого флага нижнее удаление связи в реальном времени отменяется
                             instance.deleteConnection(connection);
-
+                    
                             //удалена запись в массиве связей с началом
-                            var temporary_mas_data_state_connection_start = {};
-                            var q = 0;
-                            $.each(mas_data_state_connection_start, function (i, elem) {
-                                if (data['id'] != elem.id){
-                                    temporary_mas_data_state_connection_start[q] = {
-                                        "id":elem.id,
-                                        "element_from":elem.element_from,
-                                        "element_to":elem.element_to,
-                                    };
-                                    q = q+1;
-                                }
-                            });
-                            mas_data_state_connection_start = temporary_mas_data_state_connection_start;
 
                             var temporary_mas_data_state_connection_fault = {};
                             var q = 0;
@@ -92,21 +83,40 @@ use app\modules\main\models\Lang;
                                     q = q+1;
                                 }
                             });
-                            mas_data_state_connection_fault = temporary_mas_data_state_connection_fault;
 
-                            var temporary_mas_data_state_connection_end = {};
-                            var q = 0;
-                            $.each(mas_data_state_connection_end, function (i, elem) {
-                                if (data['id'] != elem.id){
-                                    temporary_mas_data_state_connection_end[q] = {
-                                        "id":elem.id,
-                                        "element_from":elem.element_from,
-                                        "element_to":elem.element_to,
-                                    };
-                                    q = q+1;
-                                }
-                            });
-                            mas_data_state_connection_end = temporary_mas_data_state_connection_end;
+
+                            mas_data_state_connection_fault = temporary_mas_data_state_connection_fault;
+       
+                
+
+                            // var temporary_mas_data_state_connection_start = {};
+                            // var q = 0;
+                            // $.each(mas_data_state_connection_start, function (i, elem) {
+                            //     if (data['id'] != elem.id){
+                            //         temporary_mas_data_state_connection_start[q] = {
+                            //             "id":elem.id,
+                            //             "element_from":elem.element_from,
+                            //             "element_to":elem.element_to,
+                            //         };
+                            //         q = q+1;
+                            //     }
+                            // });
+                            // mas_data_state_connection_start = temporary_mas_data_state_connection_start;
+
+                   
+                            // var temporary_mas_data_state_connection_end = {};
+                            // var q = 0;
+                            // $.each(mas_data_state_connection_end, function (i, elem) {
+                            //     if (data['id'] != elem.id){
+                            //         temporary_mas_data_state_connection_end[q] = {
+                            //             "id":elem.id,
+                            //             "element_from":elem.element_from,
+                            //             "element_to":elem.element_to,
+                            //         };
+                            //         q = q+1;
+                            //     }
+                            // });
+                            // mas_data_state_connection_end = temporary_mas_data_state_connection_end;
                         }
                     },
                     error: function () {

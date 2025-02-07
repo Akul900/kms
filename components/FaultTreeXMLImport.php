@@ -6,8 +6,7 @@ use app\modules\ftde\models\Element;
 use app\modules\main\models\Diagram;
 use app\modules\ftde\models\StateConnection;
 use app\modules\ftde\models\StateProperty;
-use app\modules\ftde\models\Transition;
-use app\modules\ftde\models\TransitionProperty;
+
 
 
 class FaultTreeXMLImport
@@ -60,18 +59,45 @@ class FaultTreeXMLImport
             if ((string)$state['type'] == 'Fault'){
                 $state_model->type = Element::COMMON_FAULT;
             }
-            if ((string)$state['type'] == 'Start'){
-                $state_model->type = Element::START_TYPE;
+            if ((string)$state['type'] == 'And'){
+                $state_model->type = Element::AND_TYPE;
             }
-            if ((string)$state['type'] == 'End'){
-                $state_model->type = Element::END_TYPE;
+            if ((string)$state['type'] == 'Or'){
+                $state_model->type = Element::OR_TYPE;
             }
+            if ((string)$state['type'] == 'Basic event'){
+                $state_model->type = Element::BASIC_EVENT;
+            }
+            if ((string)$state['type'] == 'Undeveloped event'){
+                $state_model->type = Element::UNDEVELOPED_EVENT;
+            }
+            if ((string)$state['type'] == 'Prohibition'){
+                $state_model->type = Element::PROHIBITION_TYPE;
+            }
+            if ((string)$state['type'] == 'And with priority'){
+                $state_model->type = Element::AND_WITH_PRIORITY;
+            }
+            if ((string)$state['type'] == 'Majotity valve'){
+                $state_model->type = Element::MAJORITY_VALVE;
+            }
+            if ((string)$state['type'] == 'Transfer valve'){
+                $state_model->type = Element::TRANSFER_VALVE;
+            }
+            if ((string)$state['type'] == 'Not'){
+                $state_model->type = Element::NOT_TYPE;
+            }
+            if ((string)$state['type'] == 'Conditional event'){
+                $state_model->type = Element::CONDITIONAL_EVENT;
+            }
+            if ((string)$state['type'] == 'Hidden event'){
+                $state_model->type = Element::HIDDEN_EVENT;
+            }
+
             $state_model->description = (string)$state['description'];
             $state_model->indent_x = (string)$state['indent_x'];
             $state_model->indent_y = (string)$state['indent_y'];
             $state_model->diagram = $id;
             $state_model->save();
-
             // Таблица $array_states внесение значений, где:
             // 'state_template' значение id state из xml
             // 'state' значение нового id state из только что созданного
@@ -81,7 +107,7 @@ class FaultTreeXMLImport
 
             // Создание StateProperty
             foreach($state->children() as $state_property) {
-                if ($state_property->getName() == 'StateProperty') {
+                if ($state_property->getName() == 'FaultParameter') {
                     $state_property_model = new StateProperty();
                     $state_property_model->name = (string)$state_property['name'];
                     $state_property_model->description = (string)$state_property['description'];
@@ -107,25 +133,28 @@ class FaultTreeXMLImport
                         $state_property_model->operator = StateProperty::APPROXIMATELY_EQUAL_OPERATOR;
                     }
                     $state_property_model->value = (string)$state_property['value'];
-                    $state_property_model->state = $state_model->id;
+                    $state_property_model->fault = $state_model->id;
                     $state_property_model->save();
                 }
             }
         }
 
         // Создание Connection
-        foreach($file->Connection as $transition) {
+        foreach($file->Connection as $connection ) {
             $conncetion_model = new StateConnection();
             for ($i = 0; $i < self::$j; $i++){
-                if ((integer)$transition['element-from'] == self::$array_states[$i]['state_template']){
+                if ((integer)$connection['element-from'] == self::$array_states[$i]['state_template']){
                     $conncetion_model->element_from = self::$array_states[$i]['state'];
                 }
             }
             for ($i = 0; $i < self::$j; $i++){
-                if ((integer)$transition['element-to'] == self::$array_states[$i]['state_template']){
+                if ((integer)$connection['element-to'] == self::$array_states[$i]['state_template']){
                     $conncetion_model->element_to = self::$array_states[$i]['state'];
                 }
             }
+
+          
+       
             // $conncetion_model->name_property = "0";
             // $conncetion_model->operator_property = 1;
             // $conncetion_model->value_property = "0";

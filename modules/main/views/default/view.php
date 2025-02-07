@@ -40,49 +40,65 @@ if ($model->type == Diagram::FAULT_TREE_TYPE)
         <?= Html::a('<i class="fa-solid fa-display"></i> ' .
             Yii::t('app', 'BUTTON_OPEN_DIAGRAM'), $url, ['class' => 'btn btn-success']
         ) ?>
+        <?php if ( !Yii::$app->user->isGuest): ?>
         <?= Html::a('<i class="fa-solid fa-pencil"></i> ' .
             Yii::t('app', 'BUTTON_UPDATE'),
             ['update', 'id' => $model->id], ['class' => 'btn btn-primary']
         ) ?>
+        <?php endif; ?>
+        <?php if ( !Yii::$app->user->isGuest): ?>
         <?= Html::a('<i class="fa-solid fa-file-import"></i> ' .
             Yii::t('app', 'BUTTON_IMPORT'), ['import', 'id' => $model->id], ['class' => 'btn btn-primary']
         ) ?>
+            <?php endif; ?>
+            <?php if ( !Yii::$app->user->isGuest): ?>
         <?= $model->type == Diagram::EVENT_TREE_TYPE ?
             Html::a('<i class="fa-solid fa-file-export"></i> ' .
                 Yii::t('app', 'BUTTON_EXPORT'), $url,
                 ['data' => ['method' => 'post'], 'class' => 'btn btn-primary']
             ) : false
         ?>
+            <?php endif; ?>
+            <?php if ( !Yii::$app->user->isGuest): ?>
         <?= $model->type == Diagram::STATE_TRANSITION_DIAGRAM_TYPE ?
             Html::a('<i class="fa-solid fa-file-export"></i> ' .
                 Yii::t('app', 'BUTTON_EXPORT'), $url,
                 ['data' => ['method' => 'post', 'params' => ['value' => 'xml']], 'class' => 'btn btn-primary']
             ) : false
         ?>
+            <?php endif; ?>
+          <?php if ( !Yii::$app->user->isGuest): ?>
                 <?= $model->type == Diagram::FAULT_TREE_TYPE ?
             Html::a('<i class="fa-solid fa-file-export"></i> ' .
                 Yii::t('app', 'BUTTON_EXPORT'), $url,
                 ['data' => ['method' => 'post', 'params' => ['value' => 'xml']], 'class' => 'btn btn-primary']
             ) : false
         ?>
+            <?php endif; ?>
+          <?php if ( !Yii::$app->user->isGuest): ?>
         <?= $model->type == Diagram::STATE_TRANSITION_DIAGRAM_TYPE ?
             Html::a('<i class="fa-solid fa-download"></i> ' .
                 Yii::t('app', 'BUTTON_UPLOAD_ONTOLOGY'),
                 ['upload-ontology', 'id' => $model->id], ['class' => 'btn btn-primary']
             ) : false
         ?>
+            <?php endif; ?>
+          <?php if ( !Yii::$app->user->isGuest): ?>
         <?= $model->type == Diagram::STATE_TRANSITION_DIAGRAM_TYPE ?
             Html::a('<i class="fa-solid fa-file-arrow-down"></i> ' .
                 Yii::t('app', 'BUTTON_DECISION_TABLE'),
                 ['upload-csv', 'id' => $model->id], ['class' => 'btn btn-primary']
             ) : false
         ?>
+            <?php endif; ?>
+          <?php if ( !Yii::$app->user->isGuest): ?>
         <?= Html::a('<i class="fa-solid fa-trash"></i> ' .
             Yii::t('app', 'BUTTON_DELETE'), ['#'], [
             'class' => 'btn btn-danger',
             'data-bs-toggle' => 'modal',
             'data-bs-target' => '#removeDiagramModalForm'
         ]) ?>
+            <?php endif; ?>
     </p>
 
     <?= DetailView::widget([

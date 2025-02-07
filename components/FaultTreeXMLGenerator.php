@@ -8,8 +8,6 @@ use app\modules\ftde\models\Element;
 use app\modules\ftde\models\StateConnection;
 use app\modules\ftde\models\StateProperty;
 use app\modules\ftde\models\StartToEnd;
-use app\modules\ftde\models\Transition;
-use app\modules\ftde\models\TransitionProperty;
 
 
 class FaultTreeXMLGenerator
@@ -18,11 +16,11 @@ class FaultTreeXMLGenerator
     public static function drawingStateProperty($xml, $id_state, $xml_element)
     {
         //подбор всех StateProperty
-        $state_property_elements = StateProperty::find()->where(['state' => $id_state])->all();
+        $state_property_elements = StateProperty::find()->where(['fault' => $id_state])->all();
         if ($state_property_elements != null){
             foreach ($state_property_elements as $sp_elem){
                 //отрисовка "StateProperty"
-                $state_property_element = $xml->createElement('StateProperty');
+                $state_property_element = $xml->createElement('FaultParameter');
                 $state_property_element->setAttribute('id', $sp_elem->id);
                 $state_property_element->setAttribute('name', $sp_elem->name);
                 $state_property_element->setAttribute('operator', $sp_elem->getOperatorName());

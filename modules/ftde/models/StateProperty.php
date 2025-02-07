@@ -18,7 +18,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $value
  * @property int $state
  *
- * @property State $stateFk
+ * @property Element $elementFk
  */
 class StateProperty extends \yii\db\ActiveRecord
 {
@@ -35,7 +35,7 @@ class StateProperty extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%state_property}}';
+        return '{{%fault_parameter}}';
     }
 
     /**
@@ -44,17 +44,17 @@ class StateProperty extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'value', 'state'], 'required'],
-            [['operator', 'state'], 'integer'],
+            [['name', 'value', 'fault'], 'required'],
+            [['operator', 'fault'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['description', 'value'], 'string'],
 
             // name, operator, value и state вместе должны быть уникальны, но только name будет получать сообщение об ошибке
-            ['name', 'unique', 'targetAttribute' => ['name', 'operator', 'value', 'state'],
+            ['name', 'unique', 'targetAttribute' => ['name', 'operator', 'value', 'fault'],
                 'message' => Yii::t('app', 'MESSAGE_STATE_PROPERTY_ALREADY_IN_STATE')],
 
-            [['state'], 'exist', 'skipOnError' => true, 'targetClass' => State::className(),
-                'targetAttribute' => ['state' => 'id']],
+            [['fault'], 'exist', 'skipOnError' => true, 'targetClass' => Element::className(),
+                'targetAttribute' => ['fault' => 'id']],
         ];
     }
 
@@ -87,7 +87,7 @@ class StateProperty extends \yii\db\ActiveRecord
      */
     public function getStateFk()
     {
-        return $this->hasOne(State::className(), ['id' => 'state']);
+        return $this->hasOne(Element::className(), ['id' => 'state']);
     }
 
     /**
